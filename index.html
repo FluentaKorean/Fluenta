@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Fluenta Korean</title>
-<link rel="icon" type="image/jpeg" href="feather.png.jpg">
+<link rel="icon" type="image/jpg" href="fluenta-feather.jpg">
 <style>
     * {
         box-sizing: border-box;
@@ -308,7 +309,7 @@
         animation: floating 3s ease-in-out infinite;
         filter: drop-shadow(0 15px 25px rgba(232, 62, 131, 0.2));
     }
-
+li
     @keyframes floating {
         0%, 100% {
             transform: translateY(0);
@@ -319,58 +320,217 @@
         }
     }
 
+    /* ==========================================================
+   LESSONS SECTION (Fluenta Interactive View Replacement)
+   ========================================================== */
 
-    /* =========================
-       LESSONS
-    ========================= */
+.fluenta-lessons-wrapper {
+    background-color: #1b1c1e;
+    color: #ffffff;
+    border-radius: 22px;
+    border: 1px solid #292929;
+    padding: 30px;
+    width: 100%;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
 
-    .section-title {
-        font-size: 34px;
-        margin-bottom: 10px;
-        color: #ff78ae;
+/* Fluenta Navigation Progress Frame Row */
+.fluenta-top-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 35px;
+    width: 100%;
+}
+
+.fluenta-close-btn {
+    background: none;
+    border: none;
+    color: #8e8f93;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.fluenta-progress-container {
+    flex: 1;
+    height: 14px;
+    background-color: #111111;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #292929;
+}
+
+.fluenta-progress-bar {
+    width: 11.1%; /* 1 of 9 parts initial status */
+    height: 100%;
+    background-color: #555555;
+    border-radius: 20px;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fluenta-top-icons {
+    display: flex;
+    gap: 18px;
+    color: #8e8f93;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Screen Title Context */
+.section-title.fluenta-title {
+    font-size: 28px;
+    margin-bottom: 5px;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.section-description.fluenta-desc {
+    color: #8e8f93;
+    margin-bottom: 25px;
+}
+
+/* Center Arena Content (Mascot + Speech Bubble) */
+.fluenta-presenter-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 35px;
+    padding: 40px 0;
+    min-height: 240px;
+}
+
+.fluenta-mascot-box {
+    width: 140px;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fluenta-mascot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Speech Bubble Replicating Image Layout */
+.fluenta-speech-bubble {
+    background-color: #252628;
+    border: 2px solid #404144;
+    border-radius: 14px;
+    padding: 24px 32px;
+    position: relative;
+    flex: 1;
+    max-width: 480px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+/* Side Triangle Pointing to Mascot */
+.fluenta-speech-bubble::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 16px;
+    height: 16px;
+    background-color: #252628;
+    border-left: 2px solid #404144;
+    border-bottom: 2px solid #404144;
+}
+
+.fluenta-pronunciation {
+    color: #8e8f93;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.fluenta-target-phrase {
+    font-size: 34px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.fluenta-translation {
+    color: #ff9d00; /* Fluenta Theme Accent color */
+    font-size: 22px;
+    font-weight: 500;
+}
+
+/* Bottom Controls */
+.fluenta-control-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-top: 20px;
+    padding-bottom: 15px;
+}
+
+.fluenta-circle-btn {
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.fluenta-circle-btn:active {
+    transform: scale(0.95);
+}
+
+.fluenta-btn-mic {
+    width: 65px;
+    height: 65px;
+    background-color: #ff9d00;
+    color: #1b1c1e;
+    font-size: 24px;
+}
+
+.fluenta-btn-audio {
+    width: 90px;
+    height: 90px;
+    background-color: #ff9d00;
+    color: #1b1c1e;
+    font-size: 36px;
+}
+
+.fluenta-btn-next {
+    width: 65px;
+    height: 65px;
+    background-color: #323336;
+    color: #8e8f93;
+    font-size: 22px;
+}
+
+.fluenta-btn-next.ready-state {
+    background-color: #ff9d00;
+    color: #1b1c1e;
+}
+
+/* Responsiveness fallback */
+@media (max-width: 680px) {
+    .fluenta-presenter-stage {
+        flex-direction: column;
+        text-align: center;
     }
-
-    .section-description {
-        color: #aaa;
-        margin-bottom: 30px;
+    .fluenta-speech-bubble::before {
+        left: 50%;
+        top: -10px;
+        transform: translateX(-50%) rotate(45deg);
+        border-left: 2px solid #404144;
+        border-top: 2px solid #404144;
+        border-bottom: none;
+        border-right: none;
     }
+}
 
-    .lesson-card {
-        background: #111111;
-        border: 1px solid #292929;
-        border-radius: 22px;
-        padding: 25px;
-        margin-bottom: 18px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        transition: 0.2s;
-    }
-
-    .lesson-card:hover {
-        border-color: #d93678;
-        transform: translateY(-2px);
-    }
-
-    .book-icon {
-        width: 65px;
-        height: 65px;
-        background: #d93678;
-        border-radius: 17px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .lesson-info h3 {
-        margin-bottom: 7px;
-    }
-
-    .lesson-info p {
-        color: #aaa;
-    }
 
 
     /* =========================
@@ -607,7 +767,6 @@
     </a>
 </div>
 
-
 <!-- =====================================================
      SIGN UP SCREEN
 ===================================================== -->
@@ -736,7 +895,7 @@
         </button>
 
         <button class="menu-item" onclick="showPage('quizzes')">
-            <span class="menu-icon">📄</span>
+            <span class="menu-icon">📕</span>
             Quizzes
         </button>
 
@@ -746,7 +905,7 @@
         </button>
 
         <button class="menu-item" onclick="showPage('profile')">
-            <span class="menu-icon">😃</span>
+            <span class="menu-icon">😁</span>
             Profile
         </button>
 
@@ -782,7 +941,7 @@
                 <button
                     class="pink-button hero-button"
                     onclick="showPage('lessons')">
-                    START LEARNING
+                    LEARN 😀
                 </button>
 
             </div>
@@ -808,37 +967,6 @@
     <!-- =================================================
          LESSONS
     ================================================== -->
-
-    <main id="lessons" class="page">
-
-        <h1 class="section-title">Lessons</h1>
-
-        <p class="section-description">
-            Build your Korean skills from the very beginning.
-        </p>
-
-        <div
-            class="lesson-card"
-            onclick="showPage('hangul')"
-            style="cursor:pointer;">
-
-            <div class="book-icon">
-                +
-            </div>
-
-            <div class="lesson-info">
-
-                <h3>Lesson 1 — Hangul Basics</h3>
-
-                <p>
-                    Learn your first Korean consonants and vowels.
-                </p>
-
-            </div>
-
-        </div>
-
-    </main>
 
 
 
@@ -1376,14 +1504,14 @@
 
         if (answer === "h" || answer === "ㅎ") {
 
-            feedback.textContent = "Correct! Great job!";
+            feedback.textContent = "You rockkk ㅋㅋㅋ! 😎";
             feedback.className = "feedback correct";
 
             correctSound();
 
         } else {
 
-            feedback.textContent = "Not quite. Try again!";
+            feedback.textContent = "Not quite, You got this 😁";
             feedback.className = "feedback wrong";
 
             wrongSound();
