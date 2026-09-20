@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -761,6 +760,36 @@ li
 </head>
 
 <body>
+<script>
+let today = new Date().toDateString();
+let lastVisit = localStorage.getItem("lastVisit");
+let streak = Number(localStorage.getItem("streak")) || 1;
+
+if (lastVisit !== today) {
+    if (lastVisit) {
+        let last = new Date(lastVisit);
+
+        let todayStart = new Date();
+        todayStart.setHours(0,0,0,0);
+
+        let lastStart = new Date(last);
+        lastStart.setHours(0,0,0,0);
+
+        let difference = Math.round(
+            (todayStart - lastStart) / (1000 * 60 * 60 * 24)
+        );
+
+        if (difference === 1) {
+            streak++;
+        } else if (difference > 1) {
+            streak = 1;
+        }
+    }
+
+    localStorage.setItem("streak", streak);
+    localStorage.setItem("lastVisit", today);
+}
+</script>
 <div style="position:fixed; top:20px; right:25px; z-index:9999;">
     <a href="streak.html" style="display:flex; align-items:center; gap:8px; color:white; text-decoration:none; font-size:20px; font-weight:bold;">
         <img src="streakday1.png" style="width:45px; height:45px; object-fit:contain;">
