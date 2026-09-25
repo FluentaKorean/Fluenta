@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -31,10 +30,55 @@ h1 {
     border: 2px solid #ff4fa3;
 }
 
+/* Streak image animation */
 .streak-box img {
     width: 120px;
     height: 120px;
     object-fit: contain;
+
+    animation:
+        streakFloat 3s ease-in-out infinite,
+        flameGlow 1.5s ease-in-out infinite;
+}
+
+/* Slowly float up and down */
+@keyframes streakFloat {
+
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Flame-like glowing effect */
+@keyframes flameGlow {
+
+    0% {
+        filter: drop-shadow(0 0 2px #ff4fa3);
+    }
+
+    25% {
+        filter: drop-shadow(0 0 7px #ff4fa3);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 14px #ff4fa3);
+    }
+
+    75% {
+        filter: drop-shadow(0 0 8px #ff4fa3);
+    }
+
+    100% {
+        filter: drop-shadow(0 0 2px #ff4fa3);
+    }
 }
 
 .streak-box span {
@@ -52,55 +96,104 @@ h1 {
 <h1>My Streak</h1>
 
 <div class="streak-box">
-    <img id="streakImage" src="streakday1.png" alt="Streak">
-    <span id="streakText">1 day</span>
+
+    <img id="streakImage" src="" alt="Streak">
+
+    <span id="streakText"></span>
+
 </div>
 
+
 <script>
-let today = new Date();
-let todayDate = today.toDateString();
 
-let lastVisit = localStorage.getItem("lastVisit");
-let streak = Number(localStorage.getItem("streak")) || 1;
+/* Get today's date without time */
+function getDateKey(date) {
 
-if (lastVisit !== todayDate) {
+    return date.getFullYear() + "-" +
+           String(date.getMonth() + 1).padStart(2, "0") + "-" +
+           String(date.getDate()).padStart(2, "0");
 
-    if (lastVisit) {
-        let lastDate = new Date(lastVisit);
-
-        let todayStart = new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate()
-        );
-
-        let lastStart = new Date(
-            lastDate.getFullYear(),
-            lastDate.getMonth(),
-            lastDate.getDate()
-        );
-
-        let difference =
-            Math.round((todayStart - lastStart) / (1000 * 60 * 60 * 24));
-
-        if (difference === 1) {
-            streak++;
-        } else if (difference > 1) {
-            streak = 1;
-        }
-    }
-
-    localStorage.setItem("streak", streak);
-    localStorage.setItem("lastVisit", todayDate);
 }
 
+
+let today = new Date();
+
+let todayKey = getDateKey(today);
+
+let lastVisit = localStorage.getItem("lastVisit");
+
+let streak = Number(localStorage.getItem("streak")) || 0;
+
+
+/* First ever visit */
+if (!lastVisit) {
+
+    streak = 1;
+
+}
+
+
+/* A new day */
+else if (lastVisit !== todayKey) {
+
+    let lastDate = new Date(lastVisit + "T00:00:00");
+
+    let todayStart = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+    );
+
+    let lastStart = new Date(
+        lastDate.getFullYear(),
+        lastDate.getMonth(),
+        lastDate.getDate()
+    );
+
+
+    /* Work out how many days passed */
+    let difference = Math.round(
+        (todayStart - lastStart) /
+        (1000 * 60 * 60 * 24)
+    );
+
+
+    /* Visited the very next day */
+    if (difference === 1) {
+
+        streak++;
+
+    }
+
+
+    /* Missed a day */
+    else if (difference > 1) {
+
+        streak = 1;
+
+    }
+
+}
+
+
+/* Save today's visit */
+localStorage.setItem("streak", streak);
+
+localStorage.setItem("lastVisit", todayKey);
+
+
+/* Show streak number */
 document.getElementById("streakText").textContent =
     streak + (streak === 1 ? " day" : " days");
 
-document.getElementById("streakImage").src =
-    "streakday" + Math.min(streak, 7) + ".png";
-</script>
 
+/* Choose the correct streak image */
+let dayNumber = Math.min(streak, 7);
+
+document.getElementById("streakImage").src =
+    "streakday" + dayNumber + ".png";
+
+</script>
 
 </body>
 </html>
