@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vocabulary - Fluenta Korean</title>
+
+<style>
+    body {
+        margin: 0;
+        background: #090909;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    .top-bar {
+        height: 75px;
+        background: #090909;
+        border-bottom: 1px solid #252525;
+        display: flex;
+        align-items: center;
+        padding: 0 25px;
+    }
+
+    .back-button {
+        background: #d93678;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 18px;
+        font-size: 15px;
+        cursor: pointer;
+        margin-right: 18px;
+    }
+
+    .logo {
+        color: #ff75aa;
+        font-size: 23px;
+        font-weight: bold;
+    }
+
+    .page {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #ff78ae;
+        text-align: center;
+        font-size: 38px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #aaa;
+        margin-bottom: 35px;
+    }
+
+    .word-card {
+        background: #141414;
+        border: 1px solid #333;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 20px;
+    }
+
+    .korean {
+        color: #ff78ae;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .meaning {
+        color: #ddd;
+        font-size: 17px;
+        margin-bottom: 15px;
+    }
+
+    .sentence {
+        background: #1d1d1d;
+        border-radius: 14px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .sentence-korean {
+        font-size: 22px;
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .translation {
+        color: #aaa;
+        margin-bottom: 14px;
+    }
+
+    .sound-button {
+        background: #d93678;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .sound-button:hover {
+        background: #ed4c8d;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="top-bar">
+    <button class="back-button" onclick="location.href='index.html'">
+        ← Back
+    </button>
+
+    <div class="logo">Fluenta Korean</div>
+</div>
+
+<div class="page">
+
+    <h1>Vocabulary</h1>
+
+    <p class="subtitle">
+        Learn useful Korean words and listen to how they sound.
+    </p>
+
+    <!-- WORD 1 -->
+    <div class="word-card">
+
+        <div class="korean">먹다</div>
+        <div class="meaning">To eat</div>
+
+        <button class="sound-button"
+            onclick="speakKorean('먹다')">
+            🔊 Play Sound
+        </button>
+
+        <div class="sentence">
+            <div class="sentence-korean">
+                저는 밥을 먹어요.
+            </div>
+
+            <div class="translation">
+                I eat rice.
+            </div>
+
+            <button class="sound-button"
+                onclick="speakKorean('저는 밥을 먹어요.')">
+                🔊 Listen to Sentence
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- WORD 2 -->
+    <div class="word-card">
+
+        <div class="korean">마시다</div>
+        <div class="meaning">To drink</div>
+
+        <button class="sound-button"
+            onclick="speakKorean('마시다')">
+            🔊 Play Sound
+        </button>
+
+        <div class="sentence">
+            <div class="sentence-korean">
+                물을 마셔요.
+            </div>
+
+            <div class="translation">
+                I drink water.
+            </div>
+
+            <button class="sound-button"
+                onclick="speakKorean('물을 마셔요.')">
+                🔊 Listen to Sentence
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- WORD 3 -->
+    <div class="word-card">
+
+        <div class="korean">보다</div>
+        <div class="meaning">To see / watch</div>
+
+        <button class="sound-button"
+            onclick="speakKorean('보다')">
+            🔊 Play Sound
+        </button>
+
+        <div class="sentence">
+            <div class="sentence-korean">
+                영화를 봐요.
+            </div>
+
+            <div class="translation">
+                I watch a movie.
+            </div>
+
+            <button class="sound-button"
+                onclick="speakKorean('영화를 봐요.')">
+                🔊 Listen to Sentence
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- WORD 4 -->
+    <div class="word-card">
+
+        <div class="korean">가다</div>
+        <div class="meaning">To go</div>
+
+        <button class="sound-button"
+            onclick="speakKorean('가다')">
+            🔊 Play Sound
+        </button>
+
+        <div class="sentence">
+            <div class="sentence-korean">
+                학교에 가요.
+            </div>
+
+            <div class="translation">
+                I go to school.
+            </div>
+
+            <button class="sound-button"
+                onclick="speakKorean('학교에 가요.')">
+                🔊 Listen to Sentence
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- WORD 5 -->
+    <div class="word-card">
+
+        <div class="korean">좋아하다</div>
+        <div class="meaning">To like</div>
+
+        <button class="sound-button"
+            onclick="speakKorean('좋아하다')">
+            🔊 Play Sound
+        </button>
+
+        <div class="sentence">
+            <div class="sentence-korean">
+                저는 한국어를 좋아해요.
+            </div>
+
+            <div class="translation">
+                I like Korean.
+            </div>
+
+            <button class="sound-button"
+                onclick="speakKorean('저는 한국어를 좋아해요.')">
+                🔊 Listen to Sentence
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function speakKorean(text) {
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    speech.lang = "ko-KR";
+    speech.rate = 0.85;
+    speech.pitch = 1;
+
+    window.speechSynthesis.cancel();
+
+    window.speechSynthesis.speak(speech);
+}
+
+</script>
+
+</body>
+</html>
