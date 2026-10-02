@@ -1,0 +1,2900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fluenta Korean - Listening</title>
+
+<link rel="icon" href="fluenta.png.png">
+
+<style>
+
+/* =====================================================
+   FLUENTA BASE
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #090909;
+    color: white;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   TOP BAR — SAME AS HOME
+===================================================== */
+
+.top-bar {
+    height: 75px;
+    background: #090909;
+    border-bottom: 1px solid #252525;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 25px;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 50;
+}
+
+.menu-button {
+    width: 48px;
+    height: 48px;
+
+    border: none;
+    border-radius: 13px;
+
+    background: #d93678;
+    color: white;
+
+    font-size: 25px;
+
+    margin-right: 18px;
+
+    transition: 0.2s;
+}
+
+.menu-button:hover {
+    background: #ed4c8d;
+    transform: scale(1.05);
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    color: #ff75aa;
+}
+
+.logo span {
+    color: white;
+    font-weight: normal;
+}
+
+
+/* =====================================================
+   SIDE MENU — MATCHES HOME
+===================================================== */
+
+.side-menu {
+    position: fixed;
+
+    left: -300px;
+    top: 0;
+
+    width: 290px;
+    height: 100vh;
+
+    background: #101010;
+
+    border-right: 1px solid #e83e83;
+
+    z-index: 100;
+
+    padding: 25px 18px;
+
+    transition: left 0.35s ease;
+
+    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+
+    overflow-y: auto;
+}
+
+.side-menu.open {
+    left: 0;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.menu-header h2 {
+    color: #ff70a8;
+    font-size: 22px;
+}
+
+.close-menu {
+    background: transparent;
+    border: none;
+
+    color: white;
+
+    font-size: 25px;
+
+    cursor: pointer;
+}
+
+.menu-item {
+    width: 100%;
+
+    border: none;
+
+    background: transparent;
+    color: white;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 13px 12px;
+
+    margin-bottom: 5px;
+
+    border-radius: 13px;
+
+    text-align: left;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+.menu-item:hover {
+    background: #25131c;
+    color: #ff79ad;
+}
+
+.menu-icon {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 9px;
+
+    background: #d93678;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+
+    font-weight: bold;
+    font-size: 14px;
+
+    flex-shrink: 0;
+}
+
+.hangul-icon {
+    font-size: 18px;
+}
+
+
+/* =====================================================
+   MENU DARK OVERLAY
+===================================================== */
+
+.menu-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.55);
+
+    z-index: 90;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: 0.3s;
+}
+
+.menu-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main {
+    max-width: 1150px;
+
+    margin: auto;
+
+    padding: 35px 22px 70px;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+    text-align: center;
+
+    margin-bottom: 28px;
+}
+
+.hero h1 {
+    font-size: 46px;
+
+    margin-bottom: 10px;
+}
+
+.hero h1 span {
+    color: #ed4c8d;
+}
+
+.hero p {
+    color: #999;
+
+    font-size: 17px;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   GAME CONTAINER
+===================================================== */
+
+.game {
+    max-width: 950px;
+
+    margin: auto;
+
+    background: #111;
+
+    border: 1px solid #292929;
+
+    border-radius: 26px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.45);
+}
+
+
+/* =====================================================
+   GAME HEADER
+===================================================== */
+
+.game-header {
+    display: grid;
+
+    grid-template-columns: 1fr auto 1fr;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+}
+
+.stat-box {
+    background: #191919;
+
+    border: 1px solid #292929;
+
+    border-radius: 14px;
+
+    padding: 10px 14px;
+
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+
+    color: #777;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 3px;
+}
+
+.stat-value {
+    color: white;
+
+    font-size: 19px;
+
+    font-weight: bold;
+}
+
+.stat-value.pink {
+    color: #ff75aa;
+}
+
+.game-title {
+    text-align: center;
+}
+
+.game-title strong {
+    font-size: 18px;
+}
+
+.game-title small {
+    display: block;
+
+    color: #777;
+
+    margin-top: 4px;
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.progress-area {
+    margin-bottom: 25px;
+}
+
+.progress-info {
+    display: flex;
+
+    justify-content: space-between;
+
+    color: #777;
+
+    font-size: 12px;
+
+    margin-bottom: 8px;
+}
+
+.progress-track {
+    height: 9px;
+
+    background: #242424;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+
+    width: 0%;
+
+    background: #d93678;
+
+    border-radius: 20px;
+
+    transition: width 0.4s ease;
+}
+
+
+/* =====================================================
+   START SCREEN
+===================================================== */
+
+.start-screen {
+    text-align: center;
+
+    padding: 25px 10px 35px;
+}
+
+.mascot {
+    width: 125px;
+
+    max-width: 35vw;
+
+    margin-bottom: 12px;
+
+    animation: floatMascot 2.8s ease-in-out infinite;
+}
+
+@keyframes floatMascot {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+
+}
+
+.start-screen h2 {
+    font-size: 32px;
+
+    margin-bottom: 12px;
+}
+
+.start-screen h2 span {
+    color: #ed4c8d;
+}
+
+.start-screen p {
+    color: #999;
+
+    max-width: 620px;
+
+    margin: auto;
+
+    line-height: 1.7;
+}
+
+.rules {
+    display: grid;
+
+    grid-template-columns: repeat(3,1fr);
+
+    gap: 12px;
+
+    max-width: 700px;
+
+    margin: 28px auto;
+}
+
+.rule {
+    background: #181818;
+
+    border: 1px solid #292929;
+
+    border-radius: 15px;
+
+    padding: 17px 10px;
+}
+
+.rule-number {
+    color: #ed4c8d;
+
+    font-size: 23px;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+}
+
+.rule p {
+    font-size: 12px;
+
+    color: #999;
+}
+
+.start-button {
+    border: none;
+
+    background: #d93678;
+
+    color: white;
+
+    border-radius: 15px;
+
+    padding: 16px 42px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.start-button:hover {
+    background: #ed4c8d;
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 10px 25px rgba(217,54,120,0.25);
+}
+
+
+/* =====================================================
+   GAME SCREEN
+===================================================== */
+
+#gameScreen {
+    display: none;
+}
+
+
+/* =====================================================
+   MYSTERY CARDS
+===================================================== */
+
+.card-area {
+    margin-top: 10px;
+}
+
+.card-instruction {
+    text-align: center;
+
+    color: #888;
+
+    font-size: 14px;
+
+    margin-bottom: 16px;
+}
+
+.cards {
+    display: grid;
+
+    grid-template-columns: repeat(3,1fr);
+
+    gap: 16px;
+}
+
+.mystery-card {
+    position: relative;
+
+    height: 190px;
+
+    border-radius: 21px;
+
+    border: 1px solid #303030;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #252025 0%,
+            #171517 42%,
+            #111 100%
+        );
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s,
+        border-color 0.25s,
+        box-shadow 0.25s;
+
+    cursor: pointer;
+}
+
+.mystery-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    border-radius: 50%;
+
+    background: rgba(237,76,141,0.06);
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%,-50%);
+
+    transition: 0.3s;
+}
+
+.mystery-card:hover {
+    transform: translateY(-7px);
+
+    border-color: #d93678;
+
+    box-shadow:
+        0 15px 35px rgba(217,54,120,0.14);
+}
+
+.mystery-card:hover::before {
+    width: 190px;
+    height: 190px;
+}
+
+.card-number {
+    position: absolute;
+
+    top: 12px;
+    left: 14px;
+
+    color: #555;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+.card-question {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%,-50%);
+
+    font-size: 62px;
+
+    color: #ed4c8d;
+
+    font-weight: bold;
+
+    z-index: 2;
+}
+
+.card-bottom {
+    position: absolute;
+
+    bottom: 15px;
+
+    left: 0;
+    right: 0;
+
+    text-align: center;
+
+    color: #777;
+
+    font-size: 12px;
+
+    z-index: 2;
+}
+
+.mystery-card.selected {
+    border-color: #ff75aa;
+
+    box-shadow:
+        0 0 0 3px rgba(237,76,141,0.12),
+        0 18px 40px rgba(217,54,120,0.18);
+
+    transform: translateY(-6px);
+}
+
+
+/* =====================================================
+   LISTENING VISUALIZER
+===================================================== */
+
+.visualizer {
+    display: none;
+
+    height: 42px;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    margin: 10px auto 5px;
+}
+
+.visualizer.active {
+    display: flex;
+}
+
+.wave {
+    width: 5px;
+
+    height: 12px;
+
+    border-radius: 10px;
+
+    background: #ed4c8d;
+
+    animation: soundWave 0.65s infinite alternate;
+}
+
+.wave:nth-child(2) {
+    animation-delay: .08s;
+}
+
+.wave:nth-child(3) {
+    animation-delay: .16s;
+}
+
+.wave:nth-child(4) {
+    animation-delay: .24s;
+}
+
+.wave:nth-child(5) {
+    animation-delay: .32s;
+}
+
+.wave:nth-child(6) {
+    animation-delay: .40s;
+}
+
+.wave:nth-child(7) {
+    animation-delay: .48s;
+}
+
+@keyframes soundWave {
+
+    from {
+        height: 8px;
+    }
+
+    to {
+        height: 35px;
+    }
+
+}
+
+
+/* =====================================================
+   QUESTION
+===================================================== */
+
+.question-area {
+    margin-top: 27px;
+
+    text-align: center;
+}
+
+.mode-label {
+    color: #ed4c8d;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 8px;
+}
+
+.question {
+    min-height: 45px;
+
+    font-size: 23px;
+
+    line-height: 1.4;
+}
+
+.question .highlight {
+    color: #ff75aa;
+}
+
+.listen-again {
+    margin-top: 12px;
+
+    border: 1px solid #383838;
+
+    background: #191919;
+
+    color: white;
+
+    border-radius: 12px;
+
+    padding: 9px 17px;
+
+    font-size: 13px;
+
+    transition: 0.2s;
+}
+
+.listen-again:hover {
+    border-color: #d93678;
+
+    background: #25131c;
+}
+
+
+/* =====================================================
+   ANSWER
+===================================================== */
+
+.answer-area {
+    max-width: 650px;
+
+    margin: 23px auto 0;
+}
+
+.answer-input {
+    width: 100%;
+
+    height: 58px;
+
+    background: #090909;
+
+    border: 2px solid #303030;
+
+    border-radius: 15px;
+
+    color: white;
+
+    outline: none;
+
+    padding: 0 18px;
+
+    text-align: center;
+
+    font-size: 21px;
+
+    transition: 0.2s;
+}
+
+.answer-input:focus {
+    border-color: #d93678;
+
+    box-shadow:
+        0 0 0 4px rgba(217,54,120,0.08);
+}
+
+.answer-input::placeholder {
+    color: #555;
+}
+
+.answer-buttons {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+.check-button,
+.hint-button {
+    height: 50px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.check-button {
+    background: #d93678;
+
+    color: white;
+}
+
+.check-button:hover {
+    background: #ed4c8d;
+
+    transform: translateY(-2px);
+}
+
+.hint-button {
+    background: #202020;
+
+    color: #ddd;
+
+    border: 1px solid #303030;
+}
+
+.hint-button:hover {
+    border-color: #d93678;
+
+    color: #ff75aa;
+}
+
+
+/* =====================================================
+   FEEDBACK
+===================================================== */
+
+.feedback {
+    min-height: 48px;
+
+    text-align: center;
+
+    margin-top: 15px;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+}
+
+.feedback.correct {
+    color: #70e39a;
+}
+
+.feedback.wrong {
+    color: #ff7c89;
+}
+
+.feedback.hint {
+    color: #ff75aa;
+}
+
+
+/* =====================================================
+   COMBO
+===================================================== */
+
+.combo {
+    text-align: center;
+
+    min-height: 26px;
+
+    margin-top: 4px;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+.combo strong {
+    color: #ed4c8d;
+}
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+.result-screen {
+    display: none;
+
+    text-align: center;
+
+    padding: 40px 15px 50px;
+}
+
+.result-screen h2 {
+    font-size: 35px;
+
+    margin-bottom: 10px;
+}
+
+.result-screen h2 span {
+    color: #ed4c8d;
+}
+
+.result-score {
+    font-size: 65px;
+
+    font-weight: bold;
+
+    color: #ed4c8d;
+
+    margin: 15px 0;
+}
+
+.result-message {
+    color: #999;
+
+    line-height: 1.7;
+
+    max-width: 600px;
+
+    margin: auto;
+}
+
+.result-stats {
+    display: grid;
+
+    grid-template-columns: repeat(3,1fr);
+
+    gap: 12px;
+
+    max-width: 650px;
+
+    margin: 30px auto;
+}
+
+.result-stat {
+    background: #181818;
+
+    border: 1px solid #292929;
+
+    border-radius: 15px;
+
+    padding: 17px;
+}
+
+.result-stat b {
+    display: block;
+
+    color: #ed4c8d;
+
+    font-size: 24px;
+
+    margin-bottom: 5px;
+}
+
+.result-stat span {
+    color: #777;
+
+    font-size: 12px;
+}
+
+.play-again {
+    border: none;
+
+    background: #d93678;
+
+    color: white;
+
+    padding: 15px 35px;
+
+    border-radius: 13px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.play-again:hover {
+    background: #ed4c8d;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   FLASH EFFECT
+===================================================== */
+
+.flash {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 200;
+
+    pointer-events: none;
+
+    background: rgba(100,220,145,0.10);
+
+    opacity: 0;
+}
+
+.flash.active {
+    animation: flash 0.5s;
+}
+
+@keyframes flash {
+
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:750px) {
+
+    .game-header {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .game-title {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .mystery-card {
+        height: 150px;
+    }
+
+    .rules {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 35px;
+    }
+
+}
+
+@media(max-width:500px) {
+
+    .main {
+        padding: 25px 12px 50px;
+    }
+
+    .game {
+        padding: 15px;
+        border-radius: 20px;
+    }
+
+    .top-bar {
+        padding: 0 15px;
+    }
+
+    .game-header {
+        gap: 7px;
+    }
+
+    .stat-box {
+        padding: 8px;
+    }
+
+    .answer-buttons {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media(prefers-reduced-motion: reduce) {
+
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     MENU OVERLAY
+===================================================== -->
+
+<div
+    id="menuOverlay"
+    class="menu-overlay"
+    onclick="closeMenu()">
+</div>
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<nav id="sideMenu" class="side-menu">
+
+    <div class="menu-header">
+
+        <h2>Fluenta</h2>
+
+        <button
+            class="close-menu"
+            onclick="closeMenu()">
+            ×
+        </button>
+
+    </div>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('index.html?home=1')">
+
+        <span class="menu-icon">🏠</span>
+
+        Home
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('lessons.html')">
+
+        <span class="menu-icon">📚</span>
+
+        Lessons
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('hangul.html')">
+
+        <span class="menu-icon hangul-icon">한</span>
+
+        Hangul
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('index.html?home=1#pronunciation')">
+
+        <span class="menu-icon">👄</span>
+
+        Pronunciation
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="closeMenu()">
+
+        <span class="menu-icon">🎧</span>
+
+        Listening
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('vocabulary.html')">
+
+        <span class="menu-icon">🍎</span>
+
+        Vocabulary
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('quizzes.html')">
+
+        <span class="menu-icon">📕</span>
+
+        Quizzes
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('index.html?home=1#videos')">
+
+        <span class="menu-icon">🎥</span>
+
+        Video Lessons
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('index.html?home=1#profile')">
+
+        <span class="menu-icon">😁</span>
+
+        Profile
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        onclick="goTo('index.html?home=1#settings')">
+
+        <span class="menu-icon">⚙</span>
+
+        Settings
+
+    </button>
+
+</nav>
+
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<header class="top-bar">
+
+    <button
+        class="menu-button"
+        onclick="openMenu()">
+
+        ☰
+
+    </button>
+
+
+    <div class="logo">
+
+        Fluenta <span>Korean</span>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+    <section class="hero">
+
+        <h1>
+            Listening <span>Challenge</span>
+        </h1>
+
+        <p>
+            Listen. Think. Type. Master Korean.
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         GAME
+    ================================================== -->
+
+    <section class="game">
+
+
+        <!-- GAME HEADER -->
+
+        <div class="game-header">
+
+
+            <div class="stat-box">
+
+                <span class="stat-label">
+                    XP
+                </span>
+
+                <span
+                    id="xp"
+                    class="stat-value pink">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="game-title">
+
+                <strong>
+                    🎧 LISTENING LAB
+                </strong>
+
+                <small>
+                    Train your Korean ears
+                </small>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <span class="stat-label">
+                    Lives
+                </span>
+
+                <span
+                    id="lives"
+                    class="stat-value">
+                    ♥ ♥ ♥
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="progress-area">
+
+            <div class="progress-info">
+
+                <span>
+                    Round <b id="round">0</b> / 10
+                </span>
+
+                <span id="progressText">
+                    Ready
+                </span>
+
+            </div>
+
+
+            <div class="progress-track">
+
+                <div
+                    id="progress"
+                    class="progress-fill">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             START SCREEN
+        ================================================== -->
+
+        <div
+            id="startScreen"
+            class="start-screen">
+
+
+            <img
+                src="fluenta.png.png"
+                class="mascot"
+                alt="Fluenta mascot">
+
+
+            <h2>
+                Welcome to the
+                <span>Listening Lab</span>
+            </h2>
+
+
+            <p>
+
+                Your ears are about to get a workout.
+                Pick a mystery card, listen carefully,
+                and type your answer in Korean.
+
+                But watch out — some rounds will give you
+                an English meaning instead!
+
+            </p>
+
+
+            <div class="rules">
+
+
+                <div class="rule">
+
+                    <div class="rule-number">
+                        01
+                    </div>
+
+                    <p>
+                        Pick a mystery card
+                    </p>
+
+                </div>
+
+
+                <div class="rule">
+
+                    <div class="rule-number">
+                        02
+                    </div>
+
+                    <p>
+                        Listen or read the clue
+                    </p>
+
+                </div>
+
+
+                <div class="rule">
+
+                    <div class="rule-number">
+                        03
+                    </div>
+
+                    <p>
+                        Type your Korean answer
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                id="startButton"
+                class="start-button"
+                onclick="startGame()">
+
+                START LISTENING
+
+            </button>
+
+
+        </div>
+
+
+        <!-- =================================================
+             GAME SCREEN
+        ================================================== -->
+
+        <div id="gameScreen">
+
+
+            <div class="card-area">
+
+
+                <div class="card-instruction">
+                    Choose your mystery card
+                </div>
+
+
+                <div class="cards">
+
+
+                    <div
+                        class="mystery-card"
+                        onclick="chooseCard(0)">
+
+                        <div class="card-number">
+                            CARD 01
+                        </div>
+
+                        <div class="card-question">
+                            ?
+                        </div>
+
+                        <div class="card-bottom">
+                            Mystery
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="mystery-card"
+                        onclick="chooseCard(1)">
+
+                        <div class="card-number">
+                            CARD 02
+                        </div>
+
+                        <div class="card-question">
+                            ?
+                        </div>
+
+                        <div class="card-bottom">
+                            Mystery
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="mystery-card"
+                        onclick="chooseCard(2)">
+
+                        <div class="card-number">
+                            CARD 03
+                        </div>
+
+                        <div class="card-question">
+                            ?
+                        </div>
+
+                        <div class="card-bottom">
+                            Mystery
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- QUESTION -->
+
+            <div class="question-area">
+
+
+                <div
+                    id="modeLabel"
+                    class="mode-label">
+
+                    CHOOSE A CARD
+
+                </div>
+
+
+                <div
+                    id="question"
+                    class="question">
+
+                    Your mystery challenge is waiting.
+
+                </div>
+
+
+                <div
+                    id="visualizer"
+                    class="visualizer">
+
+                    <span class="wave"></span>
+                    <span class="wave"></span>
+                    <span class="wave"></span>
+                    <span class="wave"></span>
+                    <span class="wave"></span>
+                    <span class="wave"></span>
+                    <span class="wave"></span>
+
+                </div>
+
+
+                <button
+                    id="listenAgain"
+                    class="listen-again"
+                    onclick="listenAgain()"
+                    style="display:none;">
+
+                    🔊 Listen Again
+
+                </button>
+
+
+            </div>
+
+
+            <!-- ANSWER -->
+
+            <div class="answer-area">
+
+
+                <input
+                    id="answer"
+                    class="answer-input"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Pick a card first...">
+
+
+                <div class="answer-buttons">
+
+
+                    <button
+                        class="check-button"
+                        onclick="checkAnswer()">
+
+                        CHECK ANSWER
+
+                    </button>
+
+
+                    <button
+                        class="hint-button"
+                        onclick="showHint()">
+
+                        💡 HINT
+
+                    </button>
+
+
+                </div>
+
+
+                <div
+                    id="feedback"
+                    class="feedback">
+                </div>
+
+
+                <div
+                    id="combo"
+                    class="combo">
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             RESULT SCREEN
+        ================================================== -->
+
+        <div
+            id="resultScreen"
+            class="result-screen">
+
+
+            <h2>
+                Listening <span>Complete!</span>
+            </h2>
+
+
+            <div
+                id="finalXP"
+                class="result-score">
+
+                0 XP
+
+            </div>
+
+
+            <p
+                id="resultMessage"
+                class="result-message">
+
+            </p>
+
+
+            <div class="result-stats">
+
+
+                <div class="result-stat">
+
+                    <b id="correctCount">
+                        0
+                    </b>
+
+                    <span>
+                        Correct
+                    </span>
+
+                </div>
+
+
+                <div class="result-stat">
+
+                    <b id="bestCombo">
+                        0
+                    </b>
+
+                    <span>
+                        Best Combo
+                    </span>
+
+                </div>
+
+
+                <div class="result-stat">
+
+                    <b id="accuracy">
+                        0%
+                    </b>
+
+                    <span>
+                        Accuracy
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                class="play-again"
+                onclick="startGame()">
+
+                PLAY AGAIN
+
+            </button>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<div
+    id="flash"
+    class="flash">
+</div>
+
+
+<script>
+
+/* =====================================================
+   MENU
+   EXACT HOME-STYLE BEHAVIOR
+===================================================== */
+
+function openMenu() {
+
+    document
+        .getElementById("sideMenu")
+        .classList.add("open");
+
+    document
+        .getElementById("menuOverlay")
+        .classList.add("show");
+
+}
+
+
+function closeMenu() {
+
+    document
+        .getElementById("sideMenu")
+        .classList.remove("open");
+
+    document
+        .getElementById("menuOverlay")
+        .classList.remove("show");
+
+}
+
+
+function goTo(page) {
+
+    closeMenu();
+
+    window.location.href = page;
+
+}
+
+
+/* =====================================================
+   CLOSE MENU WITH ESCAPE
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+
+            closeMenu();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   KOREAN DATABASE
+===================================================== */
+
+const koreanWords = [
+
+    {
+        korean: "안녕하세요",
+        english: "Hello",
+        category: "Greeting"
+    },
+
+    {
+        korean: "감사합니다",
+        english: "Thank you",
+        category: "Greeting"
+    },
+
+    {
+        korean: "미안해요",
+        english: "I'm sorry",
+        category: "Useful"
+    },
+
+    {
+        korean: "괜찮아요",
+        english: "It's okay",
+        category: "Useful"
+    },
+
+    {
+        korean: "물",
+        english: "Water",
+        category: "Food"
+    },
+
+    {
+        korean: "커피",
+        english: "Coffee",
+        category: "Food"
+    },
+
+    {
+        korean: "라면",
+        english: "Ramen",
+        category: "Food"
+    },
+
+    {
+        korean: "김치",
+        english: "Kimchi",
+        category: "Food"
+    },
+
+    {
+        korean: "학교",
+        english: "School",
+        category: "Places"
+    },
+
+    {
+        korean: "친구",
+        english: "Friend",
+        category: "People"
+    },
+
+    {
+        korean: "한국",
+        english: "Korea",
+        category: "Places"
+    },
+
+    {
+        korean: "한국어",
+        english: "Korean language",
+        category: "Language"
+    },
+
+    {
+        korean: "좋아요",
+        english: "It's good / I like it",
+        category: "Expressions"
+    },
+
+    {
+        korean: "좋아해요",
+        english: "I like it",
+        category: "Verbs"
+    },
+
+    {
+        korean: "먹어요",
+        english: "I eat",
+        category: "Verbs"
+    },
+
+    {
+        korean: "마셔요",
+        english: "I drink",
+        category: "Verbs"
+    },
+
+    {
+        korean: "가요",
+        english: "I go",
+        category: "Verbs"
+    },
+
+    {
+        korean: "봐요",
+        english: "I watch / see",
+        category: "Verbs"
+    },
+
+    {
+        korean: "공부해요",
+        english: "I study",
+        category: "Verbs"
+    },
+
+    {
+        korean: "배워요",
+        english: "I learn",
+        category: "Verbs"
+    },
+
+    {
+        korean: "빵",
+        english: "Bread",
+        category: "Food"
+    },
+
+    {
+        korean: "케이크",
+        english: "Cake",
+        category: "Food"
+    },
+
+    {
+        korean: "치즈",
+        english: "Cheese",
+        category: "Food"
+    },
+
+    {
+        korean: "고양이",
+        english: "Cat",
+        category: "Animals"
+    },
+
+    {
+        korean: "강아지",
+        english: "Puppy / Dog",
+        category: "Animals"
+    },
+
+    {
+        korean: "호랑이",
+        english: "Tiger",
+        category: "Animals"
+    },
+
+    {
+        korean: "천천히",
+        english: "Slowly",
+        category: "Adverbs"
+    },
+
+    {
+        korean: "갑자기",
+        english: "Suddenly",
+        category: "Adverbs"
+    },
+
+    {
+        korean: "주세요",
+        english: "Please give me",
+        category: "Useful"
+    },
+
+    {
+        korean: "어디예요",
+        english: "Where is it?",
+        category: "Questions"
+    }
+
+];
+
+
+/* =====================================================
+   GAME VARIABLES
+===================================================== */
+
+let currentWord = null;
+
+let cardWords = [];
+
+let selectedCard = null;
+
+let mode = null;
+
+let round = 0;
+
+let xp = 0;
+
+let lives = 3;
+
+let combo = 0;
+
+let bestCombo = 0;
+
+let correct = 0;
+
+let attempts = 0;
+
+let hintUsed = false;
+
+let answered = false;
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+function startGame() {
+
+    round = 0;
+
+    xp = 0;
+
+    lives = 3;
+
+    combo = 0;
+
+    bestCombo = 0;
+
+    correct = 0;
+
+    attempts = 0;
+
+    currentWord = null;
+
+    selectedCard = null;
+
+    mode = null;
+
+    hintUsed = false;
+
+    answered = false;
+
+
+    document.getElementById("xp").textContent = "0";
+
+    updateLives();
+
+    document.getElementById("startScreen").style.display = "none";
+
+    document.getElementById("resultScreen").style.display = "none";
+
+    document.getElementById("gameScreen").style.display = "block";
+
+
+    nextRound();
+
+}
+
+
+/* =====================================================
+   NEW ROUND
+===================================================== */
+
+function nextRound() {
+
+    if (round >= 10) {
+
+        finishGame();
+
+        return;
+
+    }
+
+
+    round++;
+
+    answered = false;
+
+    hintUsed = false;
+
+    currentWord = null;
+
+    selectedCard = null;
+
+    mode = null;
+
+
+    document.getElementById("round").textContent = round;
+
+    document.getElementById("progressText").textContent =
+        "Choose a card";
+
+
+    document.getElementById("progress").style.width =
+        ((round - 1) / 10 * 100) + "%";
+
+
+    document.getElementById("question").innerHTML =
+        "Your mystery challenge is waiting.";
+
+
+    document.getElementById("modeLabel").textContent =
+        "CHOOSE A CARD";
+
+
+    document.getElementById("listenAgain").style.display =
+        "none";
+
+
+    document.getElementById("visualizer").classList.remove(
+        "active"
+    );
+
+
+    document.getElementById("feedback").textContent = "";
+
+    document.getElementById("feedback").className =
+        "feedback";
+
+
+    document.getElementById("combo").innerHTML = "";
+
+
+    const input =
+        document.getElementById("answer");
+
+    input.value = "";
+
+    input.placeholder =
+        "Pick a card first...";
+
+
+    createCards();
+
+}
+
+
+/* =====================================================
+   CREATE THREE CARDS
+===================================================== */
+
+function createCards() {
+
+    cardWords = [];
+
+    while (cardWords.length < 3) {
+
+        const randomWord =
+            koreanWords[
+                Math.floor(
+                    Math.random() * koreanWords.length
+                )
+            ];
+
+        if (!cardWords.includes(randomWord)) {
+
+            cardWords.push(randomWord);
+
+        }
+
+    }
+
+
+    document
+        .querySelectorAll(".mystery-card")
+        .forEach(function(card) {
+
+            card.classList.remove("selected");
+
+        });
+
+}
+
+
+/* =====================================================
+   CHOOSE CARD
+===================================================== */
+
+function chooseCard(index) {
+
+    if (answered) return;
+
+
+    currentWord = cardWords[index];
+
+    selectedCard = index;
+
+
+    document
+        .querySelectorAll(".mystery-card")
+        .forEach(function(card, i) {
+
+            card.classList.toggle(
+                "selected",
+                i === index
+            );
+
+        });
+
+
+    hintUsed = false;
+
+
+    /*
+       70% = listening
+       30% = English clue
+    */
+
+    if (Math.random() < 0.70) {
+
+        mode = "listening";
+
+        document.getElementById("modeLabel").textContent =
+            "LISTEN CAREFULLY";
+
+
+        document.getElementById("question").innerHTML =
+            "What did you hear? <span class='highlight'>Type it in Korean.</span>";
+
+
+        document.getElementById("answer").placeholder =
+            "Type what you heard in Korean...";
+
+
+        document.getElementById("listenAgain").style.display =
+            "inline-block";
+
+
+        speakKorean();
+
+
+    } else {
+
+        mode = "meaning";
+
+        document.getElementById("modeLabel").textContent =
+            "ENGLISH CLUE";
+
+
+        document.getElementById("question").innerHTML =
+            "<span class='highlight'>"
+            + currentWord.english
+            + "</span>";
+
+
+        document.getElementById("answer").placeholder =
+            "Type the Korean answer...";
+
+
+        document.getElementById("listenAgain").style.display =
+            "none";
+
+    }
+
+
+    document.getElementById("answer").focus();
+
+}
+
+
+/* =====================================================
+   SPEAK KOREAN
+===================================================== */
+
+function speakKorean() {
+
+    if (!currentWord) return;
+
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+
+        document.getElementById("feedback").innerHTML =
+            "Your browser doesn't support speech playback.";
+
+        return;
+
+    }
+
+
+    speechSynthesis.cancel();
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            currentWord.korean
+        );
+
+
+    utterance.lang = "ko-KR";
+
+    utterance.rate = 0.72;
+
+    utterance.pitch = 1;
+
+
+    const voices =
+        speechSynthesis.getVoices();
+
+
+    const koreanVoice =
+        voices.find(function(voice) {
+
+            return voice.lang
+                .toLowerCase()
+                .startsWith("ko");
+
+        });
+
+
+    if (koreanVoice) {
+
+        utterance.voice = koreanVoice;
+
+    }
+
+
+    document
+        .getElementById("visualizer")
+        .classList.add("active");
+
+
+    speechSynthesis.speak(utterance);
+
+
+    utterance.onend = function() {
+
+        document
+            .getElementById("visualizer")
+            .classList.remove("active");
+
+    };
+
+}
+
+
+/* =====================================================
+   LISTEN AGAIN
+===================================================== */
+
+function listenAgain() {
+
+    if (!currentWord || mode !== "listening") {
+        return;
+    }
+
+    speakKorean();
+
+}
+
+
+/* =====================================================
+   NORMALIZE ANSWER
+===================================================== */
+
+function normalizeAnswer(text) {
+
+    return text
+        .trim()
+        .replace(/\s+/g, "");
+
+}
+
+
+/* =====================================================
+   CHECK ANSWER
+===================================================== */
+
+function checkAnswer() {
+
+    if (!currentWord) {
+
+        showFeedback(
+            "Pick one of the mystery cards first!",
+            "wrong"
+        );
+
+        return;
+
+    }
+
+
+    if (answered) return;
+
+
+    const input =
+        document.getElementById("answer").value;
+
+
+    if (!input.trim()) {
+
+        showFeedback(
+            "Type your answer first!",
+            "wrong"
+        );
+
+        return;
+
+    }
+
+
+    attempts++;
+
+
+    const answer =
+        normalizeAnswer(input);
+
+
+    const correctAnswer =
+        normalizeAnswer(
+            currentWord.korean
+        );
+
+
+    if (answer === correctAnswer) {
+
+        correctAnswerAction();
+
+    } else {
+
+        wrongAnswerAction();
+
+    }
+
+}
+
+
+/* =====================================================
+   CORRECT
+===================================================== */
+
+function correctAnswerAction() {
+
+    answered = true;
+
+    correct++;
+
+    combo++;
+
+
+    if (combo > bestCombo) {
+
+        bestCombo = combo;
+
+    }
+
+
+    let earnedXP = 10;
+
+
+    if (combo >= 2) {
+        earnedXP += 3;
+    }
+
+    if (combo >= 4) {
+        earnedXP += 5;
+    }
+
+    if (combo >= 6) {
+        earnedXP += 7;
+    }
+
+
+    if (hintUsed) {
+
+        earnedXP = Math.max(
+            5,
+            earnedXP - 4
+        );
+
+    }
+
+
+    xp += earnedXP;
+
+
+    document.getElementById("xp").textContent =
+        xp;
+
+
+    document.getElementById("question").innerHTML =
+        "Correct! The answer is <span class='highlight'>"
+        + currentWord.korean
+        + "</span>";
+
+
+    showFeedback(
+        "✓ Perfect! +" + earnedXP + " XP",
+        "correct"
+    );
+
+
+    document.getElementById("combo").innerHTML =
+        combo >= 2
+            ? "🔥 <strong>" + combo + "× COMBO!</strong>"
+            : "";
+
+
+    document
+        .getElementById("flash")
+        .classList.remove("active");
+
+
+    void document
+        .getElementById("flash")
+        .offsetWidth;
+
+
+    document
+        .getElementById("flash")
+        .classList.add("active");
+
+
+    speakKorean();
+
+
+    setTimeout(
+        nextRound,
+        1700
+    );
+
+}
+
+
+/* =====================================================
+   WRONG
+===================================================== */
+
+function wrongAnswerAction() {
+
+    lives--;
+
+    combo = 0;
+
+    updateLives();
+
+
+    if (lives <= 0) {
+
+        answered = true;
+
+
+        document.getElementById("question").innerHTML =
+            "The answer was <span class='highlight'>"
+            + currentWord.korean
+            + "</span>";
+
+
+        showFeedback(
+            "Out of lives!",
+            "wrong"
+        );
+
+
+        setTimeout(
+            finishGame,
+            1800
+        );
+
+
+        return;
+
+    }
+
+
+    showFeedback(
+        "✕ Not quite — try again!",
+        "wrong"
+    );
+
+
+    document.getElementById("combo").textContent =
+        "Combo reset";
+
+
+    /*
+       Play the sound again after a wrong answer
+       when it is a listening round.
+    */
+
+    if (mode === "listening") {
+
+        setTimeout(
+            speakKorean,
+            400
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   HINT
+===================================================== */
+
+function showHint() {
+
+    if (!currentWord) {
+
+        showFeedback(
+            "Pick a card first!",
+            "wrong"
+        );
+
+        return;
+
+    }
+
+
+    if (answered) return;
+
+
+    hintUsed = true;
+
+
+    const firstLetter =
+        currentWord.korean.charAt(0);
+
+
+    const length =
+        currentWord.korean.length;
+
+
+    showFeedback(
+        "💡 Hint: starts with "
+        + firstLetter
+        + " • "
+        + length
+        + " Korean characters",
+        "hint"
+    );
+
+}
+
+
+/* =====================================================
+   FEEDBACK
+===================================================== */
+
+function showFeedback(
+    message,
+    type
+) {
+
+    const feedback =
+        document.getElementById("feedback");
+
+
+    feedback.textContent = message;
+
+
+    feedback.className =
+        "feedback " + type;
+
+}
+
+
+/* =====================================================
+   LIVES
+===================================================== */
+
+function updateLives() {
+
+    let hearts = "";
+
+
+    for (
+        let i = 0;
+        i < 3;
+        i++
+    ) {
+
+        hearts +=
+            i < lives
+                ? "♥ "
+                : "♡ ";
+
+    }
+
+
+    document.getElementById("lives").textContent =
+        hearts.trim();
+
+}
+
+
+/* =====================================================
+   FINISH
+===================================================== */
+
+function finishGame() {
+
+    speechSynthesis.cancel();
+
+
+    document.getElementById("gameScreen").style.display =
+        "none";
+
+
+    document.getElementById("resultScreen").style.display =
+        "block";
+
+
+    document.getElementById("progress").style.width =
+        "100%";
+
+
+    document.getElementById("progressText").textContent =
+        "Complete!";
+
+
+    document.getElementById("finalXP").textContent =
+        xp + " XP";
+
+
+    document.getElementById("correctCount").textContent =
+        correct;
+
+
+    document.getElementById("bestCombo").textContent =
+        bestCombo;
+
+
+    const accuracy =
+        attempts === 0
+            ? 0
+            : Math.round(
+                (correct / attempts) * 100
+            );
+
+
+    document.getElementById("accuracy").textContent =
+        accuracy + "%";
+
+
+    let message;
+
+
+    if (accuracy >= 90) {
+
+        message =
+            "Your Korean listening ears are seriously getting stronger.";
+
+    } else if (accuracy >= 70) {
+
+        message =
+            "Great work! Keep listening and your Korean will become even sharper.";
+
+    } else if (accuracy >= 50) {
+
+        message =
+            "Nice start! Keep practicing and those Korean sounds will become easier to recognize.";
+
+    } else {
+
+        message =
+            "Every listening challenge makes you better. Try another round and keep going.";
+
+    }
+
+
+    document.getElementById("resultMessage").textContent =
+        message;
+
+}
+
+
+/* =====================================================
+   ENTER KEY
+===================================================== */
+
+document
+    .getElementById("answer")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                checkAnswer();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   LOAD KOREAN VOICES
+===================================================== */
+
+if ("speechSynthesis" in window) {
+
+    speechSynthesis.onvoiceschanged = function() {
+
+        speechSynthesis.getVoices();
+
+    };
+
+}
+
+</script>
+
+
+</body>
+</html>
