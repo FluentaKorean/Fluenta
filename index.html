@@ -791,10 +791,30 @@ if (lastVisit !== today) {
     localStorage.setItem("lastVisit", today);
 }
 </script>
+
+<script>
+// Returning from streak.html with ?home=1 should open Fluenta Home, not the signup screen.
+document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("home") === "1") {
+        const savedName = localStorage.getItem("fluentaName");
+        const savedUsername = localStorage.getItem("fluentaUsername");
+
+        if (savedName) {
+            document.getElementById("signupScreen").style.display = "none";
+            document.getElementById("mainWebsite").style.display = "block";
+            const profileName = document.getElementById("profileName");
+            const profileUsername = document.getElementById("profileUsername");
+            if (profileName) profileName.textContent = savedName;
+            if (profileUsername) profileUsername.textContent = "@" + (savedUsername || "");
+        }
+    }
+});
+</script>
+
 <div style="position:fixed; top:20px; right:25px; z-index:9999;">
-    <a href="streak.html" style="display:flex; align-items:center; gap:8px; color:white; text-decoration:none; font-size:20px; font-weight:bold;">
-        <img src="streakday1.png" style="width:45px; height:45px; object-fit:contain;">
-        <span>1 day</span>
+    <a href="streak.html" aria-label="Open streak" style="display:block;">
+        <img src="streakday1.png" alt="Streak" style="width:45px; height:45px; object-fit:contain;">
     </a>
 </div>
 
@@ -900,12 +920,12 @@ if (lastVisit !== today) {
             Home
         </button>
 
-        <button class="menu-item" onclick="showPage('lessons')">
+        <button class="menu-item" onclick="location.href='lessons.html'">
             <span class="menu-icon">📚</span>
             Lessons
         </button>
 
-        <button class="menu-item" onclick="showPage('hangul')">
+        <button class="menu-item" onclick="location.href='hangul.html'">
             <span class="menu-icon hangul-icon">한</span>
             Hangul
         </button>
@@ -970,8 +990,8 @@ if (lastVisit !== today) {
 
                 <button
                     class="pink-button hero-button"
-                    onclick="showPage('lessons')">
-                    LEARN 😀
+                    onclick="location.href='lessons.html'">
+                    START LEARNING
                 </button>
 
             </div>
@@ -994,9 +1014,7 @@ if (lastVisit !== today) {
 
 
 
-    <!-- =================================================
-         LESSONS
-    ================================================== -->
+ 
 
 
 
