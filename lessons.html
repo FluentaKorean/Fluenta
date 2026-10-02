@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluenta - Lessons</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#101010;color:#fff}
+.topbar{height:75px;background:#181818;border-bottom:2px solid #292929;display:flex;align-items:center;padding:0 30px;position:sticky;top:0;z-index:50}
+.back-button{text-decoration:none;color:#ddd;font-size:18px;font-weight:bold}
+.page-title{position:absolute;left:50%;transform:translateX(-50%);font-size:27px;font-weight:800;color:#fff}
+.container{max-width:1000px;margin:auto;padding:40px 25px 120px}
+.intro{text-align:center;margin-bottom:32px}.intro h1{font-size:42px;margin:0 0 10px}.intro p{color:#aaa;font-size:18px;margin:0}
+.level-card{background:#191919;border:1px solid #2b2b2b;border-radius:24px;padding:26px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.level-top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}.level-tag{color:#ed72a1;font-weight:800;letter-spacing:.5px}.level-title{font-size:30px;margin:4px 0}.level-desc{color:#aaa;margin:0}.progress-wrap{min-width:180px}.progress-label{font-size:13px;color:#aaa;text-align:right;margin-bottom:7px}.progress{height:10px;background:#303030;border-radius:20px;overflow:hidden}.progress-bar{height:100%;width:25%;background:#ed72a1;border-radius:20px;transition:.3s}
+.lesson-path{position:relative;max-width:700px;margin:15px auto 35px;padding:10px 0}.path-line{position:absolute;left:50%;top:45px;width:7px;height:calc(100% - 90px);background:#c84f7e;transform:translateX(-50%);border-radius:20px}.lesson-row{position:relative;z-index:2;display:flex;justify-content:center;margin:28px 0}.lesson-row:nth-child(even){transform:translateX(105px)}.lesson-row:nth-child(odd){transform:translateX(-105px)}
+.lesson-circle{width:120px;height:120px;border:0;border-radius:50%;background:#ed72a1;color:#fff;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 7px 0 #c84f7e;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.15s}.lesson-circle:hover{transform:translateY(-4px);box-shadow:0 11px 0 #c84f7e}.lesson-circle:active{transform:translateY(5px);box-shadow:0 2px 0 #c84f7e}.lesson-number{font-size:13px}.lesson-small{font-size:12px;color:#ffd5e5;margin-top:4px}
+.lesson-area{display:none;background:#191919;border:1px solid #2b2b2b;border-radius:24px;padding:30px;margin-top:20px}.lesson-area.active{display:block}.lesson-head{text-align:center}.lesson-head h2{font-size:32px;margin:0 0 8px}.lesson-head p{color:#aaa;margin:0 auto 25px;max-width:700px}.mascot-card{position:relative;min-height:250px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:15px}.mascot{max-height:205px;width:auto;max-width:230px;object-fit:contain}.speech{position:absolute;top:0;left:50%;transform:translateX(-50%);background:#fff;color:#222;padding:11px 16px;border-radius:18px;font-weight:800;max-width:280px;text-align:center;z-index:3;box-shadow:0 5px 0 #ddd}.speech:after{content:"";position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);border:10px solid transparent;border-top-color:#fff;border-bottom:0}
+.phrase-card{background:#111;border:1px solid #303030;border-radius:22px;padding:25px;text-align:center;margin:20px 0}.phrase-korean{font-size:45px;font-weight:900;color:#ed72a1;margin:5px}.phrase-roman{font-size:18px;color:#bbb;margin-bottom:18px}.meaning{color:#eee;font-size:17px;margin-bottom:16px}.voice-btn,.choice-btn,.next-btn{border:0;cursor:pointer;font-weight:800;border-radius:14px}.voice-btn{background:#ed72a1;color:#fff;padding:12px 20px;font-size:16px;box-shadow:0 4px 0 #c84f7e}.voice-btn:active,.next-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #c84f7e}.picture-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:22px 0}.picture-card{background:#222;border:2px solid #333;border-radius:18px;padding:12px;cursor:pointer;transition:.15s;text-align:center;color:#fff}.picture-card:hover{border-color:#ed72a1;transform:translateY(-3px)}.picture-card.selected{border-color:#ed72a1;box-shadow:0 0 0 3px rgba(237,114,161,.15)}.picture-card.correct{border-color:#66d17a}.picture-card.wrong{border-color:#ff6b8f}.picture-card img{width:100%;height:145px;object-fit:cover;border-radius:13px;background:#333;display:block}.picture-card span{display:block;margin-top:9px;font-weight:800}.feedback{display:none;text-align:center;padding:14px;border-radius:14px;font-weight:800;margin:12px 0}.feedback.show{display:block}.feedback.good{background:#17321e;color:#8df0a0}.feedback.bad{background:#381722;color:#ff9db6}.next-btn{display:none;background:#ed72a1;color:#fff;padding:13px 24px;box-shadow:0 4px 0 #c84f7e;margin:14px auto 0}.next-btn.show{display:block}
+.practice{margin-top:30px}.practice h3{text-align:center;font-size:25px;margin-bottom:8px}.practice-sub{text-align:center;color:#aaa;margin-bottom:20px}.phrase-list{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.phrase-mini{background:#222;border:1px solid #333;border-radius:18px;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:15px}.phrase-mini strong{font-size:24px;color:#ed72a1}.phrase-mini small{display:block;color:#aaa;margin-top:5px}.mini-voice{background:#333;color:#fff;border:0;border-radius:12px;padding:10px 13px;cursor:pointer;font-weight:800}.mini-voice:hover{background:#ed72a1}
+.result{display:none;text-align:center;padding:25px}.result.show{display:block}.result h2{font-size:34px;color:#ed72a1}.xp{display:inline-block;background:#272027;border:1px solid #49303e;border-radius:20px;padding:9px 16px;color:#ffb9d1;font-weight:800}
+@media(max-width:650px){.container{padding:28px 12px 90px}.intro h1{font-size:34px}.level-top{align-items:flex-start;flex-direction:column}.progress-wrap{width:100%}.lesson-row:nth-child(even){transform:translateX(60px)}.lesson-row:nth-child(odd){transform:translateX(-60px)}.lesson-circle{width:98px;height:98px;font-size:13px}.picture-grid{grid-template-columns:repeat(2,1fr)}.picture-card img{height:120px}.phrase-list{grid-template-columns:1fr}.lesson-area{padding:20px}.phrase-korean{font-size:35px}.speech{max-width:235px;font-size:14px}.mascot-card{min-height:235px}.mascot{max-height:185px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+<a href="index.html" class="back-button">← Home</a>
+<div class="page-title">Lessons</div>
+</header>
+
+<main class="container">
+<section class="intro">
+<h1>Learn Korean</h1>
+<p>Follow the path, learn useful phrases, and practice speaking Korean.</p>
+</section>
+
+<section class="level-card">
+<div class="level-top">
+<div><div class="level-tag">LEVEL 1</div><h2 class="level-title">Order at a Café ☕</h2><p class="level-desc">Learn how to order drinks and simple café items in Korean.</p></div>
+<div class="progress-wrap"><div class="progress-label" id="progressLabel">1 of 4 lessons</div><div class="progress"><div class="progress-bar" id="progressBar"></div></div></div>
+</div>
+
+<div class="lesson-path">
+<div class="path-line"></div>
+<div class="lesson-row"><button class="lesson-circle" onclick="openLesson(1)"><span class="lesson-number">LESSON 1</span>Say Please<span class="lesson-small">주세요</span></button></div>
+<div class="lesson-row"><button class="lesson-circle" onclick="openLesson(2)"><span class="lesson-number">LESSON 2</span>Drinks<span class="lesson-small">음료</span></button></div>
+<div class="lesson-row"><button class="lesson-circle" onclick="openLesson(3)"><span class="lesson-number">LESSON 3</span>Food<span class="lesson-small">음식</span></button></div>
+<div class="lesson-row"><button class="lesson-circle" onclick="openLesson(4)"><span class="lesson-number">LESSON 4</span>Order It All<span class="lesson-small">주문하기</span></button></div>
+</div>
+
+<section id="lessonArea" class="lesson-area">
+<div class="lesson-head"><h2 id="lessonTitle"></h2><p id="lessonDescription"></p></div>
+
+<div class="mascot-card"><div class="speech" id="speech">Let's order something tasty!</div><img src="fluenta.png.png" class="mascot" alt="Fluenta mascot"></div>
+
+<div class="phrase-card">
+<div class="phrase-korean" id="mainKorean">커피 주세요</div>
+<div class="phrase-roman" id="mainRoman">keopi juseyo</div>
+<div class="meaning" id="mainMeaning">Please give me coffee.</div>
+<button class="voice-btn" onclick="speakCurrent()">🔊 Hear Korean</button>
+</div>
+
+<div id="interactive"></div>
+
+<div class="practice">
+<h3>Level 1 Phrase Bank</h3>
+<p class="practice-sub">Tap the speaker to hear each Korean phrase.</p>
+<div class="phrase-list" id="phraseList"></div>
+</div>
+
+<div class="result" id="result"><h2>🎉 Lesson Complete!</h2><p>You earned <span class="xp">+10 XP</span></p><p>Keep going to unlock the next café lesson.</p></div>
+</section>
+</section>
+</main>
+
+<script>
+const lessons={
+1:{title:'Lesson 1 — Say Please',desc:'Learn the useful café pattern “주세요” and use it to ask for something politely.',speech:'Easy! Just add 주세요 after the thing you want.',main:['커피 주세요','keopi juseyo','Please give me coffee.'],phrases:[['커피 주세요','keopi juseyo','Please give me coffee.'],['차 주세요','cha juseyo','Please give me tea.'],['빵 주세요','ppang juseyo','Please give me bread.'],['물 주세요','mul juseyo','Please give me water.']],quiz:{question:'Which picture matches “커피 주세요”?',items:[['coffee.png','Coffee'],['tea.png','Tea'],['bread.png','Bread'],['rice.png','Rice']],correct:0}},
+2:{title:'Lesson 2 — Drinks',desc:'Learn common café drinks and practice saying what you want.',speech:'Pick a drink, then say 주세요!',main:['차 주세요','cha juseyo','Please give me tea.'],phrases:[['커피 주세요','keopi juseyo','Please give me coffee.'],['차 주세요','cha juseyo','Please give me tea.'],['물 주세요','mul juseyo','Please give me water.'],['주스 주세요','juseu juseyo','Please give me juice.']],quiz:{question:'Which picture matches “차 주세요”?',items:[['coffee.png','Coffee'],['tea.png','Tea'],['juice.png','Juice'],['water.png','Water']],correct:1}},
+3:{title:'Lesson 3 — Café Food',desc:'Practice ordering simple food items politely.',speech:'Nice! Now let’s add some food.',main:['빵 주세요','ppang juseyo','Please give me bread.'],phrases:[['빵 주세요','ppang juseyo','Please give me bread.'],['케이크 주세요','keikeu juseyo','Please give me cake.'],['샌드위치 주세요','saendeu-wichi juseyo','Please give me a sandwich.'],['밥 주세요','bap juseyo','Please give me rice.']],quiz:{question:'Which picture matches “빵 주세요”?',items:[['bread.png','Bread'],['cake.png','Cake'],['coffee.png','Coffee'],['rice.png','Rice']],correct:0}},
+4:{title:'Lesson 4 — Order It All',desc:'Put everything together and practice a full café order.',speech:'You’re ready to order at the café!',main:['커피하고 케이크 주세요','keopihago keikeu juseyo','Please give me coffee and cake.'],phrases:[['커피하고 케이크 주세요','keopihago keikeu juseyo','Please give me coffee and cake.'],['차하고 빵 주세요','chahago ppang juseyo','Please give me tea and bread.'],['물하고 밥 주세요','mulhago bap juseyo','Please give me water and rice.'],['주스하고 케이크 주세요','juseuhago keikeu juseyo','Please give me juice and cake.']],quiz:{question:'Which picture should you choose for “커피 주세요”?',items:[['coffee.png','Coffee'],['bread.png','Bread'],['tea.png','Tea'],['cake.png','Cake']],correct:0}}
+};
+let currentLesson=1;let selected=null;
+function speak(text){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.82;window.speechSynthesis.speak(u)}
+function speakCurrent(){speak(lessons[currentLesson].main[0])}
+function openLesson(n){currentLesson=n;selected=null;const l=lessons[n];document.getElementById('lessonArea').classList.add('active');document.getElementById('lessonTitle').textContent=l.title;document.getElementById('lessonDescription').textContent=l.desc;document.getElementById('speech').textContent=l.speech;document.getElementById('mainKorean').textContent=l.main[0];document.getElementById('mainRoman').textContent=l.main[1];document.getElementById('mainMeaning').textContent=l.main[2];document.getElementById('progressLabel').textContent=n+' of 4 lessons';document.getElementById('progressBar').style.width=(n/4*100)+'%';renderQuiz(l.quiz);renderPhrases(l.phrases);document.getElementById('result').classList.remove('show');document.getElementById('lessonArea').scrollIntoView({behavior:'smooth'})}
+function renderQuiz(q){const box=document.getElementById('interactive');box.innerHTML='<h3 style="text-align:center;margin:28px 0 8px;font-size:25px">'+q.question+'</h3><div class="picture-grid" id="pictureGrid"></div><div class="feedback" id="feedback"></div><button class="next-btn" id="nextBtn" onclick="nextLesson()">Next Lesson →</button>';const grid=document.getElementById('pictureGrid');q.items.forEach((item,i)=>{const b=document.createElement('button');b.className='picture-card';b.innerHTML='<img src="'+item[0]+'" alt="'+item[1]+'"><span>'+item[1]+'</span>';b.onclick=()=>choosePicture(i,b,q.correct);grid.appendChild(b)})}
+function choosePicture(i,btn,correct){if(selected!==null)return;selected=i;const all=document.querySelectorAll('.picture-card');all.forEach(x=>x.disabled=true);const fb=document.getElementById('feedback');if(i===correct){btn.classList.add('correct');fb.className='feedback show good';fb.textContent='Correct! Great order! 🎉';document.getElementById('nextBtn').classList.add('show');}else{btn.classList.add('wrong');fb.className='feedback show bad';fb.textContent='Not quite! Try the next lesson when you’re ready.';setTimeout(()=>{selected=null;all.forEach(x=>{x.disabled=false;x.classList.remove('wrong')});fb.className='feedback';},900)}}
+function nextLesson(){if(currentLesson<4){openLesson(currentLesson+1)}else{document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth'})}}
+function renderPhrases(arr){const box=document.getElementById('phraseList');box.innerHTML='';arr.forEach(p=>{const d=document.createElement('div');d.className='phrase-mini';d.innerHTML='<div><strong>'+p[0]+'</strong><small>'+p[1]+' · '+p[2]+'</small></div><button class="mini-voice" onclick="speak(\''+p[0]+'\')">🔊</button>';box.appendChild(d)})}
+openLesson(1);
+</script>
+</body>
+</html>
