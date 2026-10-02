@@ -3,296 +3,843 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Vocabulary - Fluenta Korean</title>
+<title>Fluenta Korean - Vocabulary</title>
+<link rel="icon" href="fluenta.png.png">
 
 <style>
-    body {
-        margin: 0;
-        background: #090909;
-        color: white;
-        font-family: Arial, sans-serif;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(237,76,141,0.14), transparent 25%),
+        radial-gradient(circle at 90% 20%, rgba(180,60,255,0.10), transparent 25%),
+        #090909;
+    color: white;
+    min-height: 100vh;
+}
+
+/* TOP BAR */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 5%;
+    background: rgba(9,9,9,0.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.logo span {
+    color: #ed4c8d;
+}
+
+.logo-dot {
+    width: 11px;
+    height: 11px;
+    background: #ed4c8d;
+    border-radius: 50%;
+    box-shadow: 0 0 18px #ed4c8d;
+}
+
+/* CLOSE BUTTON */
+
+.close-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid #333;
+    background: #151515;
+    color: white;
+    font-size: 21px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.close-btn:hover {
+    background: #ed4c8d;
+    border-color: #ed4c8d;
+    transform: rotate(90deg);
+}
+
+/* HERO */
+
+.hero {
+    text-align: center;
+    padding: 50px 20px 25px;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(237,76,141,0.12);
+    border: 1px solid rgba(237,76,141,0.3);
+    color: #ff80b0;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 7vw, 68px);
+    line-height: 1;
+    margin-bottom: 15px;
+    letter-spacing: -2px;
+}
+
+.hero h1 span {
+    color: #ed4c8d;
+}
+
+.hero p {
+    color: #aaa;
+    font-size: 16px;
+    max-width: 600px;
+    margin: auto;
+    line-height: 1.6;
+}
+
+/* STATS */
+
+.stats {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.stat {
+    background: linear-gradient(145deg, #171717, #101010);
+    border: 1px solid #292929;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat::before {
+    content: "";
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    background: rgba(237,76,141,0.15);
+    border-radius: 50%;
+    filter: blur(20px);
+    top: -30px;
+    right: -20px;
+}
+
+.stat-number {
+    font-size: 27px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.stat-label {
+    color: #888;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* SEARCH */
+
+.search-area {
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto 20px;
+}
+
+.search {
+    width: 100%;
+    padding: 17px 20px;
+    background: #141414;
+    border: 1px solid #292929;
+    border-radius: 16px;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: 0.25s;
+}
+
+.search:focus {
+    border-color: #ed4c8d;
+    box-shadow: 0 0 20px rgba(237,76,141,0.12);
+}
+
+.search::placeholder {
+    color: #666;
+}
+
+/* CATEGORY BUTTONS */
+
+.categories {
+    width: 90%;
+    max-width: 1000px;
+    margin: 15px auto 30px;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.categories::-webkit-scrollbar {
+    height: 3px;
+}
+
+.categories::-webkit-scrollbar-thumb {
+    background: #ed4c8d;
+    border-radius: 10px;
+}
+
+.category {
+    flex-shrink: 0;
+    border: 1px solid #292929;
+    background: #141414;
+    color: #aaa;
+    padding: 10px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.category:hover,
+.category.active {
+    background: #ed4c8d;
+    color: white;
+    border-color: #ed4c8d;
+}
+
+/* SECTION */
+
+.section-title {
+    width: 90%;
+    max-width: 1000px;
+    margin: 35px auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section-title h2 {
+    font-size: 22px;
+}
+
+.section-title span {
+    color: #777;
+    font-size: 13px;
+}
+
+/* WORD GRID */
+
+.word-grid {
+    width: 90%;
+    max-width: 1000px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding-bottom: 60px;
+}
+
+/* WORD CARD */
+
+.word-card {
+    background:
+        linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015)),
+        #111;
+    border: 1px solid #282828;
+    border-radius: 22px;
+    padding: 21px;
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s;
+    animation: cardIn 0.5s ease both;
+}
+
+.word-card::after {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: rgba(237,76,141,0.09);
+    border-radius: 50%;
+    right: -35px;
+    bottom: -35px;
+    filter: blur(4px);
+}
+
+.word-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(237,76,141,0.6);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.word-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.korean {
+    font-size: 29px;
+    font-weight: 800;
+}
+
+.english {
+    color: #aaa;
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.romanization {
+    color: #ed4c8d;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.voice {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: white;
+    cursor: pointer;
+    font-size: 17px;
+    transition: 0.2s;
+    position: relative;
+    z-index: 2;
+}
+
+.voice:hover {
+    background: #ed4c8d;
+    border-color: #ed4c8d;
+    transform: scale(1.08);
+}
+
+.voice:active {
+    transform: scale(0.92);
+}
+
+.tag {
+    display: inline-block;
+    margin-top: 17px;
+    padding: 5px 9px;
+    border-radius: 8px;
+    background: #1c1c1c;
+    color: #777;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* EMPTY */
+
+.empty {
+    display: none;
+    text-align: center;
+    color: #777;
+    padding: 50px;
+    grid-column: 1/-1;
+}
+
+/* FOOTER */
+
+.footer {
+    text-align: center;
+    color: #555;
+    padding: 25px;
+    font-size: 12px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 800px) {
+    .word-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 550px) {
+    .stats {
+        grid-template-columns: 1fr;
     }
 
-    .top-bar {
-        height: 75px;
-        background: #090909;
-        border-bottom: 1px solid #252525;
-        display: flex;
-        align-items: center;
-        padding: 0 25px;
+    .word-grid {
+        grid-template-columns: 1fr;
     }
 
-    .back-button {
-        background: #d93678;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 12px 18px;
-        font-size: 15px;
-        cursor: pointer;
-        margin-right: 18px;
+    .hero {
+        padding-top: 35px;
     }
 
-    .logo {
-        color: #ff75aa;
-        font-size: 23px;
-        font-weight: bold;
+    .hero h1 {
+        font-size: 43px;
     }
-
-    .page {
-        max-width: 900px;
-        margin: 40px auto;
-        padding: 20px;
-    }
-
-    h1 {
-        color: #ff78ae;
-        text-align: center;
-        font-size: 38px;
-    }
-
-    .subtitle {
-        text-align: center;
-        color: #aaa;
-        margin-bottom: 35px;
-    }
-
-    .word-card {
-        background: #141414;
-        border: 1px solid #333;
-        border-radius: 20px;
-        padding: 25px;
-        margin-bottom: 20px;
-    }
-
-    .korean {
-        color: #ff78ae;
-        font-size: 32px;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    .meaning {
-        color: #ddd;
-        font-size: 17px;
-        margin-bottom: 15px;
-    }
-
-    .sentence {
-        background: #1d1d1d;
-        border-radius: 14px;
-        padding: 15px;
-        margin-top: 15px;
-    }
-
-    .sentence-korean {
-        font-size: 22px;
-        color: white;
-        margin-bottom: 8px;
-    }
-
-    .translation {
-        color: #aaa;
-        margin-bottom: 14px;
-    }
-
-    .sound-button {
-        background: #d93678;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 10px 16px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .sound-button:hover {
-        background: #ed4c8d;
-    }
+}
 </style>
 </head>
 
 <body>
 
-<div class="top-bar">
-    <button class="back-button" onclick="location.href='index.html'">
-        ← Back
-    </button>
+<header class="topbar">
+    <div class="logo">
+        <div class="logo-dot"></div>
+        Fluenta <span>Korean</span>
+    </div>
 
-    <div class="logo">Fluenta Korean</div>
-</div>
+    <button class="close-btn" onclick="goHome()">×</button>
+</header>
 
-<div class="page">
 
-    <h1>Vocabulary</h1>
+<section class="hero">
 
-    <p class="subtitle">
-        Learn useful Korean words and listen to how they sound.
+    <div class="hero-badge">VOCABULARY BOOST</div>
+
+    <h1>Build Your <span>Korean</span> ⚡</h1>
+
+    <p>
+        Learn useful Korean words, hear how they sound,
+        and build your vocabulary one word at a time.
     </p>
 
-    <!-- WORD 1 -->
-    <div class="word-card">
+</section>
 
-        <div class="korean">먹다</div>
-        <div class="meaning">To eat</div>
 
-        <button class="sound-button"
-            onclick="speakKorean('먹다')">
-            🔊 Play Sound
-        </button>
+<section class="stats">
 
-        <div class="sentence">
-            <div class="sentence-korean">
-                저는 밥을 먹어요.
-            </div>
-
-            <div class="translation">
-                I eat rice.
-            </div>
-
-            <button class="sound-button"
-                onclick="speakKorean('저는 밥을 먹어요.')">
-                🔊 Listen to Sentence
-            </button>
-        </div>
-
+    <div class="stat">
+        <div class="stat-number">120</div>
+        <div class="stat-label">WORDS</div>
     </div>
 
-
-    <!-- WORD 2 -->
-    <div class="word-card">
-
-        <div class="korean">마시다</div>
-        <div class="meaning">To drink</div>
-
-        <button class="sound-button"
-            onclick="speakKorean('마시다')">
-            🔊 Play Sound
-        </button>
-
-        <div class="sentence">
-            <div class="sentence-korean">
-                물을 마셔요.
-            </div>
-
-            <div class="translation">
-                I drink water.
-            </div>
-
-            <button class="sound-button"
-                onclick="speakKorean('물을 마셔요.')">
-                🔊 Listen to Sentence
-            </button>
-        </div>
-
+    <div class="stat">
+        <div class="stat-number">8</div>
+        <div class="stat-label">CATEGORIES</div>
     </div>
 
-
-    <!-- WORD 3 -->
-    <div class="word-card">
-
-        <div class="korean">보다</div>
-        <div class="meaning">To see / watch</div>
-
-        <button class="sound-button"
-            onclick="speakKorean('보다')">
-            🔊 Play Sound
-        </button>
-
-        <div class="sentence">
-            <div class="sentence-korean">
-                영화를 봐요.
-            </div>
-
-            <div class="translation">
-                I watch a movie.
-            </div>
-
-            <button class="sound-button"
-                onclick="speakKorean('영화를 봐요.')">
-                🔊 Listen to Sentence
-            </button>
-        </div>
-
+    <div class="stat">
+        <div class="stat-number">🔊</div>
+        <div class="stat-label">VOICE READY</div>
     </div>
 
-
-    <!-- WORD 4 -->
-    <div class="word-card">
-
-        <div class="korean">가다</div>
-        <div class="meaning">To go</div>
-
-        <button class="sound-button"
-            onclick="speakKorean('가다')">
-            🔊 Play Sound
-        </button>
-
-        <div class="sentence">
-            <div class="sentence-korean">
-                학교에 가요.
-            </div>
-
-            <div class="translation">
-                I go to school.
-            </div>
-
-            <button class="sound-button"
-                onclick="speakKorean('학교에 가요.')">
-                🔊 Listen to Sentence
-            </button>
-        </div>
-
-    </div>
+</section>
 
 
-    <!-- WORD 5 -->
-    <div class="word-card">
+<div class="search-area">
+    <input
+        type="text"
+        id="search"
+        class="search"
+        placeholder="Search Korean or English..."
+        oninput="searchWords()"
+    >
+</div>
 
-        <div class="korean">좋아하다</div>
-        <div class="meaning">To like</div>
 
-        <button class="sound-button"
-            onclick="speakKorean('좋아하다')">
-            🔊 Play Sound
-        </button>
+<div class="categories">
 
-        <div class="sentence">
-            <div class="sentence-korean">
-                저는 한국어를 좋아해요.
-            </div>
+    <button class="category active" onclick="filterCategory('all', this)">
+        All
+    </button>
 
-            <div class="translation">
-                I like Korean.
-            </div>
+    <button class="category" onclick="filterCategory('daily', this)">
+        Daily
+    </button>
 
-            <button class="sound-button"
-                onclick="speakKorean('저는 한국어를 좋아해요.')">
-                🔊 Listen to Sentence
-            </button>
-        </div>
+    <button class="category" onclick="filterCategory('food', this)">
+        Food
+    </button>
 
-    </div>
+    <button class="category" onclick="filterCategory('people', this)">
+        People
+    </button>
 
+    <button class="category" onclick="filterCategory('places', this)">
+        Places
+    </button>
+
+    <button class="category" onclick="filterCategory('actions', this)">
+        Actions
+    </button>
+
+    <button class="category" onclick="filterCategory('feelings', this)">
+        Feelings
+    </button>
+
+    <button class="category" onclick="filterCategory('school', this)">
+        School
+    </button>
+
+</div>
+
+
+<div class="section-title">
+    <h2 id="sectionTitle">✨ Vocabulary Drop</h2>
+    <span id="count">120 words</span>
+</div>
+
+
+<div class="word-grid" id="wordGrid"></div>
+
+
+<div class="footer">
+    Keep learning. Keep growing. Keep speaking Korean. 🇰🇷
 </div>
 
 
 <script>
 
-function speakKorean(text) {
+/* ================================
+   VOCABULARY
+================================ */
 
-    const speech = new SpeechSynthesisUtterance(text);
+const words = [
 
-    speech.lang = "ko-KR";
-    speech.rate = 0.85;
-    speech.pitch = 1;
+/* DAILY */
 
-    window.speechSynthesis.cancel();
+{ko:"안녕하세요", en:"Hello", ro:"annyeonghaseyo", cat:"daily"},
+{ko:"안녕", en:"Hi / Bye", ro:"annyeong", cat:"daily"},
+{ko:"감사합니다", en:"Thank you", ro:"gamsahamnida", cat:"daily"},
+{ko:"미안해요", en:"I'm sorry", ro:"mianhaeyo", cat:"daily"},
+{ko:"괜찮아요", en:"It's okay", ro:"gwaenchanayo", cat:"daily"},
+{ko:"네", en:"Yes", ro:"ne", cat:"daily"},
+{ko:"아니요", en:"No", ro:"aniyo", cat:"daily"},
+{ko:"주세요", en:"Please give me", ro:"juseyo", cat:"daily"},
+{ko:"잠깐만요", en:"Wait a moment", ro:"jamkkanmanyo", cat:"daily"},
+{ko:"왜", en:"Why", ro:"wae", cat:"daily"},
+{ko:"뭐", en:"What", ro:"mwo", cat:"daily"},
+{ko:"어디", en:"Where", ro:"eodi", cat:"daily"},
+{ko:"언제", en:"When", ro:"eonje", cat:"daily"},
+{ko:"누구", en:"Who", ro:"nugu", cat:"daily"},
+{ko:"정말", en:"Really", ro:"jeongmal", cat:"daily"},
 
-    window.speechSynthesis.speak(speech);
+/* FOOD */
+
+{ko:"밥", en:"Rice / Meal", ro:"bap", cat:"food"},
+{ko:"물", en:"Water", ro:"mul", cat:"food"},
+{ko:"커피", en:"Coffee", ro:"keopi", cat:"food"},
+{ko:"차", en:"Tea", ro:"cha", cat:"food"},
+{ko:"빵", en:"Bread", ro:"ppang", cat:"food"},
+{ko:"우유", en:"Milk", ro:"uyu", cat:"food"},
+{ko:"치즈", en:"Cheese", ro:"chijeu", cat:"food"},
+{ko:"케이크", en:"Cake", ro:"keikeu", cat:"food"},
+{ko:"라면", en:"Ramen", ro:"ramyeon", cat:"food"},
+{ko:"김치", en:"Kimchi", ro:"gimchi", cat:"food"},
+{ko:"고기", en:"Meat", ro:"gogi", cat:"food"},
+{ko:"과일", en:"Fruit", ro:"gwail", cat:"food"},
+{ko:"사과", en:"Apple", ro:"sagwa", cat:"food"},
+{ko:"딸기", en:"Strawberry", ro:"ttalgi", cat:"food"},
+{ko:"바나나", en:"Banana", ro:"banana", cat:"food"},
+
+/* PEOPLE */
+
+{ko:"사람", en:"Person", ro:"saram", cat:"people"},
+{ko:"친구", en:"Friend", ro:"chingu", cat:"people"},
+{ko:"가족", en:"Family", ro:"gajok", cat:"people"},
+{ko:"엄마", en:"Mom", ro:"eomma", cat:"people"},
+{ko:"아빠", en:"Dad", ro:"appa", cat:"people"},
+{ko:"형", en:"Older brother (boy)", ro:"hyeong", cat:"people"},
+{ko:"오빠", en:"Older brother (girl)", ro:"oppa", cat:"people"},
+{ko:"누나", en:"Older sister (boy)", ro:"nuna", cat:"people"},
+{ko:"언니", en:"Older sister (girl)", ro:"eonni", cat:"people"},
+{ko:"동생", en:"Younger sibling", ro:"dongsaeng", cat:"people"},
+{ko:"선생님", en:"Teacher", ro:"seonsaengnim", cat:"people"},
+{ko:"학생", en:"Student", ro:"haksaeng", cat:"people"},
+{ko:"아이", en:"Child", ro:"ai", cat:"people"},
+{ko:"친구들", en:"Friends", ro:"chingudeul", cat:"people"},
+{ko:"손님", en:"Guest / Customer", ro:"sonnim", cat:"people"},
+
+/* PLACES */
+
+{ko:"집", en:"Home / House", ro:"jip", cat:"places"},
+{ko:"학교", en:"School", ro:"hakgyo", cat:"places"},
+{ko:"카페", en:"Cafe", ro:"kape", cat:"places"},
+{ko:"식당", en:"Restaurant", ro:"sikdang", cat:"places"},
+{ko:"공원", en:"Park", ro:"gongwon", cat:"places"},
+{ko:"병원", en:"Hospital", ro:"byeongwon", cat:"places"},
+{ko:"공항", en:"Airport", ro:"gonghang", cat:"places"},
+{ko:"가게", en:"Shop / Store", ro:"gage", cat:"places"},
+{ko:"시장", en:"Market", ro:"sijang", cat:"places"},
+{ko:"도서관", en:"Library", ro:"doseogwan", cat:"places"},
+{ko:"화장실", en:"Bathroom", ro:"hwajangsil", cat:"places"},
+{ko:"역", en:"Station", ro:"yeok", cat:"places"},
+{ko:"서울", en:"Seoul", ro:"Seoul", cat:"places"},
+{ko:"한국", en:"Korea", ro:"Hanguk", cat:"places"},
+{ko:"거리", en:"Street", ro:"geori", cat:"places"},
+
+/* ACTIONS */
+
+{ko:"가다", en:"To go", ro:"gada", cat:"actions"},
+{ko:"오다", en:"To come", ro:"oda", cat:"actions"},
+{ko:"먹다", en:"To eat", ro:"meokda", cat:"actions"},
+{ko:"마시다", en:"To drink", ro:"masida", cat:"actions"},
+{ko:"보다", en:"To see / watch", ro:"boda", cat:"actions"},
+{ko:"듣다", en:"To listen", ro:"deutda", cat:"actions"},
+{ko:"말하다", en:"To speak", ro:"malhada", cat:"actions"},
+{ko:"읽다", en:"To read", ro:"iktta", cat:"actions"},
+{ko:"쓰다", en:"To write / use", ro:"sseuda", cat:"actions"},
+{ko:"배우다", en:"To learn", ro:"baeuda", cat:"actions"},
+{ko:"공부하다", en:"To study", ro:"gongbuhada", cat:"actions"},
+{ko:"자다", en:"To sleep", ro:"jada", cat:"actions"},
+{ko:"일어나다", en:"To get up", ro:"ireonada", cat:"actions"},
+{ko:"걷다", en:"To walk", ro:"geotda", cat:"actions"},
+{ko:"뛰다", en:"To run", ro:"ttwida", cat:"actions"},
+
+/* FEELINGS */
+
+{ko:"좋다", en:"To be good / like", ro:"jota", cat:"feelings"},
+{ko:"싫다", en:"To dislike", ro:"silta", cat:"feelings"},
+{ko:"행복하다", en:"To be happy", ro:"haengbokhada", cat:"feelings"},
+{ko:"슬프다", en:"To be sad", ro:"seulpeuda", cat:"feelings"},
+{ko:"화나다", en:"To be angry", ro:"hwanada", cat:"feelings"},
+{ko:"재미있다", en:"To be fun / interesting", ro:"jaemiitda", cat:"feelings"},
+{ko:"재미없다", en:"To be boring", ro:"jaemieopda", cat:"feelings"},
+{ko:"피곤하다", en:"To be tired", ro:"pigonhada", cat:"feelings"},
+{ko:"무섭다", en:"To be scary", ro:"museopda", cat:"feelings"},
+{ko:"두렵다", en:"To be afraid", ro:"duryeopda", cat:"feelings"},
+{ko:"신나다", en:"To be excited", ro:"sinnada", cat:"feelings"},
+{ko:"놀라다", en:"To be surprised", ro:"nollada", cat:"feelings"},
+{ko:"웃다", en:"To laugh / smile", ro:"utda", cat:"feelings"},
+{ko:"울다", en:"To cry", ro:"ulda", cat:"feelings"},
+{ko:"사랑하다", en:"To love", ro:"saranghada", cat:"feelings"},
+
+/* SCHOOL */
+
+{ko:"책", en:"Book", ro:"chaek", cat:"school"},
+{ko:"공책", en:"Notebook", ro:"gongchaek", cat:"school"},
+{ko:"연필", en:"Pencil", ro:"yeonpil", cat:"school"},
+{ko:"펜", en:"Pen", ro:"pen", cat:"school"},
+{ko:"지우개", en:"Eraser", ro:"jiugae", cat:"school"},
+{ko:"가방", en:"Bag", ro:"gabang", cat:"school"},
+{ko:"교실", en:"Classroom", ro:"gyosil", cat:"school"},
+{ko:"수업", en:"Class / Lesson", ro:"sueop", cat:"school"},
+{ko:"시험", en:"Test / Exam", ro:"siheom", cat:"school"},
+{ko:"질문", en:"Question", ro:"jilmun", cat:"school"},
+{ko:"답", en:"Answer", ro:"dap", cat:"school"},
+{ko:"숙제", en:"Homework", ro:"sukje", cat:"school"},
+{ko:"단어", en:"Word / Vocabulary", ro:"daneo", cat:"school"},
+{ko:"문장", en:"Sentence", ro:"munjang", cat:"school"},
+{ko:"한국어", en:"Korean language", ro:"hangugeo", cat:"school"},
+
+/* EXTRA DAILY */
+
+{ko:"오늘", en:"Today", ro:"oneul", cat:"daily"},
+{ko:"내일", en:"Tomorrow", ro:"naeil", cat:"daily"},
+{ko:"어제", en:"Yesterday", ro:"eoje", cat:"daily"},
+{ko:"지금", en:"Now", ro:"jigeum", cat:"daily"},
+{ko:"아침", en:"Morning", ro:"achim", cat:"daily"},
+{ko:"점심", en:"Lunch / Noon", ro:"jeomsim", cat:"daily"},
+{ko:"저녁", en:"Evening / Dinner", ro:"jeonyeok", cat:"daily"},
+{ko:"밤", en:"Night", ro:"bam", cat:"daily"},
+{ko:"시간", en:"Time", ro:"sigan", cat:"daily"},
+{ko:"빨리", en:"Quickly", ro:"ppalli", cat:"daily"},
+{ko:"천천히", en:"Slowly", ro:"cheoncheonhi", cat:"daily"},
+{ko:"같이", en:"Together", ro:"gachi", cat:"daily"},
+{ko:"여기", en:"Here", ro:"yeogi", cat:"daily"},
+{ko:"거기", en:"There", ro:"geogi", cat:"daily"},
+{ko:"많이", en:"A lot / Much", ro:"mani", cat:"daily"}
+
+];
+
+
+/* ================================
+   DISPLAY WORDS
+================================ */
+
+const grid = document.getElementById("wordGrid");
+const count = document.getElementById("count");
+const search = document.getElementById("search");
+
+let currentCategory = "all";
+
+
+function renderWords(list) {
+
+    grid.innerHTML = "";
+
+    if (list.length === 0) {
+        grid.innerHTML = `
+            <div class="empty" style="display:block;">
+                No words found 😭
+            </div>
+        `;
+        count.textContent = "0 words";
+        return;
+    }
+
+    list.forEach((word, index) => {
+
+        const card = document.createElement("div");
+
+        card.className = "word-card";
+
+        card.style.animationDelay = `${index * 0.025}s`;
+
+        card.innerHTML = `
+
+            <div class="word-top">
+
+                <div>
+                    <div class="korean">${word.ko}</div>
+
+                    <div class="english">
+                        ${word.en}
+                    </div>
+
+                    <div class="romanization">
+                        ${word.ro}
+                    </div>
+                </div>
+
+                <button
+                    class="voice"
+                    onclick="speak('${word.ko.replace(/'/g,"\\'")}')"
+                    title="Listen"
+                >
+                    🔊
+                </button>
+
+            </div>
+
+            <div class="tag">
+                ${word.cat}
+            </div>
+
+        `;
+
+        grid.appendChild(card);
+    });
+
+    count.textContent = `${list.length} words`;
 }
+
+
+/* ================================
+   VOICE
+================================ */
+
+function speak(text) {
+
+    if (!("speechSynthesis" in window)) {
+        alert("Voice is not supported in this browser.");
+        return;
+    }
+
+    speechSynthesis.cancel();
+
+    const voice = new SpeechSynthesisUtterance(text);
+
+    voice.lang = "ko-KR";
+    voice.rate = 0.78;
+    voice.pitch = 1;
+
+    speechSynthesis.speak(voice);
+}
+
+
+/* ================================
+   CATEGORY FILTER
+================================ */
+
+function filterCategory(category, button) {
+
+    currentCategory = category;
+
+    document.querySelectorAll(".category").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    search.value = "";
+
+    if (category === "all") {
+        renderWords(words);
+    } else {
+        renderWords(
+            words.filter(word => word.cat === category)
+        );
+    }
+}
+
+
+/* ================================
+   SEARCH
+================================ */
+
+function searchWords() {
+
+    const query = search.value.toLowerCase().trim();
+
+    let result = words;
+
+    if (currentCategory !== "all") {
+        result = result.filter(
+            word => word.cat === currentCategory
+        );
+    }
+
+    if (query !== "") {
+
+        result = result.filter(word =>
+            word.ko.includes(query) ||
+            word.en.toLowerCase().includes(query) ||
+            word.ro.toLowerCase().includes(query)
+        );
+    }
+
+    renderWords(result);
+}
+
+
+/* ================================
+   HOME BUTTON
+================================ */
+
+function goHome() {
+
+    window.location.href = "index.html";
+
+}
+
+
+/* ================================
+   START
+================================ */
+
+renderWords(words);
 
 </script>
 
