@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluenta Korean - Hangul</title>
+<link rel="icon" href="fluenta.png.png">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#080808;
+    color:white;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+}
+
+.topbar{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+    background:#101010;
+    border-bottom:1px solid #252525;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#ed4c8d;
+}
+
+.menu-btn{
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:14px;
+    background:#ed4c8d;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+}
+
+.menu-btn span{
+    width:21px;
+    height:2px;
+    background:white;
+    border-radius:5px;
+}
+
+.side-menu{
+    position:fixed;
+    top:0;
+    left:-290px;
+    width:270px;
+    height:100vh;
+    background:#111;
+    z-index:100;
+    padding:25px 18px;
+    transition:.3s ease;
+    box-shadow:8px 0 30px rgba(0,0,0,.5);
+}
+
+.side-menu.open{
+    left:0;
+}
+
+.close-menu{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:13px;
+    background:#222;
+    color:white;
+    font-size:25px;
+    float:right;
+}
+
+.side-menu h2{
+    clear:both;
+    padding-top:25px;
+    margin-bottom:25px;
+}
+
+.nav-item{
+    width:100%;
+    border:none;
+    background:#191919;
+    color:white;
+    padding:15px;
+    border-radius:14px;
+    margin:6px 0;
+    text-align:left;
+    font-size:16px;
+}
+
+.nav-item:hover{
+    background:#ed4c8d;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    display:none;
+    z-index:90;
+}
+
+.overlay.show{
+    display:block;
+}
+
+.app{
+    width:min(900px,94%);
+    margin:auto;
+    padding:28px 0 70px;
+}
+
+.hero{
+    text-align:center;
+    padding:20px 10px 35px;
+}
+
+.hero h1{
+    font-size:clamp(32px,7vw,58px);
+    margin-bottom:10px;
+}
+
+.hero h1 span{
+    color:#ed4c8d;
+}
+
+.hero p{
+    color:#aaa;
+    font-size:16px;
+}
+
+.progress-wrap{
+    margin:0 auto 28px;
+    max-width:650px;
+}
+
+.progress-info{
+    display:flex;
+    justify-content:space-between;
+    color:#aaa;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.progress{
+    height:10px;
+    background:#222;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:8%;
+    height:100%;
+    background:#ed4c8d;
+    border-radius:20px;
+    transition:.4s;
+}
+
+.card{
+    background:#121212;
+    border:1px solid #242424;
+    border-radius:26px;
+    padding:25px;
+    margin-bottom:22px;
+    box-shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+.card h2{
+    font-size:24px;
+    margin-bottom:8px;
+}
+
+.card-sub{
+    color:#999;
+    margin-bottom:22px;
+}
+
+.section-title{
+    color:#ed4c8d;
+    font-size:14px;
+    font-weight:bold;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:12px;
+}
+
+.character-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+    gap:10px;
+}
+
+.character{
+    min-height:90px;
+    border:1px solid #292929;
+    background:#191919;
+    color:white;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transition:.2s;
+}
+
+.character:hover,
+.character.selected{
+    border-color:#ed4c8d;
+    transform:translateY(-3px);
+}
+
+.character .big{
+    font-size:38px;
+}
+
+.character small{
+    color:#999;
+    margin-top:4px;
+}
+
+.listen-row{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+.listen-btn{
+    border:none;
+    background:#ed4c8d;
+    color:white;
+    padding:13px 20px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-weight:bold;
+}
+
+.listen-btn svg{
+    width:21px;
+    height:21px;
+}
+
+.slow-btn{
+    background:#ed4c8d;
+}
+
+.slow-btn svg{
+    width:24px;
+    height:24px;
+}
+
+/* IDENTIFICATION */
+
+.identify-box{
+    text-align:center;
+}
+
+.question-character{
+    font-size:100px;
+    font-weight:bold;
+    margin:10px 0 20px;
+}
+
+.answer-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.answer{
+    background:#1b1b1b;
+    border:2px solid #292929;
+    color:white;
+    padding:17px;
+    border-radius:16px;
+    font-size:18px;
+}
+
+.answer.correct{
+    background:#173c28;
+    border-color:#35d878;
+}
+
+.answer.wrong{
+    background:#461d28;
+    border-color:#ff4d68;
+}
+
+.feedback{
+    min-height:25px;
+    text-align:center;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+.green{
+    color:#35d878;
+}
+
+.red{
+    color:#ff4d68;
+}
+
+/* MATCH */
+
+.match-area{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.match-column{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.match-item{
+    background:#1a1a1a;
+    border:2px solid #292929;
+    border-radius:15px;
+    padding:16px;
+    text-align:center;
+    font-size:22px;
+}
+
+.match-item.sound{
+    font-size:16px;
+}
+
+.match-item.selected{
+    border-color:#ed4c8d;
+}
+
+.match-item.matched{
+    border-color:#35d878;
+    background:#173c28;
+}
+
+/* SYLLABLE */
+
+.builder{
+    text-align:center;
+}
+
+.slot-row{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin:20px 0;
+}
+
+.slot{
+    width:75px;
+    height:75px;
+    border:2px dashed #444;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+}
+
+.slot.filled{
+    border-style:solid;
+    border-color:#ed4c8d;
+}
+
+.builder-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:8px;
+}
+
+.build-btn{
+    background:#1b1b1b;
+    border:1px solid #333;
+    color:white;
+    padding:13px 5px;
+    border-radius:13px;
+    font-size:25px;
+}
+
+.build-btn:hover{
+    border-color:#ed4c8d;
+}
+
+/* TRACING */
+
+.trace-card{
+    overflow:hidden;
+}
+
+.trace-header{
+    text-align:center;
+}
+
+.trace-character-name{
+    color:#999;
+    margin-top:5px;
+}
+
+.trace-board{
+    width:min(470px,100%);
+    height:430px;
+    margin:25px auto 18px;
+    position:relative;
+    border-radius:28px;
+    background:#f7f7f7;
+    overflow:hidden;
+    touch-action:none;
+    box-shadow:0 10px 35px rgba(0,0,0,.4);
+}
+
+#guideCanvas,
+#drawCanvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+#guideCanvas{
+    z-index:1;
+}
+
+#drawCanvas{
+    z-index:2;
+}
+
+.start-dot{
+    position:absolute;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:#050505;
+    z-index:5;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    box-shadow:0 0 0 5px rgba(0,0,0,.08);
+}
+
+.trace-status{
+    text-align:center;
+    min-height:28px;
+    font-weight:bold;
+}
+
+.trace-actions{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:14px;
+}
+
+.clear-btn,
+.continue-btn{
+    border:none;
+    padding:14px 24px;
+    border-radius:15px;
+    font-weight:bold;
+}
+
+.clear-btn{
+    background:#292929;
+    color:white;
+}
+
+.continue-btn{
+    background:#ed4c8d;
+    color:white;
+    display:none;
+}
+
+.trace-tip{
+    color:#888;
+    text-align:center;
+    font-size:13px;
+    margin-top:12px;
+}
+
+/* COMPLETE */
+
+.complete-screen{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:200;
+    background:#090909;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    overflow:hidden;
+}
+
+.complete-screen.show{
+    display:flex;
+}
+
+.complete-content{
+    position:relative;
+    z-index:20;
+    padding:30px;
+}
+
+.complete-content h1{
+    font-size:clamp(42px,10vw,80px);
+    color:#ed4c8d;
+    animation:bounce .8s infinite alternate;
+}
+
+.complete-content h2{
+    font-size:28px;
+    margin:15px 0;
+}
+
+.complete-content p{
+    color:#aaa;
+    margin-bottom:25px;
+}
+
+.home-btn{
+    border:none;
+    background:#ed4c8d;
+    color:white;
+    padding:16px 30px;
+    border-radius:16px;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.balloon{
+    position:absolute;
+    width:55px;
+    height:70px;
+    border-radius:50% 50% 45% 45%;
+    background:#ed4c8d;
+    bottom:-100px;
+    animation:balloonUp linear forwards;
+}
+
+.balloon:after{
+    content:"";
+    position:absolute;
+    width:1px;
+    height:100px;
+    background:#aaa;
+    top:68px;
+    left:50%;
+}
+
+.balloon:nth-child(2){
+    background:#fff;
+}
+
+.balloon:nth-child(3){
+    background:#8f8f8f;
+}
+
+.balloon:nth-child(4){
+    background:#ed4c8d;
+}
+
+.confetti{
+    position:absolute;
+    width:9px;
+    height:18px;
+    top:-30px;
+    animation:confettiFall linear forwards;
+}
+
+.spark{
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:#ed4c8d;
+    border-radius:50%;
+    pointer-events:none;
+    animation:sparkle .6s forwards;
+    z-index:10;
+}
+
+@keyframes balloonUp{
+    to{
+        transform:translateY(-120vh) rotate(15deg);
+    }
+}
+
+@keyframes confettiFall{
+    to{
+        transform:translateY(110vh) rotate(720deg);
+    }
+}
+
+@keyframes sparkle{
+    0%{
+        transform:scale(.3);
+        opacity:1;
+    }
+    100%{
+        transform:scale(2);
+        opacity:0;
+    }
+}
+
+@keyframes bounce{
+    from{transform:translateY(0)}
+    to{transform:translateY(-10px)}
+}
+
+@media(max-width:600px){
+    .app{
+        width:94%;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:21px;
+    }
+
+    .answer-grid{
+        grid-template-columns:1fr;
+    }
+
+    .builder-grid{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+    .trace-board{
+        height:360px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDE MENU -->
+<div class="side-menu" id="sideMenu">
+    <button class="close-menu" onclick="closeMenu()">×</button>
+
+    <h2>Fluenta Korean</h2>
+
+    <button class="nav-item" onclick="goHome()">Home</button>
+    <button class="nav-item" onclick="goPage('lessons.html')">Lessons</button>
+    <button class="nav-item" onclick="goPage('hangul.html')">Hangul</button>
+    <button class="nav-item" onclick="goPage('pronunciation.html')">Pronunciation</button>
+    <button class="nav-item" onclick="goPage('listening.html')">Listening</button>
+    <button class="nav-item" onclick="goPage('vocabulary.html')">Vocabulary</button>
+    <button class="nav-item" onclick="goPage('quizzes.html')">Quizzes</button>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- TOP -->
+<header class="topbar">
+    <button class="menu-btn" onclick="openMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="logo">Fluenta <span>Korean</span></div>
+
+    <div style="width:45px"></div>
+</header>
+
+<main class="app">
+
+    <section class="hero">
+        <h1>Learn <span>한글</span></h1>
+        <p>Learn it. Hear it. Match it. Trace it. Master it.</p>
+    </section>
+
+    <div class="progress-wrap">
+        <div class="progress-info">
+            <span id="progressText">Hangul lesson</span>
+            <span id="progressPercent">8%</span>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <!-- CONSONANTS -->
+    <section class="card">
+        <div class="section-title">Part 1</div>
+        <h2>Basic Consonants</h2>
+        <p class="card-sub">Tap a letter to hear its Korean name.</p>
+
+        <div class="character-grid" id="consonantGrid"></div>
+
+        <div class="listen-row">
+            <button class="listen-btn" onclick="speakCurrent()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+                    <path d="M16 9c1.5 1.5 1.5 4.5 0 6"/>
+                </svg>
+                Listen
+            </button>
+
+            <button class="listen-btn slow-btn" onclick="speakCurrent(true)">
+                <svg viewBox="0 0 24 24" fill="white">
+                    <ellipse cx="12" cy="13" rx="7" ry="5"/>
+                    <circle cx="17" cy="8" r="3"/>
+                    <circle cx="18" cy="7.5" r=".7" fill="#ed4c8d"/>
+                    <path d="M5 15l-3 2 3 1z"/>
+                    <path d="M9 17l-2 3M13 18l1 3" stroke="white" stroke-width="1.5"/>
+                </svg>
+                Slow
+            </button>
+        </div>
+    </section>
+
+    <!-- VOWELS -->
+    <section class="card">
+        <div class="section-title">Part 2</div>
+        <h2>Basic Vowels</h2>
+        <p class="card-sub">Listen and learn each vowel.</p>
+
+        <div class="character-grid" id="vowelGrid"></div>
+    </section>
+
+    <!-- TENSE -->
+    <section class="card">
+        <div class="section-title">Part 3</div>
+        <h2>Tense Consonants</h2>
+        <p class="card-sub">These consonants have stronger sounds.</p>
+
+        <div class="character-grid" id="tenseGrid"></div>
+    </section>
+
+    <!-- COMBINED -->
+    <section class="card">
+        <div class="section-title">Part 4</div>
+        <h2>Combined Vowels</h2>
+        <p class="card-sub">Two vowel sounds can combine into one character.</p>
+
+        <div class="character-grid" id="combinedGrid"></div>
+    </section>
+
+    <!-- IDENTIFY -->
+    <section class="card identify-box">
+        <div class="section-title">Mini Game 1</div>
+        <h2>Identify the Letter</h2>
+        <p class="card-sub">Which sound belongs to this Hangul?</p>
+
+        <div class="question-character" id="questionCharacter">ㄱ</div>
+
+        <div class="answer-grid" id="answerGrid"></div>
+
+        <div class="feedback" id="identifyFeedback"></div>
+    </section>
+
+    <!-- MATCH -->
+    <section class="card">
+        <div class="section-title">Mini Game 2</div>
+        <h2>Match Them</h2>
+        <p class="card-sub">Match each Hangul character with its sound.</p>
+
+        <div class="match-area">
+            <div class="match-column" id="matchLetters"></div>
+            <div class="match-column" id="matchSounds"></div>
+        </div>
+
+        <div class="feedback" id="matchFeedback"></div>
+    </section>
+
+    <!-- BUILDER -->
+    <section class="card builder">
+        <div class="section-title">Mini Game 3</div>
+        <h2>Build a Syllable</h2>
+        <p class="card-sub">Build 가 by choosing ㄱ + ㅏ.</p>
+
+        <div class="slot-row">
+            <div class="slot" id="slot1"></div>
+            <div class="slot" id="slot2"></div>
+        </div>
+
+        <div class="builder-grid">
+            <button class="build-btn" onclick="chooseBuild('ㄱ')">ㄱ</button>
+            <button class="build-btn" onclick="chooseBuild('ㄴ')">ㄴ</button>
+            <button class="build-btn" onclick="chooseBuild('ㄷ')">ㄷ</button>
+            <button class="build-btn" onclick="chooseBuild('ㅁ')">ㅁ</button>
+            <button class="build-btn" onclick="chooseBuild('ㅏ')">ㅏ</button>
+            <button class="build-btn" onclick="chooseBuild('ㅓ')">ㅓ</button>
+            <button class="build-btn" onclick="chooseBuild('ㅗ')">ㅗ</button>
+            <button class="build-btn" onclick="chooseBuild('ㅜ')">ㅜ</button>
+        </div>
+
+        <div class="feedback" id="builderFeedback"></div>
+    </section>
+
+    <!-- TRACING -->
+    <section class="card trace-card">
+        <div class="section-title">Final Skill</div>
+        <div class="trace-header">
+            <h2>Trace the Hangul</h2>
+            <p class="card-sub">
+                Draw directly over the Hangul. Stay close to the guide.
+            </p>
+        </div>
+
+        <div class="trace-board" id="traceBoard">
+            <canvas id="guideCanvas"></canvas>
+            <canvas id="drawCanvas"></canvas>
+            <div class="start-dot" id="startDot"></div>
+        </div>
+
+        <div class="trace-status" id="traceStatus">
+            Start at the black dot and trace the letter.
+        </div>
+
+        <div class="trace-actions">
+            <button class="clear-btn" onclick="clearTrace()">Clear</button>
+            <button class="listen-btn" onclick="speakTrace()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+                    <path d="M16 9c1.5 1.5 1.5 4.5 0 6"/>
+                </svg>
+                Hear it
+            </button>
+            <button class="continue-btn" id="traceContinue" onclick="nextTrace()">
+                Continue →
+            </button>
+        </div>
+
+        <p class="trace-tip">
+            Your black drawing follows your actual mouse or finger movement.
+        </p>
+    </section>
+
+</main>
+
+<!-- COMPLETE -->
+<div class="complete-screen" id="completeScreen">
+
+    <div id="balloons"></div>
+    <div id="confetti"></div>
+
+    <div class="complete-content">
+        <div style="font-size:70px;">🎉</div>
+        <h1>한글 MASTER!</h1>
+        <h2>You completed Hangul!</h2>
+        <p>You learned, listened, matched, built and traced Korean letters.</p>
+        <button class="home-btn" onclick="goHome()">Return to Fluenta</button>
+    </div>
+
+</div>
+
+<script>
+
+/* =========================
+   DATA
+========================= */
+
+const consonants = [
+    ["ㄱ","기역","G / K"],
+    ["ㄴ","니은","N"],
+    ["ㄷ","디귿","D / T"],
+    ["ㄹ","리을","R / L"],
+    ["ㅁ","미음","M"],
+    ["ㅂ","비읍","B / P"],
+    ["ㅅ","시옷","S"],
+    ["ㅇ","이응","NG"],
+    ["ㅈ","지읒","J"],
+    ["ㅊ","치읓","CH"],
+    ["ㅋ","키읔","K"],
+    ["ㅌ","티읕","T"],
+    ["ㅍ","피읖","P"],
+    ["ㅎ","히읗","H"]
+];
+
+const vowels = [
+    ["ㅏ","아","A"],
+    ["ㅑ","야","YA"],
+    ["ㅓ","어","EO"],
+    ["ㅕ","여","YEO"],
+    ["ㅗ","오","O"],
+    ["ㅛ","요","YO"],
+    ["ㅜ","우","U"],
+    ["ㅠ","유","YU"],
+    ["ㅡ","으","EU"],
+    ["ㅣ","이","I"]
+];
+
+const tense = [
+    ["ㄲ","쌍기역","KK"],
+    ["ㄸ","쌍디귿","TT"],
+    ["ㅃ","쌍비읍","PP"],
+    ["ㅆ","쌍시옷","SS"],
+    ["ㅉ","쌍지읒","JJ"]
+];
+
+const combined = [
+    ["ㅐ","애","AE"],
+    ["ㅔ","에","E"],
+    ["ㅒ","얘","YAE"],
+    ["ㅖ","예","YE"],
+    ["ㅘ","와","WA"],
+    ["ㅙ","왜","WAE"],
+    ["ㅚ","외","OE"],
+    ["ㅝ","워","WEO"],
+    ["ㅞ","웨","WE"],
+    ["ㅟ","위","WI"],
+    ["ㅢ","의","UI"]
+];
+
+/* Korean pronunciation names */
+const pronunciation = {
+    "ㄱ":"기역",
+    "ㄴ":"니은",
+    "ㄷ":"디귿",
+    "ㄹ":"리을",
+    "ㅁ":"미음",
+    "ㅂ":"비읍",
+    "ㅅ":"시옷",
+    "ㅇ":"이응",
+    "ㅈ":"지읒",
+    "ㅊ":"치읓",
+    "ㅋ":"키읔",
+    "ㅌ":"티읕",
+    "ㅍ":"피읖",
+    "ㅎ":"히읗",
+
+    "ㅏ":"아",
+    "ㅑ":"야",
+    "ㅓ":"어",
+    "ㅕ":"여",
+    "ㅗ":"오",
+    "ㅛ":"요",
+    "ㅜ":"우",
+    "ㅠ":"유",
+    "ㅡ":"으",
+    "ㅣ":"이",
+
+    "ㄲ":"쌍기역",
+    "ㄸ":"쌍디귿",
+    "ㅃ":"쌍비읍",
+    "ㅆ":"쌍시옷",
+    "ㅉ":"쌍지읒",
+
+    "ㅐ":"애",
+    "ㅔ":"에",
+    "ㅒ":"얘",
+    "ㅖ":"예",
+    "ㅘ":"와",
+    "ㅙ":"왜",
+    "ㅚ":"외",
+    "ㅝ":"워",
+    "ㅞ":"웨",
+    "ㅟ":"위",
+    "ㅢ":"의"
+};
+
+let currentCharacter = "ㄱ";
+let currentSpeech = "기역";
+
+/* =========================
+   MENU
+========================= */
+
+function openMenu(){
+    document.getElementById("sideMenu").classList.add("open");
+    document.getElementById("overlay").classList.add("show");
+}
+
+function closeMenu(){
+    document.getElementById("sideMenu").classList.remove("open");
+    document.getElementById("overlay").classList.remove("show");
+}
+
+function goHome(){
+    window.location.href = "index.html";
+}
+
+function goPage(page){
+    window.location.href = page;
+}
+
+/* =========================
+   SPEECH
+========================= */
+
+function speak(text,slow=false){
+    if(!("speechSynthesis" in window)){
+        return;
+    }
+
+    speechSynthesis.cancel();
+
+    const voice = new SpeechSynthesisUtterance(text);
+    voice.lang = "ko-KR";
+    voice.rate = slow ? 0.48 : 0.9;
+    voice.pitch = 1;
+
+    speechSynthesis.speak(voice);
+}
+
+function speakCurrent(slow=false){
+    speak(currentSpeech,slow);
+}
+
+function speakTrace(){
+    speak(pronunciation[traceCharacters[traceIndex][0]]);
+}
+
+/* =========================
+   CHARACTER CARDS
+========================= */
+
+function createCharacterGrid(id,data){
+    const grid = document.getElementById(id);
+
+    data.forEach(item=>{
+        const button = document.createElement("button");
+        button.className = "character";
+
+        button.innerHTML = `
+            <span class="big">${item[0]}</span>
+            <small>${item[2]}</small>
+        `;
+
+        button.onclick = ()=>{
+            document.querySelectorAll(".character").forEach(x=>x.classList.remove("selected"));
+            button.classList.add("selected");
+
+            currentCharacter = item[0];
+            currentSpeech = item[1];
+
+            speak(item[1]);
+        };
+
+        grid.appendChild(button);
+    });
+}
+
+createCharacterGrid("consonantGrid",consonants);
+createCharacterGrid("vowelGrid",vowels);
+createCharacterGrid("tenseGrid",tense);
+createCharacterGrid("combinedGrid",combined);
+
+/* =========================
+   IDENTIFICATION
+========================= */
+
+let identifyIndex = 0;
+
+const identifyQuestions = [
+    ["ㄱ","기역","니은","미음","시옷"],
+    ["ㄴ","니은","기역","비읍","히읗"],
+    ["ㅁ","미음","디귿","리을","치읓"],
+    ["ㅅ","시옷","이응","기역","니은"],
+    ["ㅏ","아","오","우","이"],
+    ["ㅓ","어","아","오","으"],
+    ["ㅗ","오","우","아","이"],
+    ["ㅜ","우","어","오","야"],
+    ["ㅎ","히읗","키읔","미음","비읍"]
+];
+
+function loadIdentify(){
+
+    const q = identifyQuestions[identifyIndex % identifyQuestions.length];
+
+    document.getElementById("questionCharacter").textContent = q[0];
+
+    const grid = document.getElementById("answerGrid");
+    grid.innerHTML = "";
+
+    let answers = q.slice(1);
+
+    answers.sort(()=>Math.random()-.5);
+
+    answers.forEach(answer=>{
+        const button = document.createElement("button");
+        button.className = "answer";
+        button.textContent = answer;
+
+        button.onclick = ()=>{
+            if(answer === q[1]){
+                button.classList.add("correct");
+
+                document.getElementById("identifyFeedback").innerHTML =
+                    '<span class="green">Correct! 잘했어요!</span>';
+
+                speak(q[1]);
+
+                identifyIndex++;
+
+                setTimeout(loadIdentify,700);
+                updateProgress(15);
+            }else{
+                button.classList.add("wrong");
+
+                document.getElementById("identifyFeedback").innerHTML =
+                    '<span class="red">Try again!</span>';
+            }
+        };
+
+        grid.appendChild(button);
+    });
+}
+
+loadIdentify();
+
+/* =========================
+   MATCHING
+========================= */
+
+const matchData = [
+    ["ㄱ","G / K"],
+    ["ㄴ","N"],
+    ["ㄷ","D / T"],
+    ["ㅁ","M"],
+    ["ㅅ","S"]
+];
+
+let selectedLetter = null;
+let matchedCount = 0;
+
+function loadMatching(){
+
+    const letters = document.getElementById("matchLetters");
+    const sounds = document.getElementById("matchSounds");
+
+    letters.innerHTML = "";
+    sounds.innerHTML = "";
+
+    const shuffled = [...matchData].sort(()=>Math.random()-.5);
+
+    matchData.forEach(item=>{
+        const b = document.createElement("button");
+        b.className = "match-item";
+        b.textContent = item[0];
+        b.dataset.value = item[0];
+
+        b.onclick = ()=>{
+            document.querySelectorAll("#matchLetters .match-item")
+                .forEach(x=>x.classList.remove("selected"));
+
+            b.classList.add("selected");
+            selectedLetter = item[0];
+        };
+
+        letters.appendChild(b);
+    });
+
+    shuffled.forEach(item=>{
+        const b = document.createElement("button");
+        b.className = "match-item sound";
+        b.textContent = item[1];
+        b.dataset.value = item[0];
+
+        b.onclick = ()=>{
+
+            if(!selectedLetter){
+                document.getElementById("matchFeedback").innerHTML =
+                    '<span class="red">Choose a Korean letter first.</span>';
+                return;
+            }
+
+            if(selectedLetter === item[0]){
+
+                b.classList.add("matched");
+
+                document.querySelector(
+                    `#matchLetters .match-item[data-value="${item[0]}"]`
+                ).classList.add("matched");
+
+                matchedCount++;
+
+                speak(pronunciation[item[0]]);
+
+                selectedLetter = null;
+
+                if(matchedCount === matchData.length){
+                    document.getElementById("matchFeedback").innerHTML =
+                        '<span class="green">Amazing! All matched!</span>';
+
+                    updateProgress(25);
+                }
+
+            }else{
+                b.style.borderColor="#ff4d68";
+
+                document.getElementById("matchFeedback").innerHTML =
+                    '<span class="red">Not that one — try again!</span>';
+
+                setTimeout(()=>{
+                    b.style.borderColor="";
+                },500);
+            }
+        };
+
+        sounds.appendChild(b);
+    });
+}
+
+loadMatching();
+
+/* =========================
+   SYLLABLE BUILDER
+========================= */
+
+let buildFirst = "";
+let buildSecond = "";
+
+function chooseBuild(letter){
+
+    if(!buildFirst){
+        buildFirst = letter;
+        document.getElementById("slot1").textContent = letter;
+    }else if(!buildSecond){
+        buildSecond = letter;
+        document.getElementById("slot2").textContent = letter;
+    }
+
+    if(buildFirst && buildSecond){
+
+        if(buildFirst==="ㄱ" && buildSecond==="ㅏ"){
+
+            document.getElementById("builderFeedback").innerHTML =
+                '<span class="green">가 — Perfect! 잘했어요!</span>';
+
+            speak("가");
+            updateProgress(35);
+
+        }else{
+
+            document.getElementById("builderFeedback").innerHTML =
+                '<span class="red">Try ㄱ + ㅏ!</span>';
+
+            setTimeout(()=>{
+                buildFirst="";
+                buildSecond="";
+                document.getElementById("slot1").textContent="";
+                document.getElementById("slot2").textContent="";
+            },700);
+        }
+    }
+}
+
+/* =========================
+   TRACING
+========================= */
+
+const traceCharacters = [
+    ["ㄱ","기역"],
+    ["ㄴ","니은"],
+    ["ㄷ","디귿"],
+    ["ㄹ","리을"],
+    ["ㅁ","미음"],
+    ["ㅂ","비읍"],
+    ["ㅅ","시옷"],
+    ["ㅇ","이응"],
+    ["ㅈ","지읒"],
+    ["ㅊ","치읓"],
+    ["ㅋ","키읔"],
+    ["ㅌ","티읕"],
+    ["ㅍ","피읖"],
+    ["ㅎ","히읗"],
+
+    ["ㅏ","아"],
+    ["ㅑ","야"],
+    ["ㅓ","어"],
+    ["ㅕ","여"],
+    ["ㅗ","오"],
+    ["ㅛ","요"],
+    ["ㅜ","우"],
+    ["ㅠ","유"],
+    ["ㅡ","으"],
+    ["ㅣ","이"],
+
+    ["ㄲ","쌍기역"],
+    ["ㄸ","쌍디귿"],
+    ["ㅃ","쌍비읍"],
+    ["ㅆ","쌍시옷"],
+    ["ㅉ","쌍지읒"],
+
+    ["ㅐ","애"],
+    ["ㅔ","에"],
+    ["ㅒ","얘"],
+    ["ㅖ","예"],
+    ["ㅘ","와"],
+    ["ㅙ","왜"],
+    ["ㅚ","외"],
+    ["ㅝ","워"],
+    ["ㅞ","웨"],
+    ["ㅟ","위"],
+    ["ㅢ","의"]
+];
+
+let traceIndex = 0;
+let drawing = false;
+let traceStarted = false;
+let traceCorrect = false;
+let tracePoints = [];
+let guideImageData = null;
+
+const board = document.getElementById("traceBoard");
+const guideCanvas = document.getElementById("guideCanvas");
+const drawCanvas = document.getElementById("drawCanvas");
+
+const guideCtx = guideCanvas.getContext("2d");
+const drawCtx = drawCanvas.getContext("2d");
+
+function resizeTrace(){
+
+    const rect = board.getBoundingClientRect();
+
+    const dpr = window.devicePixelRatio || 1;
+
+    guideCanvas.width = rect.width*dpr;
+    guideCanvas.height = rect.height*dpr;
+
+    drawCanvas.width = rect.width*dpr;
+    drawCanvas.height = rect.height*dpr;
+
+    guideCtx.setTransform(dpr,0,0,dpr,0,0);
+    drawCtx.setTransform(dpr,0,0,dpr,0,0);
+
+    drawGuide();
+}
+
+window.addEventListener("resize",resizeTrace);
+
+function drawGuide(){
+
+    const w = board.clientWidth;
+    const h = board.clientHeight;
+
+    guideCtx.clearRect(0,0,w,h);
+
+    const char = traceCharacters[traceIndex][0];
+
+    guideCtx.fillStyle="#d9d9d9";
+    guideCtx.font=`bold ${Math.min(w,h)*.63}px "Malgun Gothic","Noto Sans KR",Arial,sans-serif`;
+    guideCtx.textAlign="center";
+    guideCtx.textBaseline="middle";
+
+    guideCtx.fillText(char,w/2,h/2+5);
+
+    /* light tracing outline */
+    guideCtx.strokeStyle="#c3c3c3";
+    guideCtx.lineWidth=2;
+    guideCtx.strokeText(char,w/2,h/2+5);
+
+    /* starting dot */
+    positionStartDot();
+
+    guideImageData = guideCtx.getImageData(
+        0,0,
+        guideCanvas.width,
+        guideCanvas.height
+    );
+}
+
+function positionStartDot(){
+
+    const char = traceCharacters[traceIndex][0];
+
+    let x = board.clientWidth/2;
+    let y = board.clientHeight/2-100;
+
+    const positions = {
+        "ㄱ":[35,34],
+        "ㄴ":[35,34],
+        "ㄷ":[35,34],
+        "ㄹ":[35,30],
+        "ㅁ":[35,32],
+        "ㅂ":[35,30],
+        "ㅅ":[50,25],
+        "ㅇ":[50,27],
+        "ㅈ":[45,25],
+        "ㅊ":[45,22],
+        "ㅋ":[35,30],
+        "ㅌ":[35,30],
+        "ㅍ":[35,30],
+        "ㅎ":[50,22],
+
+        "ㅏ":[48,32],
+        "ㅑ":[45,30],
+        "ㅓ":[52,32],
+        "ㅕ":[55,30],
+        "ㅗ":[50,35],
+        "ㅛ":[50,32],
+        "ㅜ":[50,65],
+        "ㅠ":[50,63],
+        "ㅡ":[35,50],
+        "ㅣ":[50,30]
+    };
+
+    if(positions[char]){
+        x = board.clientWidth*(positions[char][0]/100);
+        y = board.clientHeight*(positions[char][1]/100);
+    }
+
+    const dot = document.getElementById("startDot");
+
+    dot.style.left=x+"px";
+    dot.style.top=y+"px";
+}
+
+function getPointerPosition(e){
+
+    const rect = board.getBoundingClientRect();
+
+    let clientX;
+    let clientY;
+
+    if(e.touches && e.touches.length){
+        clientX=e.touches[0].clientX;
+        clientY=e.touches[0].clientY;
+    }else{
+        clientX=e.clientX;
+        clientY=e.clientY;
+    }
+
+    return {
+        x:clientX-rect.left,
+        y:clientY-rect.top
+    };
+}
+
+function pointNearGuide(x,y){
+
+    /*
+       The guide is deliberately forgiving.
+       The user draws directly on the visible Hangul,
+       rather than following a tiny predefined path.
+    */
+
+    const dpr = window.devicePixelRatio || 1;
+
+    const px=Math.floor(x*dpr);
+    const py=Math.floor(y*dpr);
+
+    const radius=18;
+
+    for(let yy=-radius;yy<=radius;yy+=4){
+        for(let xx=-radius;xx<=radius;xx+=4){
+
+            const nx=px+xx*dpr;
+            const ny=py+yy*dpr;
+
+            if(nx<0 || ny<0 ||
+               nx>=guideCanvas.width ||
+               ny>=guideCanvas.height) continue;
+
+            const index=(Math.floor(ny)*guideCanvas.width+
+                        Math.floor(nx))*4;
+
+            const r=guideImageData.data[index];
+            const g=guideImageData.data[index+1];
+            const b=guideImageData.data[index+2];
+
+            if(r<245 || g<245 || b<245){
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+function drawPoint(p){
+
+    drawCtx.lineWidth=15;
+    drawCtx.lineCap="round";
+    drawCtx.lineJoin="round";
+    drawCtx.strokeStyle="#080808";
+
+    if(tracePoints.length){
+
+        const previous=tracePoints[tracePoints.length-1];
+
+        drawCtx.beginPath();
+        drawCtx.moveTo(previous.x,previous.y);
+        drawCtx.lineTo(p.x,p.y);
+        drawCtx.stroke();
+
+    }else{
+
+        drawCtx.beginPath();
+        drawCtx.arc(p.x,p.y,7,0,Math.PI*2);
+        drawCtx.fillStyle="#080808";
+        drawCtx.fill();
+    }
+
+    tracePoints.push(p);
+
+    const dot=document.getElementById("startDot");
+    dot.style.left=p.x+"px";
+    dot.style.top=p.y+"px";
+
+    /* Korean spark trail */
+    if(Math.random()<.15){
+        createSpark(p.x,p.y);
+    }
+}
+
+function createSpark(x,y){
+
+    const spark=document.createElement("div");
+    spark.className="spark";
+
+    spark.style.left=(board.offsetLeft+x)+"px";
+    spark.style.top=(board.offsetTop+y)+"px";
+
+    board.parentElement.appendChild(spark);
+
+    setTimeout(()=>spark.remove(),600);
+}
+
+function startDrawing(e){
+
+    if(traceCorrect) return;
+
+    e.preventDefault();
+
+    const p=getPointerPosition(e);
+
+    drawing=true;
+    traceStarted=true;
+    tracePoints=[];
+
+    if(pointNearGuide(p.x,p.y)){
+        drawPoint(p);
+
+        document.getElementById("traceStatus").innerHTML=
+            '<span class="green">Great! Keep tracing...</span>';
+    }else{
+        document.getElementById("traceStatus").innerHTML=
+            '<span class="red">Start on the Hangul guide.</span>';
+    }
+}
+
+function moveDrawing(e){
+
+    if(!drawing || traceCorrect) return;
+
+    e.preventDefault();
+
+    const p=getPointerPosition(e);
+
+    if(pointNearGuide(p.x,p.y)){
+
+        drawPoint(p);
+
+        document.getElementById("traceStatus").innerHTML=
+            '<span class="green">Nice! Keep going...</span>';
+
+        checkTraceProgress();
+
+    }else{
+
+        document.getElementById("traceStatus").innerHTML=
+            '<span class="red">Stay closer to the Hangul!</span>';
+    }
+}
+
+function stopDrawing(e){
+
+    if(!drawing) return;
+
+    drawing=false;
+
+    if(tracePoints.length>20){
+        checkTraceProgress();
+    }
+}
+
+function checkTraceProgress(){
+
+    if(tracePoints.length<25) return;
+
+    /*
+       We use the amount of guide area touched by the
+       user's real freehand drawing.
+    */
+
+    const w=board.clientWidth;
+    const h=board.clientHeight;
+
+    const sampleCount=90;
+
+    let covered=0;
+    let valid=0;
+
+    for(let i=0;i<sampleCount;i++){
+
+        const x=Math.random()*w;
+        const y=Math.random()*h;
+
+        if(pointNearGuide(x,y)){
+            valid++;
+        }
+    }
+
+    /*
+       A second forgiving condition:
+       enough actual points must have been drawn while
+       staying over the character.
+    */
+
+    let goodPoints=0;
+
+    tracePoints.forEach(p=>{
+        if(pointNearGuide(p.x,p.y)){
+            goodPoints++;
+        }
+    });
+
+    const percentage=goodPoints/tracePoints.length;
+
+    if(tracePoints.length>65 && percentage>.72){
+
+        completeTrace();
+    }
+}
+
+function completeTrace(){
+
+    if(traceCorrect) return;
+
+    traceCorrect=true;
+
+    document.getElementById("traceStatus").innerHTML=
+        '<span class="green">✓ Perfect! 잘했어요!</span>';
+
+    document.getElementById("traceContinue").style.display="block";
+
+    const char=traceCharacters[traceIndex][0];
+
+    /* Correct Korean pronunciation */
+    speak(pronunciation[char]);
+
+    /* Success sound */
+    successSound();
+
+    /* Make the tracing look successful */
+    drawCtx.save();
+    drawCtx.shadowColor="#35d878";
+    drawCtx.shadowBlur=12;
+    drawCtx.strokeStyle="#35d878";
+    drawCtx.lineWidth=15;
+    drawCtx.lineCap="round";
+    drawCtx.globalAlpha=.55;
+
+    for(let i=1;i<tracePoints.length;i++){
+
+        drawCtx.beginPath();
+        drawCtx.moveTo(tracePoints[i-1].x,tracePoints[i-1].y);
+        drawCtx.lineTo(tracePoints[i].x,tracePoints[i].y);
+        drawCtx.stroke();
+    }
+
+    drawCtx.restore();
+
+    updateProgress(70);
+}
+
+function clearTrace(){
+
+    traceCorrect=false;
+    drawing=false;
+    tracePoints=[];
+
+    drawCtx.clearRect(
+        0,
+        0,
+        board.clientWidth,
+        board.clientHeight
+    );
+
+    document.getElementById("traceContinue").style.display="none";
+
+    document.getElementById("traceStatus").textContent=
+        "Start at the black dot and trace the letter.";
+
+    positionStartDot();
+}
+
+function nextTrace(){
+
+    traceIndex++;
+
+    if(traceIndex>=traceCharacters.length){
+
+        showComplete();
+        return;
+    }
+
+    clearTrace();
+    drawGuide();
+
+    document.getElementById("traceStatus").textContent=
+        `Trace ${traceCharacters[traceIndex][0]} — ${traceCharacters[traceIndex][1]}`;
+
+    updateProgress(70 + Math.round(
+        (traceIndex/traceCharacters.length)*30
+    ));
+}
+
+/* Pointer events */
+
+drawCanvas.addEventListener("pointerdown",startDrawing);
+drawCanvas.addEventListener("pointermove",moveDrawing);
+drawCanvas.addEventListener("pointerup",stopDrawing);
+drawCanvas.addEventListener("pointercancel",stopDrawing);
+drawCanvas.addEventListener("pointerleave",stopDrawing);
+
+/* =========================
+   SUCCESS SOUND
+========================= */
+
+function successSound(){
+
+    try{
+
+        const AudioContext =
+            window.AudioContext || window.webkitAudioContext;
+
+        const ctx=new AudioContext();
+
+        const notes=[523.25,659.25,783.99];
+
+        notes.forEach((frequency,index)=>{
+
+            const oscillator=ctx.createOscillator();
+            const gain=ctx.createGain();
+
+            oscillator.frequency.value=frequency;
+            oscillator.type="sine";
+
+            gain.gain.setValueAtTime(
+                .0001,
+                ctx.currentTime+index*.12
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                .12,
+                ctx.currentTime+index*.12+.03
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                .0001,
+                ctx.currentTime+index*.12+.18
+            );
+
+            oscillator.connect(gain);
+            gain.connect(ctx.destination);
+
+            oscillator.start(ctx.currentTime+index*.12);
+            oscillator.stop(ctx.currentTime+index*.12+.2);
+        });
+
+    }catch(e){}
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+function updateProgress(value){
+
+    value=Math.min(100,value);
+
+    document.getElementById("progressBar").style.width=value+"%";
+    document.getElementById("progressPercent").textContent=value+"%";
+}
+
+/* =========================
+   CELEBRATION
+========================= */
+
+function showComplete(){
+
+    const screen=document.getElementById("completeScreen");
+
+    screen.classList.add("show");
+
+    createBalloons();
+    createConfetti();
+
+    speak("한글 공부를 완료했어요! 정말 잘했어요!");
+
+    successSound();
+}
+
+function createBalloons(){
+
+    const container=document.getElementById("balloons");
+
+    container.innerHTML="";
+
+    for(let i=0;i<18;i++){
+
+        const balloon=document.createElement("div");
+
+        balloon.className="balloon";
+
+        balloon.style.left=(Math.random()*100)+"%";
+        balloon.style.animationDuration=(5+Math.random()*5)+"s";
+        balloon.style.animationDelay=(Math.random()*2)+"s";
+
+        container.appendChild(balloon);
+    }
+}
+
+function createConfetti(){
+
+    const container=document.getElementById("confetti");
+
+    container.innerHTML="";
+
+    for(let i=0;i<130;i++){
+
+        const piece=document.createElement("div");
+
+        piece.className="confetti";
+
+        piece.style.left=(Math.random()*100)+"%";
+        piece.style.animationDuration=(2.5+Math.random()*3)+"s";
+        piece.style.animationDelay=(Math.random()*2)+"s";
+
+        const shapes=[
+            "#ed4c8d",
+            "#ffffff",
+            "#999999",
+            "#ff78ad"
+        ];
+
+        piece.style.background=
+            shapes[Math.floor(Math.random()*shapes.length)];
+
+        piece.style.transform=
+            `rotate(${Math.random()*360}deg)`;
+
+        container.appendChild(piece);
+    }
+}
+
+/* =========================
+   START
+========================= */
+
+resizeTrace();
+
+</script>
+
+</body>
+</html>
