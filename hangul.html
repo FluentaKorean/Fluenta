@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -450,24 +451,41 @@ button{
     height:100%;
 }
 
-#guideCanvas{
-    z-index:1;
-}
+#guideCanvas{z-index:1;}
 
 #drawCanvas{
-    z-index:2;
+    z-index:3;
+    cursor:crosshair;
 }
 
 .start-dot{
     position:absolute;
-    width:20px;
-    height:20px;
+    width:25px;
+    height:25px;
     border-radius:50%;
     background:#050505;
-    z-index:5;
+    z-index:6;
     transform:translate(-50%,-50%);
     pointer-events:none;
-    box-shadow:0 0 0 5px rgba(0,0,0,.08);
+    box-shadow:0 0 0 6px rgba(237,76,141,.16),0 3px 10px rgba(0,0,0,.25);
+    transition:left .03s linear,top .03s linear;
+}
+
+.start-dot::after{
+    content:"";
+    position:absolute;
+    inset:6px;
+    border-radius:50%;
+    background:#ed4c8d;
+    opacity:.55;
+}
+
+.trace-board.tracing{
+    box-shadow:0 0 0 3px rgba(237,76,141,.22),0 10px 35px rgba(0,0,0,.4);
+}
+
+.trace-board.completed{
+    box-shadow:0 0 0 4px rgba(53,216,120,.55),0 10px 35px rgba(0,0,0,.4);
 }
 
 .trace-status{
@@ -857,7 +875,7 @@ button{
         </div>
 
         <p class="trace-tip">
-            Your black drawing follows your actual mouse or finger movement.
+            Press the black dot and follow it. Black ink fills in behind your pen.
         </p>
     </section>
 
@@ -1276,464 +1294,279 @@ function chooseBuild(letter){
 ========================= */
 
 const traceCharacters = [
-    ["ㄱ","기역"],
-    ["ㄴ","니은"],
-    ["ㄷ","디귿"],
-    ["ㄹ","리을"],
-    ["ㅁ","미음"],
-    ["ㅂ","비읍"],
-    ["ㅅ","시옷"],
-    ["ㅇ","이응"],
-    ["ㅈ","지읒"],
-    ["ㅊ","치읓"],
-    ["ㅋ","키읔"],
-    ["ㅌ","티읕"],
-    ["ㅍ","피읖"],
-    ["ㅎ","히읗"],
-
-    ["ㅏ","아"],
-    ["ㅑ","야"],
-    ["ㅓ","어"],
-    ["ㅕ","여"],
-    ["ㅗ","오"],
-    ["ㅛ","요"],
-    ["ㅜ","우"],
-    ["ㅠ","유"],
-    ["ㅡ","으"],
-    ["ㅣ","이"],
-
-    ["ㄲ","쌍기역"],
-    ["ㄸ","쌍디귿"],
-    ["ㅃ","쌍비읍"],
-    ["ㅆ","쌍시옷"],
-    ["ㅉ","쌍지읒"],
-
-    ["ㅐ","애"],
-    ["ㅔ","에"],
-    ["ㅒ","얘"],
-    ["ㅖ","예"],
-    ["ㅘ","와"],
-    ["ㅙ","왜"],
-    ["ㅚ","외"],
-    ["ㅝ","워"],
-    ["ㅞ","웨"],
-    ["ㅟ","위"],
-    ["ㅢ","의"]
+    ["ㄱ","gi"],["ㄴ","ni"],["ㄷ","di"],["ㄹ","ri"],["ㅁ","mi"],
+    ["ㅂ","bi"],["ㅅ","si"],["ㅇ","iŋ"],["ㅈ","ji"],["ㅊ","chi"],
+    ["ㅋ","ki"],["ㅌ","ti"],["ㅍ","pi"],["ㅎ","hi"],
+    ["ㅏ","a"],["ㅑ","ya"],["ㅓ","eo"],["ㅕ","yeo"],["ㅗ","o"],
+    ["ㅛ","yo"],["ㅜ","u"],["ㅠ","yu"],["ㅡ","eu"],["ㅣ","i"],
+    ["ㄲ","kki"],["ㄸ","tti"],["ㅃ","ppi"],["ㅆ","ssi"],["ㅉ","jji"],
+    ["ㅐ","ae"],["ㅔ","e"],["ㅒ","yae"],["ㅖ","ye"],
+    ["ㅘ","wa"],["ㅙ","wae"],["ㅚ","oe"],["ㅝ","wo"],
+    ["ㅞ","we"],["ㅟ","wi"],["ㅢ","ui"]
 ];
 
-let traceIndex = 0;
-let drawing = false;
-let traceStarted = false;
-let traceCorrect = false;
-let tracePoints = [];
-let guideImageData = null;
+let traceIndex=0;
+let drawing=false;
+let traceCorrect=false;
+let tracePoints=[];
+let currentStroke=0;
+let strokeProgress=0;
 
-const board = document.getElementById("traceBoard");
-const guideCanvas = document.getElementById("guideCanvas");
-const drawCanvas = document.getElementById("drawCanvas");
+const board=document.getElementById("traceBoard");
+const guideCanvas=document.getElementById("guideCanvas");
+const drawCanvas=document.getElementById("drawCanvas");
+const guideCtx=guideCanvas.getContext("2d");
+const drawCtx=drawCanvas.getContext("2d");
 
-const guideCtx = guideCanvas.getContext("2d");
-const drawCtx = drawCanvas.getContext("2d");
+const tracePaths={
+"ㄱ":[[[.28,.30],[.72,.30]],[[.72,.30],[.72,.70]]],
+"ㄴ":[[[.30,.30],[.30,.70],[.72,.70]]],
+"ㄷ":[[[.30,.30],[.72,.30]],[[.30,.30],[.30,.70],[.72,.70]]],
+"ㄹ":[[[.30,.30],[.72,.30],[.72,.50],[.30,.50],[.30,.70],[.72,.70]]],
+"ㅁ":[[[.30,.30],[.30,.70],[.72,.70],[.72,.30],[.30,.30]]],
+"ㅂ":[[[.30,.30],[.30,.70],[.72,.70],[.72,.30],[.30,.30]],[[.30,.50],[.72,.50]]],
+"ㅅ":[[[.30,.30],[.50,.70]],[[.70,.30],[.50,.70]]],
+"ㅇ":[[[.50,.28],[.65,.34],[.72,.50],[.65,.66],[.50,.72],[.35,.66],[.28,.50],[.35,.34],[.50,.28]]],
+"ㅈ":[[[.30,.30],[.70,.30]],[[.50,.30],[.30,.70]],[[.50,.30],[.70,.70]]],
+"ㅊ":[[[.30,.24],[.70,.24]],[[.30,.34],[.70,.34]],[[.50,.34],[.30,.70]],[[.50,.34],[.70,.70]]],
+"ㅋ":[[[.30,.30],[.72,.30]],[[.50,.30],[.50,.50]],[[.50,.50],[.30,.70]]],
+"ㅌ":[[[.30,.30],[.72,.30]],[[.30,.48],[.72,.48]],[[.50,.48],[.50,.70]]],
+"ㅍ":[[[.30,.32],[.72,.32]],[[.30,.68],[.72,.68]],[[.42,.32],[.42,.68]],[[.60,.32],[.60,.68]]],
+"ㅎ":[[[.30,.28],[.70,.28]],[[.50,.28],[.50,.42]],[[.50,.48],[.65,.54],[.68,.66],[.50,.72],[.32,.66],[.35,.54],[.50,.48]]],
+"ㅏ":[[[.50,.25],[.50,.75]],[[.50,.50],[.72,.50]]],
+"ㅑ":[[[.50,.25],[.50,.75]],[[.50,.42],[.70,.42]],[[.50,.58],[.70,.58]]],
+"ㅓ":[[[.65,.25],[.65,.75]],[[.65,.50],[.30,.50]]],
+"ㅕ":[[[.65,.25],[.65,.75]],[[.65,.42],[.35,.42]],[[.65,.58],[.35,.58]]],
+"ㅗ":[[[.30,.58],[.70,.58]],[[.50,.58],[.50,.30]]],
+"ㅛ":[[[.30,.58],[.70,.58]],[[.43,.58],[.43,.35]],[[.57,.58],[.57,.35]]],
+"ㅜ":[[[.30,.35],[.70,.35]],[[.50,.35],[.50,.70]]],
+"ㅠ":[[[.30,.35],[.70,.35]],[[.43,.35],[.43,.60]],[[.57,.35],[.57,.60]]],
+"ㅡ":[[[.25,.50],[.75,.50]]],
+"ㅣ":[[[.50,.25],[.50,.75]]]
+};
 
-function resizeTrace(){
+const fallbackPaths={
+"ㄲ":[[[.22,.30],[.47,.30],[.47,.70]],[[.53,.30],[.78,.30],[.78,.70]]],
+"ㄸ":[[[.20,.30],[.43,.30],[.20,.50],[.43,.50],[.20,.70]],[[.57,.30],[.80,.30],[.57,.50],[.80,.50],[.57,.70]]],
+"ㅃ":[[[.25,.30],[.25,.70],[.43,.70],[.43,.30],[.25,.30]],[[.57,.30],[.57,.70],[.75,.70],[.75,.30],[.57,.30]]],
+"ㅆ":[[[.20,.30],[.32,.70]],[[.44,.30],[.56,.70]],[[.68,.30],[.80,.70]]],
+"ㅉ":[[[.25,.30],[.75,.30]],[[.50,.30],[.35,.70]],[[.50,.30],[.65,.70]]],
+"ㅐ":[[[.40,.25],[.40,.75]],[[.40,.50],[.62,.50]],[[.72,.25],[.72,.75]]],
+"ㅔ":[[[.60,.25],[.60,.75]],[[.60,.50],[.38,.50]],[[.28,.25],[.28,.75]]],
+"ㅒ":[[[.40,.25],[.40,.75]],[[.40,.42],[.60,.42]],[[.40,.58],[.60,.58]],[[.72,.25],[.72,.75]]],
+"ㅖ":[[[.60,.25],[.60,.75]],[[.60,.42],[.40,.42]],[[.60,.58],[.40,.58]],[[.28,.25],[.28,.75]]]
+};
 
-    const rect = board.getBoundingClientRect();
-
-    const dpr = window.devicePixelRatio || 1;
-
-    guideCanvas.width = rect.width*dpr;
-    guideCanvas.height = rect.height*dpr;
-
-    drawCanvas.width = rect.width*dpr;
-    drawCanvas.height = rect.height*dpr;
-
-    guideCtx.setTransform(dpr,0,0,dpr,0,0);
-    drawCtx.setTransform(dpr,0,0,dpr,0,0);
-
-    drawGuide();
+function getTracePaths(c){
+    if(tracePaths[c]) return tracePaths[c];
+    if(fallbackPaths[c]) return fallbackPaths[c];
+    const combo={
+      "ㅘ":[[[.28,.58],[.55,.58]],[[.42,.58],[.42,.30]],[[.62,.25],[.62,.75]],[[.62,.50],[.78,.50]]],
+      "ㅙ":[[[.25,.58],[.48,.58]],[[.37,.58],[.37,.30]],[[.58,.25],[.58,.75]],[[.58,.50],[.72,.50]],[[.82,.25],[.82,.75]]],
+      "ㅚ":[[[.25,.58],[.48,.58]],[[.37,.58],[.37,.30]],[[.65,.25],[.65,.75]],[[.52,.50],[.82,.50]]],
+      "ㅝ":[[[.25,.35],[.52,.35]],[[.38,.35],[.38,.70]],[[.62,.25],[.62,.75]],[[.62,.50],[.80,.50]]],
+      "ㅞ":[[[.20,.35],[.45,.35]],[[.32,.35],[.32,.70]],[[.55,.25],[.55,.75]],[[.55,.50],[.68,.50]],[[.80,.25],[.80,.75]]],
+      "ㅟ":[[[.25,.58],[.50,.58]],[[.38,.58],[.38,.30]],[[.65,.25],[.65,.75]],[[.52,.50],[.82,.50]]],
+      "ㅢ":[[[.25,.50],[.55,.50]],[[.72,.25],[.72,.75]]]
+    };
+    return combo[c]||[[[.25,.50],[.75,.50]]];
 }
 
+function pointFromPercent(p){
+    return {x:p[0]*board.clientWidth,y:p[1]*board.clientHeight};
+}
+
+function resizeTrace(){
+    const r=board.getBoundingClientRect(),d=devicePixelRatio||1;
+    guideCanvas.width=r.width*d; guideCanvas.height=r.height*d;
+    drawCanvas.width=r.width*d; drawCanvas.height=r.height*d;
+    guideCtx.setTransform(d,0,0,d,0,0);
+    drawCtx.setTransform(d,0,0,d,0,0);
+    drawGuide();
+}
 window.addEventListener("resize",resizeTrace);
 
 function drawGuide(){
-
-    const w = board.clientWidth;
-    const h = board.clientHeight;
-
+    const w=board.clientWidth,h=board.clientHeight;
     guideCtx.clearRect(0,0,w,h);
+    guideCtx.fillStyle="#f7f7f7";
+    guideCtx.fillRect(0,0,w,h);
 
-    const char = traceCharacters[traceIndex][0];
+    getTracePaths(traceCharacters[traceIndex][0]).forEach((path,i)=>{
+        guideCtx.beginPath();
+        path.forEach((pt,j)=>{
+            const p=pointFromPercent(pt);
+            j?guideCtx.lineTo(p.x,p.y):guideCtx.moveTo(p.x,p.y);
+        });
+        guideCtx.lineWidth=28;
+        guideCtx.lineCap="round";
+        guideCtx.lineJoin="round";
+        guideCtx.strokeStyle="#dedede";
+        guideCtx.stroke();
 
-    guideCtx.fillStyle="#d9d9d9";
-    guideCtx.font=`bold ${Math.min(w,h)*.63}px "Malgun Gothic","Noto Sans KR",Arial,sans-serif`;
-    guideCtx.textAlign="center";
-    guideCtx.textBaseline="middle";
+        guideCtx.beginPath();
+        path.forEach((pt,j)=>{
+            const p=pointFromPercent(pt);
+            j?guideCtx.lineTo(p.x,p.y):guideCtx.moveTo(p.x,p.y);
+        });
+        guideCtx.lineWidth=3;
+        guideCtx.setLineDash([7,8]);
+        guideCtx.strokeStyle="#999";
+        guideCtx.stroke();
+        guideCtx.setLineDash([]);
 
-    guideCtx.fillText(char,w/2,h/2+5);
-
-    /* light tracing outline */
-    guideCtx.strokeStyle="#c3c3c3";
-    guideCtx.lineWidth=2;
-    guideCtx.strokeText(char,w/2,h/2+5);
-
-    /* starting dot */
-    positionStartDot();
-
-    guideImageData = guideCtx.getImageData(
-        0,0,
-        guideCanvas.width,
-        guideCanvas.height
-    );
+        const p=pointFromPercent(path[0]);
+        guideCtx.beginPath();
+        guideCtx.arc(p.x,p.y,8,0,Math.PI*2);
+        guideCtx.fillStyle=i===currentStroke?"#050505":"#bdbdbd";
+        guideCtx.fill();
+    });
+    positionTraceDot();
 }
 
-function positionStartDot(){
+function currentGuidePosition(){
+    const paths=getTracePaths(traceCharacters[traceIndex][0]);
+    const path=paths[currentStroke];
+    if(!path)return null;
+    return pointFromPercent(path[Math.min(strokeProgress,path.length-1)]);
+}
 
-    const char = traceCharacters[traceIndex][0];
-
-    let x = board.clientWidth/2;
-    let y = board.clientHeight/2-100;
-
-    const positions = {
-        "ㄱ":[35,34],
-        "ㄴ":[35,34],
-        "ㄷ":[35,34],
-        "ㄹ":[35,30],
-        "ㅁ":[35,32],
-        "ㅂ":[35,30],
-        "ㅅ":[50,25],
-        "ㅇ":[50,27],
-        "ㅈ":[45,25],
-        "ㅊ":[45,22],
-        "ㅋ":[35,30],
-        "ㅌ":[35,30],
-        "ㅍ":[35,30],
-        "ㅎ":[50,22],
-
-        "ㅏ":[48,32],
-        "ㅑ":[45,30],
-        "ㅓ":[52,32],
-        "ㅕ":[55,30],
-        "ㅗ":[50,35],
-        "ㅛ":[50,32],
-        "ㅜ":[50,65],
-        "ㅠ":[50,63],
-        "ㅡ":[35,50],
-        "ㅣ":[50,30]
-    };
-
-    if(positions[char]){
-        x = board.clientWidth*(positions[char][0]/100);
-        y = board.clientHeight*(positions[char][1]/100);
-    }
-
-    const dot = document.getElementById("startDot");
-
-    dot.style.left=x+"px";
-    dot.style.top=y+"px";
+function positionTraceDot(){
+    const p=currentGuidePosition();
+    if(!p)return;
+    const d=document.getElementById("startDot");
+    d.style.left=p.x+"px"; d.style.top=p.y+"px";
 }
 
 function getPointerPosition(e){
-
-    const rect = board.getBoundingClientRect();
-
-    let clientX;
-    let clientY;
-
-    if(e.touches && e.touches.length){
-        clientX=e.touches[0].clientX;
-        clientY=e.touches[0].clientY;
-    }else{
-        clientX=e.clientX;
-        clientY=e.clientY;
-    }
-
-    return {
-        x:clientX-rect.left,
-        y:clientY-rect.top
-    };
+    const r=board.getBoundingClientRect();
+    return {x:e.clientX-r.left,y:e.clientY-r.top};
 }
 
-function pointNearGuide(x,y){
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
 
-    /*
-       The guide is deliberately forgiving.
-       The user draws directly on the visible Hangul,
-       rather than following a tiny predefined path.
-    */
-
-    const dpr = window.devicePixelRatio || 1;
-
-    const px=Math.floor(x*dpr);
-    const py=Math.floor(y*dpr);
-
-    const radius=18;
-
-    for(let yy=-radius;yy<=radius;yy+=4){
-        for(let xx=-radius;xx<=radius;xx+=4){
-
-            const nx=px+xx*dpr;
-            const ny=py+yy*dpr;
-
-            if(nx<0 || ny<0 ||
-               nx>=guideCanvas.width ||
-               ny>=guideCanvas.height) continue;
-
-            const index=(Math.floor(ny)*guideCanvas.width+
-                        Math.floor(nx))*4;
-
-            const r=guideImageData.data[index];
-            const g=guideImageData.data[index+1];
-            const b=guideImageData.data[index+2];
-
-            if(r<245 || g<245 || b<245){
-                return true;
-            }
-        }
-    }
-
-    return false;
+function nearestOnSegment(p,a,b){
+    const dx=b.x-a.x,dy=b.y-a.y,l=dx*dx+dy*dy;
+    if(!l)return {point:a,t:0};
+    let t=((p.x-a.x)*dx+(p.y-a.y)*dy)/l;
+    t=Math.max(0,Math.min(1,t));
+    return {point:{x:a.x+t*dx,y:a.y+t*dy},t};
 }
 
-function drawPoint(p){
+function nearestGuide(p){
+    const path=getTracePaths(traceCharacters[traceIndex][0])[currentStroke];
+    let best=null;
+    for(let i=0;i<path.length-1;i++){
+        const hit=nearestOnSegment(p,pointFromPercent(path[i]),pointFromPercent(path[i+1]));
+        const d=dist(p,hit.point);
+        if(!best||d<best.distance)best={distance:d,segment:i,t:hit.t};
+    }
+    return best;
+}
 
-    drawCtx.lineWidth=15;
+function inkTo(p){
+    const prev=currentGuidePosition()||p;
+    drawCtx.strokeStyle="#080808";
+    drawCtx.lineWidth=28;
     drawCtx.lineCap="round";
     drawCtx.lineJoin="round";
-    drawCtx.strokeStyle="#080808";
-
-    if(tracePoints.length){
-
-        const previous=tracePoints[tracePoints.length-1];
-
-        drawCtx.beginPath();
-        drawCtx.moveTo(previous.x,previous.y);
-        drawCtx.lineTo(p.x,p.y);
-        drawCtx.stroke();
-
-    }else{
-
-        drawCtx.beginPath();
-        drawCtx.arc(p.x,p.y,7,0,Math.PI*2);
-        drawCtx.fillStyle="#080808";
-        drawCtx.fill();
-    }
-
+    drawCtx.beginPath();
+    drawCtx.moveTo(prev.x,prev.y);
+    drawCtx.lineTo(p.x,p.y);
+    drawCtx.stroke();
     tracePoints.push(p);
-
-    const dot=document.getElementById("startDot");
-    dot.style.left=p.x+"px";
-    dot.style.top=p.y+"px";
-
-    /* Korean spark trail */
-    if(Math.random()<.15){
-        createSpark(p.x,p.y);
-    }
+    const d=document.getElementById("startDot");
+    d.style.left=p.x+"px"; d.style.top=p.y+"px";
 }
 
-function createSpark(x,y){
-
-    const spark=document.createElement("div");
-    spark.className="spark";
-
-    spark.style.left=(board.offsetLeft+x)+"px";
-    spark.style.top=(board.offsetTop+y)+"px";
-
-    board.parentElement.appendChild(spark);
-
-    setTimeout(()=>spark.remove(),600);
-}
+function speakTrace(){speak(traceCharacters[traceIndex][1]);}
 
 function startDrawing(e){
-
-    if(traceCorrect) return;
-
+    if(traceCorrect)return;
     e.preventDefault();
-
-    const p=getPointerPosition(e);
-
-    drawing=true;
-    traceStarted=true;
-    tracePoints=[];
-
-    if(pointNearGuide(p.x,p.y)){
-        drawPoint(p);
-
-        document.getElementById("traceStatus").innerHTML=
-            '<span class="green">Great! Keep tracing...</span>';
-    }else{
-        document.getElementById("traceStatus").innerHTML=
-            '<span class="red">Start on the Hangul guide.</span>';
+    const p=getPointerPosition(e),active=currentGuidePosition();
+    if(!active||dist(p,active)>36){
+        document.getElementById("traceStatus").innerHTML='<span class="red">Start on the black dot!</span>';
+        return;
     }
+    drawing=true;
+    board.classList.add("tracing");
+    try{drawCanvas.setPointerCapture(e.pointerId);}catch(_){}
+    tracePoints=[active];
+    inkTo(active);
+    document.getElementById("traceStatus").innerHTML='<span class="green">Great! Follow the dot...</span>';
 }
 
 function moveDrawing(e){
-
-    if(!drawing || traceCorrect) return;
-
+    if(!drawing||traceCorrect)return;
     e.preventDefault();
+    const p=getPointerPosition(e),hit=nearestGuide(p);
+    if(!hit||hit.distance>40){
+        document.getElementById("traceStatus").innerHTML='<span class="red">Stay on the guide!</span>';
+        return;
+    }
+    const path=getTracePaths(traceCharacters[traceIndex][0])[currentStroke];
+    const next=Math.min(path.length-1,hit.segment+(hit.t>.55?1:0));
+    if(next>strokeProgress+1){
+        document.getElementById("traceStatus").innerHTML='<span class="red">Follow the dot step by step.</span>';
+        return;
+    }
+    strokeProgress=next;
+    inkTo(pointFromPercent(path[strokeProgress]));
+    document.getElementById("traceStatus").innerHTML='<span class="green">Nice! Keep going...</span>';
 
-    const p=getPointerPosition(e);
-
-    if(pointNearGuide(p.x,p.y)){
-
-        drawPoint(p);
-
-        document.getElementById("traceStatus").innerHTML=
-            '<span class="green">Nice! Keep going...</span>';
-
-        checkTraceProgress();
-
-    }else{
-
-        document.getElementById("traceStatus").innerHTML=
-            '<span class="red">Stay closer to the Hangul!</span>';
+    if(strokeProgress>=path.length-1){
+        drawing=false;
+        board.classList.remove("tracing");
+        finishCurrentStroke();
     }
 }
 
-function stopDrawing(e){
-
-    if(!drawing) return;
-
+function stopDrawing(){
     drawing=false;
-
-    if(tracePoints.length>20){
-        checkTraceProgress();
-    }
+    board.classList.remove("tracing");
 }
 
-function checkTraceProgress(){
-
-    if(tracePoints.length<25) return;
-
-    /*
-       We use the amount of guide area touched by the
-       user's real freehand drawing.
-    */
-
-    const w=board.clientWidth;
-    const h=board.clientHeight;
-
-    const sampleCount=90;
-
-    let covered=0;
-    let valid=0;
-
-    for(let i=0;i<sampleCount;i++){
-
-        const x=Math.random()*w;
-        const y=Math.random()*h;
-
-        if(pointNearGuide(x,y)){
-            valid++;
-        }
-    }
-
-    /*
-       A second forgiving condition:
-       enough actual points must have been drawn while
-       staying over the character.
-    */
-
-    let goodPoints=0;
-
-    tracePoints.forEach(p=>{
-        if(pointNearGuide(p.x,p.y)){
-            goodPoints++;
-        }
-    });
-
-    const percentage=goodPoints/tracePoints.length;
-
-    if(tracePoints.length>65 && percentage>.72){
-
+function finishCurrentStroke(){
+    const paths=getTracePaths(traceCharacters[traceIndex][0]);
+    successSound();
+    if(currentStroke<paths.length-1){
+        currentStroke++;
+        strokeProgress=0;
+        drawGuide();
+        document.getElementById("traceStatus").innerHTML='<span class="green">✓ Stroke complete! Start the next dot.</span>';
+    }else{
         completeTrace();
     }
 }
 
 function completeTrace(){
-
-    if(traceCorrect) return;
-
+    if(traceCorrect)return;
     traceCorrect=true;
-
-    document.getElementById("traceStatus").innerHTML=
-        '<span class="green">✓ Perfect! 잘했어요!</span>';
-
+    board.classList.add("completed");
+    document.getElementById("traceStatus").innerHTML='<span class="green">✓ Perfect! 잘했어요!</span>';
     document.getElementById("traceContinue").style.display="block";
-
-    const char=traceCharacters[traceIndex][0];
-
-    /* Correct Korean pronunciation */
-    speak(pronunciation[char]);
-
-    /* Success sound */
+    speak(traceCharacters[traceIndex][1]);
     successSound();
-
-    /* Make the tracing look successful */
-    drawCtx.save();
-    drawCtx.shadowColor="#35d878";
-    drawCtx.shadowBlur=12;
-    drawCtx.strokeStyle="#35d878";
-    drawCtx.lineWidth=15;
-    drawCtx.lineCap="round";
-    drawCtx.globalAlpha=.55;
-
-    for(let i=1;i<tracePoints.length;i++){
-
-        drawCtx.beginPath();
-        drawCtx.moveTo(tracePoints[i-1].x,tracePoints[i-1].y);
-        drawCtx.lineTo(tracePoints[i].x,tracePoints[i].y);
-        drawCtx.stroke();
-    }
-
-    drawCtx.restore();
-
-    updateProgress(70);
+    updateProgress(70+Math.round((traceIndex/traceCharacters.length)*30));
 }
 
 function clearTrace(){
-
-    traceCorrect=false;
-    drawing=false;
-    tracePoints=[];
-
-    drawCtx.clearRect(
-        0,
-        0,
-        board.clientWidth,
-        board.clientHeight
-    );
-
+    traceCorrect=false; drawing=false; currentStroke=0; strokeProgress=0; tracePoints=[];
+    board.classList.remove("tracing","completed");
+    drawCtx.clearRect(0,0,board.clientWidth,board.clientHeight);
     document.getElementById("traceContinue").style.display="none";
-
-    document.getElementById("traceStatus").textContent=
-        "Start at the black dot and trace the letter.";
-
-    positionStartDot();
+    document.getElementById("traceStatus").textContent="Start at the black dot and trace the letter.";
+    drawGuide();
 }
 
 function nextTrace(){
-
     traceIndex++;
-
-    if(traceIndex>=traceCharacters.length){
-
-        showComplete();
-        return;
-    }
-
+    if(traceIndex>=traceCharacters.length){showComplete();return;}
     clearTrace();
-    drawGuide();
-
-    document.getElementById("traceStatus").textContent=
-        `Trace ${traceCharacters[traceIndex][0]} — ${traceCharacters[traceIndex][1]}`;
-
-    updateProgress(70 + Math.round(
-        (traceIndex/traceCharacters.length)*30
-    ));
+    document.getElementById("traceStatus").textContent=`Trace ${traceCharacters[traceIndex][0]} — ${traceCharacters[traceIndex][1]}`;
+    updateProgress(70+Math.round((traceIndex/traceCharacters.length)*30));
 }
-
-/* Pointer events */
 
 drawCanvas.addEventListener("pointerdown",startDrawing);
 drawCanvas.addEventListener("pointermove",moveDrawing);
