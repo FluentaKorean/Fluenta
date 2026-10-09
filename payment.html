@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluenta Pro | Fluenta Korean</title>
+  <style>
+    :root {
+      --bg: #101014;
+      --panel: #19191f;
+      --panel-light: #202027;
+      --pink: #ed4c8d;
+      --pink-dark: #d93678;
+      --text: #f7f4f7;
+      --muted: #aaa5af;
+      --border: #34313a;
+      --success: #63d7a1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -10%, rgba(237,76,141,.14), transparent 45%),
+        var(--bg);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .topbar {
+      height: 76px; display: flex; align-items: center; justify-content: space-between;
+      gap: 18px; padding: 0 5%; border-bottom: 1px solid rgba(255,255,255,.07);
+      background: rgba(16,16,20,.86);
+    }
+    .brand { font-size: 23px; font-weight: 850; letter-spacing: -.7px; }
+    .brand span { color: var(--pink); }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .streak, .pro-nav {
+      min-height: 42px; display: inline-flex; align-items: center; justify-content: center;
+      gap: 9px; padding: 0 14px; border-radius: 13px; font-weight: 750;
+    }
+    .streak { color: #f4f0f4; background: #222128; border: 1px solid #38343e; }
+    .streak-mark { width: 9px; height: 15px; border-radius: 8px 8px 6px 6px; background: #aaa3ae; }
+    .pro-nav { color: white; border: 1px solid #f56aa2; background: linear-gradient(135deg, #e33d80, #b92868); }
+    .mini-crown { width: 18px; height: 15px; display: inline-block; }
+    .page { width: min(1060px, 92%); margin: 38px auto 70px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; color: #ff8db9;
+      text-transform: uppercase; letter-spacing: 2px; font-size: 11px; font-weight: 850;
+    }
+    .eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--pink); }
+    h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.04; margin: 14px 0; letter-spacing: -1.8px; }
+    .intro { color: var(--muted); max-width: 610px; line-height: 1.65; margin: 0; }
+    .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; margin: 30px 0 25px; }
+    .plan {
+      text-align: left; position: relative; color: var(--text); padding: 22px;
+      background: linear-gradient(155deg, #202027, #17171d); border: 1px solid var(--border);
+      border-radius: 20px; transition: .18s ease; min-height: 205px;
+    }
+    .plan:hover { transform: translateY(-3px); border-color: #8a3d60; }
+    .plan.selected { border: 2px solid var(--pink); padding: 21px; box-shadow: 0 0 0 3px rgba(237,76,141,.08); }
+    .plan .tag {
+      display: inline-block; color: #ff9ec3; background: rgba(237,76,141,.12);
+      border: 1px solid rgba(237,76,141,.23); border-radius: 7px; padding: 5px 8px;
+      font-size: 10px; font-weight: 850; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .plan h2 { font-size: 20px; margin: 16px 0 7px; }
+    .price { font-size: 30px; font-weight: 850; letter-spacing: -1px; }
+    .price small { font-size: 13px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+    .plan p { color: var(--muted); font-size: 13px; margin: 12px 0 0; line-height: 1.5; }
+    .popular {
+      position: absolute; right: 14px; top: 14px; background: var(--pink); color: #fff;
+      font-size: 9px; font-weight: 900; padding: 5px 7px; border-radius: 6px; letter-spacing: .7px;
+    }
+    .layout { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; align-items: start; }
+    .card { background: rgba(25,25,31,.94); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+    .card h2 { font-size: 20px; margin: 0 0 7px; }
+    .sub { color: var(--muted); font-size: 13px; line-height: 1.55; margin: 0 0 21px; }
+    .field { margin-bottom: 16px; }
+    label { display: block; font-size: 12px; color: #d8d3dc; font-weight: 750; margin-bottom: 8px; }
+    input, select {
+      width: 100%; min-height: 46px; border-radius: 11px; padding: 12px 13px;
+      background: #111116; color: var(--text); border: 1px solid #3b3742; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(237,76,141,.1); }
+    .account-box {
+      padding: 17px; border: 1px dashed #6d3b53; background: rgba(237,76,141,.055);
+      border-radius: 14px; margin: 17px 0;
+    }
+    .account-box .account-label { color: #ff9ec3; font-size: 10px; letter-spacing: 1.2px; font-weight: 850; text-transform: uppercase; }
+    .account-number { font-size: 23px; font-weight: 850; letter-spacing: 1px; margin: 8px 0; overflow-wrap: anywhere; }
+    .account-detail { color: var(--muted); font-size: 13px; margin-top: 5px; }
+    .button {
+      width: 100%; min-height: 48px; border: 0; border-radius: 12px; padding: 13px 17px;
+      color: white; background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+      font-weight: 850; box-shadow: 0 8px 22px rgba(217,54,120,.17);
+    }
+    .button:hover { filter: brightness(1.07); }
+    .button.secondary { background: #27232c; border: 1px solid #403944; box-shadow: none; }
+    .notice { font-size: 12px; line-height: 1.6; color: var(--muted); margin: 13px 0 0; }
+    .steps { display: grid; gap: 16px; margin-top: 20px; }
+    .step { display: flex; gap: 13px; align-items: flex-start; }
+    .step-num {
+      flex: 0 0 30px; height: 30px; display: grid; place-items: center; border-radius: 9px;
+      background: rgba(237,76,141,.12); color: #ff9ec3; font-size: 12px; font-weight: 900;
+    }
+    .step strong { display: block; font-size: 13px; margin: 1px 0 5px; }
+    .step p { color: var(--muted); font-size: 12px; line-height: 1.55; margin: 0; }
+    .status { display: none; padding: 13px 14px; margin-top: 14px; border-radius: 11px; font-size: 13px; line-height: 1.5; }
+    .status.show { display: block; }
+    .status.info { color: #ffd9e7; background: rgba(237,76,141,.1); border: 1px solid rgba(237,76,141,.28); }
+    .status.success { color: #b8f6d8; background: rgba(99,215,161,.09); border: 1px solid rgba(99,215,161,.28); }
+    .footer { text-align: center; margin-top: 28px; color: #77717e; font-size: 11px; line-height: 1.7; }
+    .hidden { display: none !important; }
+    @media (max-width: 760px) {
+      .plans { grid-template-columns: 1fr; }
+      .plan { min-height: auto; }
+      .layout { grid-template-columns: 1fr; }
+      .topbar { padding: 0 4%; }
+      .streak { display: none; }
+      .page { margin-top: 28px; }
+      .card { padding: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Fluenta<span>.</span></div>
+    <div class="top-actions">
+      <button class="streak" type="button" aria-label="Streak"><span class="streak-mark"></span> Streak</button>
+      <button class="pro-nav" type="button" id="topPro">
+        <svg class="mini-crown" viewBox="0 0 24 20" aria-hidden="true">
+          <path d="M2 5.5 7 9 12 2l5 7 5-3.5-2 12H4L2 5.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M5 15.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        Fluenta Pro
+      </button>
+    </div>
+  </header>
+
+  <main class="page" id="paymentSection">
+    <div class="eyebrow">Your next level starts here</div>
+    <h1>Make room for <span style="color:var(--pink)">more.</span></h1>
+    <p class="intro">Choose a Fluenta Pro plan to unlock language-learning features when your payment has been verified. Select a plan below to see its amount and payment instructions.</p>
+
+    <section class="plans" aria-label="Subscription plans">
+      <button class="plan" type="button" data-plan="weekly" aria-pressed="false">
+        <span class="tag">Flexible</span>
+        <h2>Weekly</h2>
+        <div class="price" id="weeklyPrice">₦ AMOUNT <small>/ week</small></div>
+        <p>Try Pro for a week. Renews only when you choose to pay again.</p>
+      </button>
+      <button class="plan selected" type="button" data-plan="monthly" aria-pressed="true">
+        <span class="popular">POPULAR</span>
+        <span class="tag">Best balance</span>
+        <h2>Monthly</h2>
+        <div class="price" id="monthlyPrice">₦ AMOUNT <small>/ month</small></div>
+        <p>Enjoy Pro for a full month of language-learning practice.</p>
+      </button>
+      <button class="plan" type="button" data-plan="yearly" aria-pressed="false">
+        <span class="tag">Long-term</span>
+        <h2>Yearly</h2>
+        <div class="price" id="yearlyPrice">₦ AMOUNT <small>/ year</small></div>
+        <p>One payment for a full year of Pro access.</p>
+      </button>
+    </section>
+
+    <div class="layout">
+      <section class="card">
+        <h2>Payment details</h2>
+        <p class="sub">Choose a plan, fill in your details, and continue to see the payment instructions. After making the transfer, enter the bank reference so the payment can be checked.</p>
+
+        <div class="account-box">
+          <div class="account-label">Account name</div>
+          <div class="account-number" id="accountName">YOUR ACCOUNT NAME</div>
+          <div class="account-detail">Bank: <strong id="bankName">YOUR BANK NAME</strong></div>
+          <div class="account-detail">Account number: <strong id="accountNumber">YOUR ACCOUNT NUMBER</strong></div>
+          <div class="account-detail">Amount due: <strong id="amountDue">₦ AMOUNT</strong></div>
+          <div class="account-detail">Plan: <strong id="planDue">Monthly</strong></div>
+        </div>
+
+        <form id="paymentForm">
+          <div class="field">
+            <label for="fullName">Your full name</label>
+            <input id="fullName" name="fullName" autocomplete="name" placeholder="Type your full name" required>
+          </div>
+          <div class="field">
+            <label for="email">Your email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="Type your email address" required>
+          </div>
+          <div class="field">
+            <label for="reference">Bank transfer reference</label>
+            <input id="reference" name="reference" placeholder="Type the transfer reference after paying" required>
+          </div>
+          <div class="field">
+            <label for="paymentDate">Payment date</label>
+            <input id="paymentDate" name="paymentDate" type="date" required>
+          </div>
+          <button class="button" type="submit">Continue to payment</button>
+          <div id="formStatus" class="status info" role="status"></div>
+          <p class="notice">Submitting this form does not confirm payment or activate Pro. Never enter your bank PIN, password, or one-time verification code here.</p>
+        </form>
+      </section>
+
+      <aside class="card">
+        <h2>How activation works</h2>
+        <p class="sub">Your Pro membership begins after the payment is confirmed.</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">01</div><div><strong>Choose a plan</strong><p>Select weekly, monthly, or yearly. The amount due updates automatically.</p></div></div>
+          <div class="step"><div class="step-num">02</div><div><strong>Make the transfer</strong><p>Use the account details provided by Fluenta. Check the account name and amount before sending.</p></div></div>
+          <div class="step"><div class="step-num">03</div><div><strong>Submit your reference</strong><p>Provide the transfer reference and payment date so the payment can be matched.</p></div></div>
+          <div class="step"><div class="step-num">04</div><div><strong>Get verified access</strong><p>A secure server must confirm the payment before Fluenta marks your account as Pro.</p></div></div>
+        </div>
+        <div class="account-box" style="margin-top:24px">
+          <div class="account-label">Membership status</div>
+          <div style="font-weight:800;margin-top:8px">Not activated</div>
+          <div class="account-detail">Pro access will appear here after secure payment verification is connected.</div>
+        </div>
+        <button class="button secondary" type="button" id="backButton">Back to Fluenta</button>
+      </aside>
+    </div>
+    <div class="footer">Fluenta Korean · Learn at your own pace<br>Subscription terms and secure payment verification should be configured before accepting real payments.</div>
+  </main>
+
+  <script>
+    /*
+      OWNER SETUP — replace these placeholders with your real plan prices and
+      business account details before publishing. Keep secret keys out of this file.
+    */
+    const FLUENTA_PAYMENT_SETTINGS = {
+      currency: "₦",
+      accountName: "YOUR ACCOUNT NAME",
+      bankName: "YOUR BANK NAME",
+      accountNumber: "YOUR ACCOUNT NUMBER",
+      prices: {
+        weekly: "AMOUNT",
+        monthly: "AMOUNT",
+        yearly: "AMOUNT"
+      },
+      // Add your secure backend endpoint here when it has been built.
+      verificationEndpoint: ""
+    };
+
+    const planNames = { weekly: "Weekly", monthly: "Monthly", yearly: "Yearly" };
+    let selectedPlan = "monthly";
+
+    function displayPrice(plan) {
+      const price = FLUENTA_PAYMENT_SETTINGS.prices[plan];
+      return FLUENTA_PAYMENT_SETTINGS.currency + " " + price;
+    }
+
+    function updatePlan(plan) {
+      selectedPlan = plan;
+      document.querySelectorAll(".plan").forEach(card => {
+        const isSelected = card.dataset.plan === plan;
+        card.classList.toggle("selected", isSelected);
+        card.setAttribute("aria-pressed", String(isSelected));
+      });
+      document.getElementById("amountDue").textContent = displayPrice(plan);
+      document.getElementById("planDue").textContent = planNames[plan];
+    }
+
+    document.getElementById("accountName").textContent = FLUENTA_PAYMENT_SETTINGS.accountName;
+    document.getElementById("bankName").textContent = FLUENTA_PAYMENT_SETTINGS.bankName;
+    document.getElementById("accountNumber").textContent = FLUENTA_PAYMENT_SETTINGS.accountNumber;
+    document.getElementById("weeklyPrice").innerHTML = displayPrice("weekly") + " <small>/ week</small>";
+    document.getElementById("monthlyPrice").innerHTML = displayPrice("monthly") + " <small>/ month</small>";
+    document.getElementById("yearlyPrice").innerHTML = displayPrice("yearly") + " <small>/ year</small>";
+
+    document.querySelectorAll(".plan").forEach(card => {
+      card.addEventListener("click", () => updatePlan(card.dataset.plan));
+    });
+
+    document.getElementById("topPro").addEventListener("click", () => {
+      document.getElementById("paymentSection").scrollIntoView({ behavior: "smooth" });
+    });
+
+    document.getElementById("backButton").addEventListener("click", () => {
+      // Change this to your actual home page filename if needed.
+      window.location.href = "index.html";
+    });
+
+    document.getElementById("paymentForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const status = document.getElementById("formStatus");
+
+      /*
+        A normal website form cannot move money directly into a bank account.
+        This button displays the transfer details. A secure payment provider
+        or bank-supported payment integration must be added for real checkout.
+      */
+      status.className = "status show info";
+      status.textContent =
+        "Payment instructions: transfer " + displayPrice(selectedPlan) +
+        " to " + FLUENTA_PAYMENT_SETTINGS.accountName + ", " +
+        FLUENTA_PAYMENT_SETTINGS.bankName + ", account number " +
+        FLUENTA_PAYMENT_SETTINGS.accountNumber +
+        ". After paying, enter the bank transfer reference and date. This demo does not send money or save your form.";
+      status.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    updatePlan(selectedPlan);
+  </script>
+</body>
+</html>
