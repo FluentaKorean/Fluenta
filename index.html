@@ -35,7 +35,7 @@
 
     #signupScreen {
         min-height: 100vh;
-        display: flex;
+        display: none;
         justify-content: center;
         align-items: center;
         padding: 30px;
@@ -93,6 +93,32 @@
         resize: vertical;
     }
 
+    .password-wrap {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+    }
+    .password-wrap input {
+        flex: 1;
+        min-width: 0;
+    }
+    .password-eye {
+        border: 1px solid #4b4b4b;
+        border-radius: 12px;
+        padding: 0 13px;
+        color: #ffb0cc;
+        background: #222;
+        white-space: nowrap;
+    }
+    .profile-detail {
+        margin-top: 12px;
+        color: #ddd;
+        overflow-wrap: anywhere;
+        line-height: 1.5;
+    }
+    .profile-detail strong { color: #ffb0cc; }
+
+
     .input-group input:focus,
     .input-group textarea:focus {
         border-color: #e83e83;
@@ -134,7 +160,7 @@
     ========================= */
 
     #mainWebsite {
-        display: none;
+        display: block;
         min-height: 100vh;
     }
 
@@ -187,6 +213,10 @@
         border-right: 1px solid #e83e83;
         z-index: 100;
         padding: 25px 18px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: #d93678 #111111;
         transition: left 0.35s ease;
         box-shadow: 10px 0 30px rgba(0,0,0,0.5);
     }
@@ -299,9 +329,26 @@
         margin-bottom: 28px;
     }
 
+    .hero-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
     .hero-button {
         width: auto;
         padding: 14px 25px;
+    }
+
+    .create-profile-button {
+        background: transparent;
+        border: 1px solid #ed4c8d;
+        color: #ff9bc2;
+    }
+
+    .create-profile-button:hover {
+        background: #2a101b;
     }
 
     .mascot-large {
@@ -800,7 +847,48 @@ li
         .fluenta-pro-crown-icon { font-size: 16px; }
     }
 
+
+
+    /* Thin Fluenta scrollbar */
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: #d93678 #111111;
+        scroll-behavior: smooth;
+    }
+
+    ::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #111111;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #d93678;
+        border-radius: 20px;
+        border: 2px solid #111111;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #ed4c8d;
+    }
+
+    /* White comment-bubble icon for Chat */
+    .menu-icon.chat-icon {
+        background: transparent;
+        color: #ffffff;
+    }
+
+    .menu-icon.chat-icon svg {
+        width: 25px;
+        height: 25px;
+        display: block;
+    }
+
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -875,12 +963,12 @@ document.addEventListener("DOMContentLoaded", function () {
             Start your Korean journey with Fluenta.
         </p>
 
-        <div class="input-group">
+        <div class="input-group signup-only">
             <label>Name</label>
             <input id="name" type="text" placeholder="Your name">
         </div>
 
-        <div class="input-group">
+        <div class="input-group signup-only">
             <label>Username</label>
             <input id="username" type="text" placeholder="Choose a username">
         </div>
@@ -892,26 +980,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
         <div class="input-group">
             <label>Password</label>
-            <input id="password" type="password" placeholder="Create a password">
+            <div class="password-wrap">
+                <input id="password" type="password" placeholder="Create a password" autocomplete="new-password">
+                <button type="button" class="password-eye" onclick="togglePasswordVisibility()" aria-label="Show or hide password">Show</button>
+            </div>
+            <p style="color:#888;font-size:12px;margin-top:7px;">Your password is stored securely by Supabase and will not be shown on your profile.</p>
         </div>
 
-        <div class="input-group">
+        <div class="input-group signup-only">
             <label>Age</label>
             <input id="age" type="number" placeholder="Your age">
         </div>
 
-        <div class="input-group">
+        <div class="input-group signup-only">
             <label>Why are you learning Korean?</label>
             <textarea id="reason" placeholder="Tell Fluenta..."></textarea>
         </div>
 
-        <button class="pink-button" onclick="createAccount()">
+        <button id="authSubmit" class="pink-button" onclick="createAccount()">
             CREATE ACCOUNT
         </button>
 
         <p class="login-text">
-            Already have an account?
-            <span onclick="loginDemo()">Log in</span>
+            <span id="signupPrompt">Already have an account?</span>
+            <span id="authToggle" onclick="toggleAuthMode()">Log in</span>
         </p>
 
     </div>
@@ -992,6 +1084,18 @@ document.addEventListener("DOMContentLoaded", function () {
     Vocabulary
 </button>
 
+        <button type="button" class="menu-item" onclick="window.location.href='chat.html'" aria-label="Open Chat">
+            <span class="menu-icon chat-icon" aria-hidden="true">
+                <svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 5.5C4 3.57 5.57 2 7.5 2h13C22.43 2 24 3.57 24 5.5v10c0 1.93-1.57 3.5-3.5 3.5h-7.2L7 24v-5.2c-1.74-.24-3-1.72-3-3.5z" fill="#ffffff"/>
+                    <circle cx="9" cy="10.5" r="1.35" fill="#111111"/>
+                    <circle cx="14" cy="10.5" r="1.35" fill="#111111"/>
+                    <circle cx="19" cy="10.5" r="1.35" fill="#111111"/>
+                </svg>
+            </span>
+            Chat
+        </button>
+
         <button class="menu-item" onclick="showPage('quizzes')">
             <span class="menu-icon">📕</span>
             Quizzes
@@ -1036,11 +1140,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     listening and more — one step at a time.
                 </p>
 
-                <button
-                    class="pink-button hero-button"
-                    onclick="location.href='lessons.html'">
-                    START LEARNING
-                </button>
+                <div class="hero-actions">
+                    <button
+                        class="pink-button hero-button"
+                        onclick="location.href='lessons.html'">
+                        START LEARNING
+                    </button>
+                    <button
+                        type="button"
+                        class="pink-button hero-button create-profile-button"
+                        onclick="openCreateProfile()">
+                        CREATE PROFILE
+                    </button>
+                </div>
 
             </div>
 
@@ -1284,6 +1396,11 @@ document.addEventListener("DOMContentLoaded", function () {
             <p id="profileUsername">
                 Username
             </p>
+            <p class="profile-detail"><strong>Email:</strong> <span id="profileEmail">Not loaded</span></p>
+            <p class="profile-detail"><strong>Age:</strong> <span id="profileAge">Not added</span></p>
+            <p class="profile-detail"><strong>Learning Korean because:</strong> <span id="profileReason">Not added</span></p>
+            <p class="profile-detail"><strong>Password:</strong> <span>Protected by Supabase (not displayed)</span></p>
+            <button class="pink-button" style="margin-top:18px;max-width:260px;" onclick="sendPasswordReset()">RESET PASSWORD</button>
 
         </div>
 
@@ -1312,127 +1429,239 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
 
+    let fluentaAuthMode = "signup";
+
+    function togglePasswordVisibility() {
+        const field = document.getElementById("password");
+        const button = document.querySelector(".password-eye");
+        if (!field || !button) return;
+        const showing = field.type === "password";
+        field.type = showing ? "text" : "password";
+        button.textContent = showing ? "Hide" : "Show";
+    }
+
+    async function sendPasswordReset() {
+        const email = (document.getElementById("profileEmail")?.textContent || "").trim();
+        if (!email || email === "Not loaded") {
+            alert("Please log in first so Fluenta knows which email to send the reset link to.");
+            return;
+        }
+        try {
+            const { error } = await fluentaSupabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + window.location.pathname
+            });
+            if (error) throw error;
+            alert("If password reset is available for this account, Supabase will send a reset email.");
+        } catch (error) {
+            alert("Could not request a password reset: " + error.message);
+        }
+    }
+
+    // Show registration first, with login available below.
+    function openCreateProfile() {
+        fluentaAuthMode = "signup";
+        document.querySelector(".signup-title").textContent = "SIGN UP";
+        document.querySelector(".signup-subtitle").textContent = "Start your Korean journey with Fluenta.";
+        document.querySelectorAll(".signup-only").forEach(el => el.style.display = "");
+        document.getElementById("authSubmit").textContent = "CREATE ACCOUNT";
+        document.getElementById("authSubmit").onclick = createAccount;
+        document.getElementById("signupPrompt").textContent = "Already have an account?";
+        document.getElementById("authToggle").textContent = "Log in";
+        document.getElementById("password").placeholder = "Create a password";
+        document.getElementById("mainWebsite").style.display = "none";
+        document.getElementById("signupScreen").style.display = "flex";
+        window.scrollTo(0, 0);
+    }
+
+    function toggleAuthMode() {
+        fluentaAuthMode = fluentaAuthMode === "signup" ? "login" : "signup";
+        const isSignup = fluentaAuthMode === "signup";
+        document.querySelector(".signup-title").textContent = isSignup ? "SIGN UP" : "LOG IN";
+        document.querySelector(".signup-subtitle").textContent = isSignup
+            ? "Start your Korean journey with Fluenta."
+            : "Welcome back to Fluenta.";
+        document.querySelectorAll(".signup-only").forEach(el => el.style.display = isSignup ? "" : "none");
+        document.getElementById("authSubmit").textContent = isSignup ? "CREATE ACCOUNT" : "LOG IN";
+        document.getElementById("authSubmit").onclick = isSignup ? createAccount : loginDemo;
+        document.getElementById("signupPrompt").textContent = isSignup ? "Already have an account?" : "New to Fluenta?";
+        document.getElementById("authToggle").textContent = isSignup ? "Log in" : "Sign up";
+        document.getElementById("password").placeholder = isSignup ? "Create a password" : "Your password";
+    }
+
     /* =========================
        CREATE ACCOUNT
     ========================= */
 
-    function createAccount() {
+    // SUPABASE SETUP:
+    // Replace the two placeholder strings below with your Supabase Project URL
+    // and publishable key. Never put a secret/service_role key in this file.
+    const FLUENTA_SUPABASE_URL = "https://offvwlcozbmkznyxrvtz.supabase.co";
+    const FLUENTA_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_VAd6QJyP3qyfXo0D1xbpMw_VgUDIUYP";
 
-        const name =
-            document.getElementById("name").value.trim();
+    const fluentaSupabase = window.supabase.createClient(
+        FLUENTA_SUPABASE_URL,
+        FLUENTA_SUPABASE_PUBLISHABLE_KEY
+    );
 
-        const username =
-            document.getElementById("username").value.trim();
+    function showSignedInWebsite(user, fallbackName, fallbackUsername) {
+        const metadata = user.user_metadata || {};
+        const name = metadata.full_name || fallbackName || "Fluenta learner";
+        const username = metadata.username || fallbackUsername || "";
+        const age = metadata.age ?? "";
+        const reason = metadata.learning_reason || "";
 
-        const email =
-            document.getElementById("email").value.trim();
+        localStorage.setItem("fluentaName", name);
+        localStorage.setItem("fluentaUsername", username);
+        localStorage.setItem("fluentaUserId", user.id);
 
-        const password =
-            document.getElementById("password").value.trim();
+        document.getElementById("signupScreen").style.display = "none";
+        document.getElementById("mainWebsite").style.display = "block";
 
-        const age =
-            document.getElementById("age").value.trim();
+        const profileName = document.getElementById("profileName");
+        const profileUsername = document.getElementById("profileUsername");
+        const profileEmail = document.getElementById("profileEmail");
+        const profileAge = document.getElementById("profileAge");
+        const profileReason = document.getElementById("profileReason");
+        if (profileName) profileName.textContent = name;
+        if (profileUsername) profileUsername.textContent = "@" + username;
+        if (profileEmail) profileEmail.textContent = user.email || "";
+        if (profileAge) profileAge.textContent = age ? String(age) : "Not added";
+        if (profileReason) profileReason.textContent = reason || "Not added";
+    }
 
-        const reason =
-            document.getElementById("reason").value.trim();
-
-
+    function supabaseSetupReady() {
         if (
-            !name ||
-            !username ||
-            !email ||
-            !password ||
-            !age ||
-            !reason
+            FLUENTA_SUPABASE_URL.includes("PASTE_") ||
+            FLUENTA_SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")
         ) {
+            alert("Fluenta still needs its Supabase Project URL and publishable key. Open index.html and replace the two Supabase placeholders in the script.");
+            return false;
+        }
+        return true;
+    }
 
+    async function createAccount() {
+        if (!supabaseSetupReady()) return;
+
+        const name = document.getElementById("name").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const age = document.getElementById("age").value.trim();
+        const reason = document.getElementById("reason").value.trim();
+
+        if (!name || !username || !email || !password || !age || !reason) {
             alert("Please complete all the fields.");
-
             return;
         }
 
+        if (password.length < 6) {
+            alert("Please use a password with at least 6 characters.");
+            return;
+        }
 
-        localStorage.setItem(
-            "fluentaName",
-            name
-        );
+        const button = document.querySelector("#signupScreen .pink-button");
+        const oldText = button.textContent;
+        button.disabled = true;
+        button.textContent = "CREATING ACCOUNT...";
 
-        localStorage.setItem(
-            "fluentaUsername",
-            username
-        );
+        try {
+            const { data, error } = await fluentaSupabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: name,
+                        username,
+                        age: Number(age),
+                        learning_reason: reason
+                    }
+                }
+            });
 
+            if (error) throw error;
 
-        document.getElementById(
-            "signupScreen"
-        ).style.display = "none";
-
-
-        document.getElementById(
-            "mainWebsite"
-        ).style.display = "block";
-
-
-        document.getElementById(
-            "profileName"
-        ).textContent = name;
-
-
-        document.getElementById(
-            "profileUsername"
-        ).textContent =
-            "@" + username;
-
+            if (data.session && data.user) {
+                // Save the public profile using the real column names in Supabase.
+                const profileResult = await fluentaSupabase.from("profiles").upsert(
+                    {
+                        id: data.user.id,
+                        full_name: name,
+                        username: username,
+                        created_at: new Date().toISOString()
+                    },
+                    { onConflict: "id" }
+                );
+                const profileError = profileResult.error;
+                showSignedInWebsite(data.user, name, username);
+                if (profileError) {
+                    alert("Your account was created, but Fluenta could not save your public profile for friend search. Supabase says: " + profileError.message + ". We need to check the profiles table columns and permissions next.");
+                } else {
+                    alert("Welcome to Fluenta! Your account and profile have been saved.");
+                }
+            } else {
+                alert("Fluenta received your sign-up, but Supabase email confirmation is still enabled. To allow instant sign-up, open Supabase Dashboard → Authentication → Sign In / Providers → Email and turn OFF Confirm email, then save. This cannot be switched off safely from index.html.");
+            }
+        } catch (error) {
+            alert("Could not create your account: " + error.message);
+        } finally {
+            button.disabled = false;
+            button.textContent = oldText;
+        }
     }
 
+    async function loginDemo() {
+        if (!supabaseSetupReady()) return;
 
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-    /* =========================
-       DEMO LOGIN
-    ========================= */
+        if (!email || !password) {
+            alert("Enter your email and password in the Email and Password boxes, then click Log in.");
+            return;
+        }
 
-    function loginDemo() {
+        try {
+            const { data, error } = await fluentaSupabase.auth.signInWithPassword({
+                email,
+                password
+            });
 
-        const savedName =
-            localStorage.getItem("fluentaName");
+            if (error) throw error;
+            if (!data.user) throw new Error("Login could not be completed.");
 
-        const savedUsername =
-            localStorage.getItem("fluentaUsername");
-
-
-        if (!savedName) {
-
-            alert(
-                "You haven't created an account on this browser yet."
+            // Keep the public profile directory updated after login too.
+            const meta = data.user.user_metadata || {};
+            const profileResult = await fluentaSupabase.from("profiles").upsert(
+                {
+                    id: data.user.id,
+                    full_name: meta.full_name || "Fluenta learner",
+                    username: meta.username || "",
+                    created_at: new Date().toISOString()
+                },
+                { onConflict: "id" }
             );
 
-            return;
+            showSignedInWebsite(data.user);
+            if (profileResult.error) {
+                alert("You are logged in, but friend search may not find your profile yet. Supabase says: " + profileResult.error.message + ". We need to check the profiles table permissions/columns.");
+            }
+        } catch (error) {
+            alert("Could not log in: " + error.message);
         }
-
-
-        document.getElementById(
-            "signupScreen"
-        ).style.display = "none";
-
-
-        document.getElementById(
-            "mainWebsite"
-        ).style.display = "block";
-
-
-        document.getElementById(
-            "profileName"
-        ).textContent =
-            savedName;
-
-
-        document.getElementById(
-            "profileUsername"
-        ).textContent =
-            "@" + savedUsername;
-
     }
 
+    // Registration is the first screen. A valid ?home=1 return from streak can reopen Home.
+    document.addEventListener("DOMContentLoaded", async function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("home") !== "1") return;
+        if (
+            FLUENTA_SUPABASE_URL.includes("PASTE_") ||
+            FLUENTA_SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")
+        ) return;
+        const { data } = await fluentaSupabase.auth.getSession();
+        if (data.session && data.session.user) showSignedInWebsite(data.session.user);
+    });
 
 
     /* =========================
