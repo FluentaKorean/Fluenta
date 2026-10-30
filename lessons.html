@@ -1,95 +1,966 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fluenta - Lessons</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111e22">
+<title>Fluenta Korean — Lesson Path</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#101010;color:#fff}
-.topbar{height:75px;background:#181818;border-bottom:2px solid #292929;display:flex;align-items:center;padding:0 30px;position:sticky;top:0;z-index:50}
-.back-button{text-decoration:none;color:#ddd;font-size:18px;font-weight:bold}
-.page-title{position:absolute;left:50%;transform:translateX(-50%);font-size:27px;font-weight:800;color:#fff}
-.container{max-width:1000px;margin:auto;padding:40px 25px 120px}
-.intro{text-align:center;margin-bottom:32px}.intro h1{font-size:42px;margin:0 0 10px}.intro p{color:#aaa;font-size:18px;margin:0}
-.level-card{background:#191919;border:1px solid #2b2b2b;border-radius:24px;padding:26px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.level-top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}.level-tag{color:#ed72a1;font-weight:800;letter-spacing:.5px}.level-title{font-size:30px;margin:4px 0}.level-desc{color:#aaa;margin:0}.progress-wrap{min-width:180px}.progress-label{font-size:13px;color:#aaa;text-align:right;margin-bottom:7px}.progress{height:10px;background:#303030;border-radius:20px;overflow:hidden}.progress-bar{height:100%;width:25%;background:#ed72a1;border-radius:20px;transition:.3s}
-.lesson-path{position:relative;max-width:700px;margin:15px auto 35px;padding:10px 0}.path-line{position:absolute;left:50%;top:45px;width:7px;height:calc(100% - 90px);background:#c84f7e;transform:translateX(-50%);border-radius:20px}.lesson-row{position:relative;z-index:2;display:flex;justify-content:center;margin:28px 0}.lesson-row:nth-child(even){transform:translateX(105px)}.lesson-row:nth-child(odd){transform:translateX(-105px)}
-.lesson-circle{width:120px;height:120px;border:0;border-radius:50%;background:#ed72a1;color:#fff;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 7px 0 #c84f7e;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.15s}.lesson-circle:hover{transform:translateY(-4px);box-shadow:0 11px 0 #c84f7e}.lesson-circle:active{transform:translateY(5px);box-shadow:0 2px 0 #c84f7e}.lesson-number{font-size:13px}.lesson-small{font-size:12px;color:#ffd5e5;margin-top:4px}
-.lesson-area{display:none;background:#191919;border:1px solid #2b2b2b;border-radius:24px;padding:30px;margin-top:20px}.lesson-area.active{display:block}.lesson-head{text-align:center}.lesson-head h2{font-size:32px;margin:0 0 8px}.lesson-head p{color:#aaa;margin:0 auto 25px;max-width:700px}.mascot-card{position:relative;min-height:250px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:15px}.mascot{max-height:205px;width:auto;max-width:230px;object-fit:contain}.speech{position:absolute;top:0;left:50%;transform:translateX(-50%);background:#fff;color:#222;padding:11px 16px;border-radius:18px;font-weight:800;max-width:280px;text-align:center;z-index:3;box-shadow:0 5px 0 #ddd}.speech:after{content:"";position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);border:10px solid transparent;border-top-color:#fff;border-bottom:0}
-.phrase-card{background:#111;border:1px solid #303030;border-radius:22px;padding:25px;text-align:center;margin:20px 0}.phrase-korean{font-size:45px;font-weight:900;color:#ed72a1;margin:5px}.phrase-roman{font-size:18px;color:#bbb;margin-bottom:18px}.meaning{color:#eee;font-size:17px;margin-bottom:16px}.voice-btn,.choice-btn,.next-btn{border:0;cursor:pointer;font-weight:800;border-radius:14px}.voice-btn{background:#ed72a1;color:#fff;padding:12px 20px;font-size:16px;box-shadow:0 4px 0 #c84f7e}.voice-btn:active,.next-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #c84f7e}.picture-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:22px 0}.picture-card{background:#222;border:2px solid #333;border-radius:18px;padding:12px;cursor:pointer;transition:.15s;text-align:center;color:#fff}.picture-card:hover{border-color:#ed72a1;transform:translateY(-3px)}.picture-card.selected{border-color:#ed72a1;box-shadow:0 0 0 3px rgba(237,114,161,.15)}.picture-card.correct{border-color:#66d17a}.picture-card.wrong{border-color:#ff6b8f}.picture-card img{width:100%;height:145px;object-fit:cover;border-radius:13px;background:#333;display:block}.picture-card span{display:block;margin-top:9px;font-weight:800}.feedback{display:none;text-align:center;padding:14px;border-radius:14px;font-weight:800;margin:12px 0}.feedback.show{display:block}.feedback.good{background:#17321e;color:#8df0a0}.feedback.bad{background:#381722;color:#ff9db6}.next-btn{display:none;background:#ed72a1;color:#fff;padding:13px 24px;box-shadow:0 4px 0 #c84f7e;margin:14px auto 0}.next-btn.show{display:block}
-.practice{margin-top:30px}.practice h3{text-align:center;font-size:25px;margin-bottom:8px}.practice-sub{text-align:center;color:#aaa;margin-bottom:20px}.phrase-list{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.phrase-mini{background:#222;border:1px solid #333;border-radius:18px;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:15px}.phrase-mini strong{font-size:24px;color:#ed72a1}.phrase-mini small{display:block;color:#aaa;margin-top:5px}.mini-voice{background:#333;color:#fff;border:0;border-radius:12px;padding:10px 13px;cursor:pointer;font-weight:800}.mini-voice:hover{background:#ed72a1}
-.result{display:none;text-align:center;padding:25px}.result.show{display:block}.result h2{font-size:34px;color:#ed72a1}.xp{display:inline-block;background:#272027;border:1px solid #49303e;border-radius:20px;padding:9px 16px;color:#ffb9d1;font-weight:800}
-@media(max-width:650px){.container{padding:28px 12px 90px}.intro h1{font-size:34px}.level-top{align-items:flex-start;flex-direction:column}.progress-wrap{width:100%}.lesson-row:nth-child(even){transform:translateX(60px)}.lesson-row:nth-child(odd){transform:translateX(-60px)}.lesson-circle{width:98px;height:98px;font-size:13px}.picture-grid{grid-template-columns:repeat(2,1fr)}.picture-card img{height:120px}.phrase-list{grid-template-columns:1fr}.lesson-area{padding:20px}.phrase-korean{font-size:35px}.speech{max-width:235px;font-size:14px}.mascot-card{min-height:235px}.mascot{max-height:185px}}
+:root {
+  --bg:#111e22;
+  --white:#f8fbff;
+}
+
+* { box-sizing:border-box; }
+
+html {
+  scroll-behavior:smooth;
+  scroll-padding-top:105px;
+}
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--white);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+button,a {
+  -webkit-tap-highlight-color:transparent;
+}
+
+.topbar {
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(17,30,34,.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid #26383e;
+  padding:calc(10px + env(safe-area-inset-top)) 14px 10px;
+}
+
+.topline {
+  max-width:650px;
+  margin:0 auto 9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand {
+  font-weight:900;
+  font-size:15px;
+  color:white;
+}
+
+.menu-toggle {
+  width:42px;
+  height:38px;
+  border:1px solid #35474e;
+  border-radius:10px;
+  background:#1b2b30;
+  color:white;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+}
+
+.menu-toggle svg {
+  width:23px;
+  height:23px;
+}
+
+.stats {
+  max-width:650px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+
+.stat {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-weight:800;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+.stat .flag { font-size:19px; }
+.stat svg { width:20px;height:20px;flex-shrink:0; }
+.stat.streak { color:#ff8b43; }
+.stat.gems { color:#35c6ff; }
+.stat.energy { color:#ff69b7; }
+
+.page {
+  max-width:650px;
+  margin:0 auto;
+  padding:20px 16px 125px;
+}
+
+.session {
+  margin:0 0 20px;
+  border-radius:17px;
+  overflow:hidden;
+  box-shadow:0 5px 0 var(--shadow);
+  background:var(--accent);
+}
+
+.session-head {
+  display:flex;
+  align-items:stretch;
+  min-height:83px;
+}
+
+.session-title {
+  flex:1;
+  padding:15px 17px;
+}
+
+.session-kicker {
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.7px;
+  opacity:.85;
+  text-transform:uppercase;
+}
+
+.session-name {
+  font-size:20px;
+  line-height:1.2;
+  font-weight:850;
+  margin-top:6px;
+}
+
+.session-list {
+  width:57px;
+  border-left:2px solid #0002;
+  display:grid;
+  place-items:center;
+  background:#0000000b;
+}
+
+.session-list svg {
+  width:26px;
+  height:26px;
+}
+
+.path {
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:5px 0 24px;
+  min-height:300px;
+}
+
+.path:before {
+  content:"";
+  position:absolute;
+  top:10px;
+  bottom:25px;
+  left:50%;
+  width:5px;
+  border-radius:20px;
+  background:repeating-linear-gradient(
+    to bottom,
+    #ffffff15 0 12px,
+    transparent 12px 22px
+  );
+  transform:translateX(-50%);
+}
+
+.stop {
+  position:relative;
+  width:100%;
+  height:101px;
+  display:flex;
+  align-items:center;
+  z-index:1;
+}
+
+.stop.left {
+  justify-content:flex-start;
+  padding-left:calc(50% - 145px);
+}
+
+.stop.center {
+  justify-content:center;
+}
+
+.stop.right {
+  justify-content:flex-end;
+  padding-right:calc(50% - 145px);
+}
+
+.bubble {
+  width:76px;
+  height:76px;
+  border-radius:50%;
+  position:relative;
+  display:grid;
+  place-items:center;
+  color:white;
+  text-decoration:none;
+  font-size:27px;
+  font-weight:950;
+  background:var(--bubble);
+  border:3px solid #ffffff35;
+  box-shadow:
+    0 7px 0 var(--bubble-shadow),
+    inset 0 4px 0 #ffffff35,
+    inset 0 -5px 0 #00000013;
+  transition:transform .12s;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.bubble:before {
+  content:"";
+  position:absolute;
+  width:30px;
+  height:12px;
+  top:10px;
+  left:12px;
+  border-radius:50%;
+  background:#ffffff30;
+  transform:rotate(-25deg);
+}
+
+.bubble:active {
+  transform:translateY(4px);
+}
+
+.bubble .number {
+  position:relative;
+  z-index:1;
+  text-shadow:0 1px 1px #0002;
+}
+
+.side-art {
+  width:80px;
+  height:78px;
+  position:absolute;
+  top:10px;
+  display:grid;
+  place-items:center;
+}
+
+.side-art.left-art {
+  left:calc(50% - 205px);
+}
+
+.side-art.right-art {
+  right:calc(50% - 205px);
+}
+
+.stars {
+  position:absolute;
+  top:77px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:3px;
+  color:#40535b;
+}
+
+.stars svg {
+  width:17px;
+  height:17px;
+  fill:currentColor;
+}
+
+.chest {
+  width:65px;
+  height:62px;
+  filter:drop-shadow(0 4px 0 #0005);
+}
+
+.mascot {
+  width:65px;
+  height:74px;
+  position:relative;
+}
+
+.mascot .hair {
+  position:absolute;
+  left:15px;
+  top:2px;
+  width:38px;
+  height:34px;
+  border-radius:48% 48% 35% 35%;
+  background:var(--hair);
+}
+
+.mascot .face {
+  position:absolute;
+  left:19px;
+  top:17px;
+  width:30px;
+  height:27px;
+  border-radius:45%;
+  background:#ffc5ad;
+  z-index:2;
+}
+
+.mascot .eye {
+  position:absolute;
+  top:10px;
+  width:4px;
+  height:5px;
+  background:#25343a;
+  border-radius:50%;
+}
+
+.mascot .eye.one { left:7px; }
+.mascot .eye.two { right:7px; }
+
+.mascot .smile {
+  position:absolute;
+  left:12px;
+  top:18px;
+  width:7px;
+  height:4px;
+  border-bottom:2px solid #b75d68;
+  border-radius:50%;
+}
+
+.mascot .body {
+  position:absolute;
+  left:15px;
+  top:43px;
+  width:38px;
+  height:26px;
+  border-radius:12px 12px 8px 8px;
+  background:var(--shirt);
+  z-index:3;
+}
+
+.mascot .leg {
+  position:absolute;
+  top:62px;
+  width:9px;
+  height:12px;
+  background:#514b68;
+  border-radius:5px;
+  z-index:2;
+}
+
+.mascot .leg.one { left:23px; }
+.mascot .leg.two { right:19px; }
+
+.mascot .arm {
+  position:absolute;
+  top:47px;
+  width:9px;
+  height:23px;
+  background:#ffc5ad;
+  border-radius:8px;
+  z-index:2;
+}
+
+.mascot .arm.one {
+  left:8px;
+  transform:rotate(15deg);
+}
+
+.mascot .arm.two {
+  right:7px;
+  transform:rotate(-18deg);
+}
+
+.end-mark {
+  color:#a5b8c1;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:1px;
+  margin:8px 0 20px;
+  text-align:center;
+}
+
+/* Hamburger menu */
+
+.menu-backdrop {
+  position:fixed;
+  inset:0;
+  background:#0009;
+  z-index:49;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s;
+}
+
+.side-menu {
+  position:fixed;
+  z-index:50;
+  top:0;
+  bottom:0;
+  left:0;
+  width:min(300px,84vw);
+  padding:calc(20px + env(safe-area-inset-top)) 18px 24px;
+  background:#17262b;
+  border-right:1px solid #34454c;
+  transform:translateX(-105%);
+  transition:transform .23s ease;
+  overflow-y:auto;
+}
+
+body.menu-open .menu-backdrop {
+  opacity:1;
+  pointer-events:auto;
+}
+
+body.menu-open .side-menu {
+  transform:translateX(0);
+}
+
+.menu-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.menu-brand {
+  font-size:23px;
+  font-weight:900;
+  color:#ff65b3;
+}
+
+.menu-close {
+  background:transparent;
+  border:0;
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+}
+
+.menu-link {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 12px;
+  margin:5px 0;
+  border-radius:10px;
+  color:#f8fbff;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.menu-link:hover {
+  background:#263b43;
+}
+
+.menu-dot {
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ff65b3;
+}
+
+/* Bottom navigation */
+
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:30;
+  background:rgba(17,30,34,.98);
+  border-top:2px solid #2b3b41;
+  padding:10px 12px calc(12px + env(safe-area-inset-bottom));
+  display:flex;
+  justify-content:center;
+  gap:clamp(12px,5vw,42px);
+}
+
+.nav-item {
+  width:48px;
+  height:46px;
+  border:0;
+  background:transparent;
+  color:#91a7b0;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  text-decoration:none;
+}
+
+.nav-item svg {
+  width:27px;
+  height:27px;
+  stroke:currentColor;
+  stroke-width:2.5;
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.nav-item.active {
+  color:#ffd447;
+  background:#263b43;
+  outline:2px solid #2a839f;
+}
+
+.nav-item:nth-child(2) { color:#ffbd35; }
+.nav-item:nth-child(3) { color:#ff4d62; }
+.nav-item:nth-child(4) { color:#ff79c6; }
+.nav-item:nth-child(5) { color:#38d9bb; }
+.nav-item:nth-child(6) { color:#d778ff; }
+
+@media(max-width:390px) {
+  .page {
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .stop.left {
+    padding-left:calc(50% - 118px);
+  }
+
+  .stop.right {
+    padding-right:calc(50% - 118px);
+  }
+
+  .side-art.left-art {
+    left:calc(50% - 165px);
+  }
+
+  .side-art.right-art {
+    right:calc(50% - 165px);
+  }
+
+  .bubble {
+    width:68px;
+    height:68px;
+    font-size:24px;
+  }
+
+  .session-name { font-size:18px; }
+  .session-title { padding-left:13px; }
+
+  .bottom-nav {
+    gap:clamp(8px,3vw,18px);
+  }
+
+  .nav-item { width:42px; }
+}
+
+@media(min-width:600px) {
+  .page { padding-top:24px; }
+  .stop { height:112px; }
+  .bubble { width:82px;height:82px; }
+}
 </style>
 </head>
+
 <body>
+
 <header class="topbar">
-<a href="index.html" class="back-button">← Home</a>
-<div class="page-title">Lessons</div>
+
+  <div class="topline">
+    <div class="brand">Fluenta Korean</div>
+
+    <button class="menu-toggle" id="menuToggle"
+      type="button" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <span class="flag">🇰🇷</span>
+      <span id="sectionCounter">1</span>
+    </div>
+
+    <div class="stat streak">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M13.5 1.5c.7 4-2.8 4.8-2.1 8.1.3 1.3 1.4 2 2.5 1.9 2-.2 2.8-2.6 2-4.5 3.5 2.3 5.1 5.4 4.2 9.1-.8 3.6-4 6.1-8.1 6.1-4.6 0-8-3.3-8-7.8 0-3.7 2.2-6.5 5.5-9.2-.3 3.1.2 4.3 1.2 4.9C9.9 6.7 12.6 5.4 13.5 1.5z"/>
+      </svg>
+      0
+    </div>
+
+    <div class="stat gems">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M7 2h10l5 7-10 13L2 9 7 2z"/>
+      </svg>
+      189
+    </div>
+
+    <div class="stat energy">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <rect x="2" y="5" width="20" height="14" rx="3"/>
+        <path d="M13 7l-5 6h3l-1 4 6-7h-4z"
+          fill="#111e22"/>
+      </svg>
+      25
+    </div>
+
+  </div>
 </header>
 
-<main class="container">
-<section class="intro">
-<h1>Learn Korean</h1>
-<p>Follow the path, learn useful phrases, and practice speaking Korean.</p>
-</section>
+<!-- Hamburger menu -->
 
-<section class="level-card">
-<div class="level-top">
-<div><div class="level-tag">LEVEL 1</div><h2 class="level-title">Order at a Café ☕</h2><p class="level-desc">Learn how to order drinks and simple café items in Korean.</p></div>
-<div class="progress-wrap"><div class="progress-label" id="progressLabel">1 of 4 lessons</div><div class="progress"><div class="progress-bar" id="progressBar"></div></div></div>
-</div>
+<div class="menu-backdrop" id="menuBackdrop"></div>
 
-<div class="lesson-path">
-<div class="path-line"></div>
-<div class="lesson-row"><button class="lesson-circle" onclick="openLesson(1)"><span class="lesson-number">LESSON 1</span>Say Please<span class="lesson-small">주세요</span></button></div>
-<div class="lesson-row"><button class="lesson-circle" onclick="openLesson(2)"><span class="lesson-number">LESSON 2</span>Drinks<span class="lesson-small">음료</span></button></div>
-<div class="lesson-row"><button class="lesson-circle" onclick="openLesson(3)"><span class="lesson-number">LESSON 3</span>Food<span class="lesson-small">음식</span></button></div>
-<div class="lesson-row"><button class="lesson-circle" onclick="openLesson(4)"><span class="lesson-number">LESSON 4</span>Order It All<span class="lesson-small">주문하기</span></button></div>
-</div>
+<aside class="side-menu" id="sideMenu">
 
-<section id="lessonArea" class="lesson-area">
-<div class="lesson-head"><h2 id="lessonTitle"></h2><p id="lessonDescription"></p></div>
+  <div class="menu-head">
+    <div class="menu-brand">Fluenta</div>
+    <button class="menu-close" id="menuClose">×</button>
+  </div>
 
-<div class="mascot-card"><div class="speech" id="speech">Let's order something tasty!</div><img src="fluenta.png.png" class="mascot" alt="Fluenta mascot"></div>
+  <a class="menu-link" href="index.html">Home</a>
+  <a class="menu-link" href="lesson-first.html">Learn Korean</a>
+  <a class="menu-link" href="hangul.html">Hangul</a>
+  <a class="menu-link" href="lessons.html">Lessons</a>
+  <a class="menu-link" href="vocabulary.html">Vocabulary</a>
+  <a class="menu-link" href="listening.html">Listening</a>
+  <a class="menu-link" href="quizzes.html">Quizzes</a>
+  <a class="menu-link" href="chat.html">Friends and chat</a>
+  <a class="menu-link" href="gem.html">Gems</a>
 
-<div class="phrase-card">
-<div class="phrase-korean" id="mainKorean">커피 주세요</div>
-<div class="phrase-roman" id="mainRoman">keopi juseyo</div>
-<div class="meaning" id="mainMeaning">Please give me coffee.</div>
-<button class="voice-btn" onclick="speakCurrent()">🔊 Hear Korean</button>
-</div>
+</aside>
 
-<div id="interactive"></div>
+<main class="page" id="lessonPath"></main>
 
-<div class="practice">
-<h3>Level 1 Phrase Bank</h3>
-<p class="practice-sub">Tap the speaker to hear each Korean phrase.</p>
-<div class="phrase-list" id="phraseList"></div>
-</div>
+<!-- Bottom navigation -->
 
-<div class="result" id="result"><h2>🎉 Lesson Complete!</h2><p>You earned <span class="xp">+10 XP</span></p><p>Keep going to unlock the next café lesson.</p></div>
-</section>
-</section>
-</main>
+<nav class="bottom-nav">
+
+  <a class="nav-item active" href="index.html" aria-label="Home">
+    <svg viewBox="0 0 24 24">
+      <path d="M3 10.5 12 3l9 7.5"/>
+      <path d="M5.5 9.5V21h13V9.5M9 21v-7h6v7"/>
+    </svg>
+  </a>
+
+  <a class="nav-item" href="lessons.html" aria-label="Lessons">
+    <svg viewBox="0 0 24 24">
+      <path d="M4 7h16v10H4zM7 4v16M17 4v16"/>
+    </svg>
+  </a>
+
+  <a class="nav-item" href="streak.html" aria-label="Streak">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 21c-5 0-8-3.5-8-8 0-3.2 2-5.8 5-8-.2 2.8.6 4 1.7 4.4C12.8 7 14 4.8 14 2c3.5 3.1 6 6.5 6 11 0 4.5-3.3 8-8 8z"/>
+    </svg>
+  </a>
+
+  <a class="nav-item" href="chat.html" aria-label="Friends and chat">
+    <svg viewBox="0 0 24 24">
+      <path d="M4 4h16v13H9l-5 4z"/>
+      <path d="M8 9h8M8 13h5"/>
+    </svg>
+  </a>
+
+  <a class="nav-item" href="gem.html" aria-label="Gems">
+    <svg viewBox="0 0 24 24">
+      <path d="M7 3h10l5 6-10 12L2 9z"/>
+      <path d="M2 9h20"/>
+    </svg>
+  </a>
+
+  <a class="nav-item" href="more.html" aria-label="More">
+    <svg viewBox="0 0 24 24">
+      <circle cx="5" cy="12" r="1"/>
+      <circle cx="12" cy="12" r="1"/>
+      <circle cx="19" cy="12" r="1"/>
+    </svg>
+  </a>
+
+</nav>
 
 <script>
-const lessons={
-1:{title:'Lesson 1 — Say Please',desc:'Learn the useful café pattern “주세요” and use it to ask for something politely.',speech:'Easy! Just add 주세요 after the thing you want.',main:['커피 주세요','keopi juseyo','Please give me coffee.'],phrases:[['커피 주세요','keopi juseyo','Please give me coffee.'],['차 주세요','cha juseyo','Please give me tea.'],['빵 주세요','ppang juseyo','Please give me bread.'],['물 주세요','mul juseyo','Please give me water.']],quiz:{question:'Which picture matches “커피 주세요”?',items:[['coffee.png','Coffee'],['tea.png','Tea'],['bread.png','Bread'],['rice.png','Rice']],correct:0}},
-2:{title:'Lesson 2 — Drinks',desc:'Learn common café drinks and practice saying what you want.',speech:'Pick a drink, then say 주세요!',main:['차 주세요','cha juseyo','Please give me tea.'],phrases:[['커피 주세요','keopi juseyo','Please give me coffee.'],['차 주세요','cha juseyo','Please give me tea.'],['물 주세요','mul juseyo','Please give me water.'],['주스 주세요','juseu juseyo','Please give me juice.']],quiz:{question:'Which picture matches “차 주세요”?',items:[['coffee.png','Coffee'],['tea.png','Tea'],['juice.png','Juice'],['water.png','Water']],correct:1}},
-3:{title:'Lesson 3 — Café Food',desc:'Practice ordering simple food items politely.',speech:'Nice! Now let’s add some food.',main:['빵 주세요','ppang juseyo','Please give me bread.'],phrases:[['빵 주세요','ppang juseyo','Please give me bread.'],['케이크 주세요','keikeu juseyo','Please give me cake.'],['샌드위치 주세요','saendeu-wichi juseyo','Please give me a sandwich.'],['밥 주세요','bap juseyo','Please give me rice.']],quiz:{question:'Which picture matches “빵 주세요”?',items:[['bread.png','Bread'],['cake.png','Cake'],['coffee.png','Coffee'],['rice.png','Rice']],correct:0}},
-4:{title:'Lesson 4 — Order It All',desc:'Put everything together and practice a full café order.',speech:'You’re ready to order at the café!',main:['커피하고 케이크 주세요','keopihago keikeu juseyo','Please give me coffee and cake.'],phrases:[['커피하고 케이크 주세요','keopihago keikeu juseyo','Please give me coffee and cake.'],['차하고 빵 주세요','chahago ppang juseyo','Please give me tea and bread.'],['물하고 밥 주세요','mulhago bap juseyo','Please give me water and rice.'],['주스하고 케이크 주세요','juseuhago keikeu juseyo','Please give me juice and cake.']],quiz:{question:'Which picture should you choose for “커피 주세요”?',items:[['coffee.png','Coffee'],['bread.png','Bread'],['tea.png','Tea'],['cake.png','Cake']],correct:0}}
-};
-let currentLesson=1;let selected=null;
-function speak(text){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.82;window.speechSynthesis.speak(u)}
-function speakCurrent(){speak(lessons[currentLesson].main[0])}
-function openLesson(n){currentLesson=n;selected=null;const l=lessons[n];document.getElementById('lessonArea').classList.add('active');document.getElementById('lessonTitle').textContent=l.title;document.getElementById('lessonDescription').textContent=l.desc;document.getElementById('speech').textContent=l.speech;document.getElementById('mainKorean').textContent=l.main[0];document.getElementById('mainRoman').textContent=l.main[1];document.getElementById('mainMeaning').textContent=l.main[2];document.getElementById('progressLabel').textContent=n+' of 4 lessons';document.getElementById('progressBar').style.width=(n/4*100)+'%';renderQuiz(l.quiz);renderPhrases(l.phrases);document.getElementById('result').classList.remove('show');document.getElementById('lessonArea').scrollIntoView({behavior:'smooth'})}
-function renderQuiz(q){const box=document.getElementById('interactive');box.innerHTML='<h3 style="text-align:center;margin:28px 0 8px;font-size:25px">'+q.question+'</h3><div class="picture-grid" id="pictureGrid"></div><div class="feedback" id="feedback"></div><button class="next-btn" id="nextBtn" onclick="nextLesson()">Next Lesson →</button>';const grid=document.getElementById('pictureGrid');q.items.forEach((item,i)=>{const b=document.createElement('button');b.className='picture-card';b.innerHTML='<img src="'+item[0]+'" alt="'+item[1]+'"><span>'+item[1]+'</span>';b.onclick=()=>choosePicture(i,b,q.correct);grid.appendChild(b)})}
-function choosePicture(i,btn,correct){if(selected!==null)return;selected=i;const all=document.querySelectorAll('.picture-card');all.forEach(x=>x.disabled=true);const fb=document.getElementById('feedback');if(i===correct){btn.classList.add('correct');fb.className='feedback show good';fb.textContent='Correct! Great order! 🎉';document.getElementById('nextBtn').classList.add('show');}else{btn.classList.add('wrong');fb.className='feedback show bad';fb.textContent='Not quite! Try the next lesson when you’re ready.';setTimeout(()=>{selected=null;all.forEach(x=>{x.disabled=false;x.classList.remove('wrong')});fb.className='feedback';},900)}}
-function nextLesson(){if(currentLesson<4){openLesson(currentLesson+1)}else{document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth'})}}
-function renderPhrases(arr){const box=document.getElementById('phraseList');box.innerHTML='';arr.forEach(p=>{const d=document.createElement('div');d.className='phrase-mini';d.innerHTML='<div><strong>'+p[0]+'</strong><small>'+p[1]+' · '+p[2]+'</small></div><button class="mini-voice" onclick="speak(\''+p[0]+'\')">🔊</button>';box.appendChild(d)})}
-openLesson(1);
+
+const sessions = [
+  {start:1,end:10,title:"Order at a Cafe"},
+  {start:11,end:20,title:"Talk about yourself"},
+  {start:21,end:30,title:"Meet new people"},
+  {start:31,end:40,title:"Food and daily life"},
+  {start:41,end:50,title:"Places and directions"},
+  {start:51,end:60,title:"Your everyday routine"},
+  {start:61,end:70,title:"Shopping and money"},
+  {start:71,end:80,title:"Plans and invitations"},
+  {start:81,end:90,title:"Past experiences"},
+  {start:91,end:100,title:"Keep the conversation going"}
+];
+
+const colors = [
+  ["#ff4657","#c91f3c"],
+  ["#ff8a2b","#d85c13"],
+  ["#ffd43b","#d39b08"],
+  ["#42d878","#17964c"],
+  ["#20b8ff","#087db9"],
+  ["#626bff","#3941c4"],
+  ["#ad62ff","#7835c9"],
+  ["#ff55b6","#c92b7f"],
+  ["#e8b23b","#a97912"],
+  ["#27d6c2","#138e82"],
+  ["#ff6b83","#c83956"],
+  ["#8bd34d","#508b21"]
+];
+
+const path = document.getElementById("lessonPath");
+
+const starSvg = `
+<svg viewBox="0 0 24 24">
+<path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9z"/>
+</svg>`;
+
+const listSvg = `
+<svg viewBox="0 0 24 24" fill="none"
+stroke="currentColor" stroke-width="2.4"
+stroke-linecap="round">
+<path d="M9 5h11M9 12h11M9 19h11"/>
+<circle cx="4" cy="5" r="1" fill="currentColor"/>
+<circle cx="4" cy="12" r="1" fill="currentColor"/>
+<circle cx="4" cy="19" r="1" fill="currentColor"/>
+</svg>`;
+
+const chestSvg = `
+<svg class="chest" viewBox="0 0 70 66">
+<path d="M9 22V12q0-5 5-5h42q5 0 5 5v10" fill="#ffcf9b"/>
+<path d="M7 21h56v37H7z" fill="#bd760d"/>
+<path d="M13 27h44v23H13z" fill="#80440d" stroke="#ffcf9b" stroke-width="4"/>
+<path d="M7 22h56v9H7z" fill="#ffb83e"/>
+<circle cx="35" cy="30" r="4" fill="#fff7e9"/>
+<path d="M12 56h46" stroke="#ffd09b" stroke-width="5"/>
+</svg>`;
+
+function mascot(colorIndex) {
+
+  const hair = [
+    "#44283f","#ff922e","#563d91",
+    "#dc4b72","#2c7b9a","#523b83"
+  ][colorIndex % 6];
+
+  const shirt = [
+    "#ff5aa8","#23b8ff","#ff4d5a",
+    "#f3bd32","#47d47a","#a86aff"
+  ][colorIndex % 6];
+
+  return `
+  <div class="mascot" style="--hair:${hair};--shirt:${shirt}">
+    <div class="hair"></div>
+    <div class="face">
+      <i class="eye one"></i>
+      <i class="eye two"></i>
+      <i class="smile"></i>
+    </div>
+    <div class="arm one"></div>
+    <div class="arm two"></div>
+    <div class="body"></div>
+    <div class="leg one"></div>
+    <div class="leg two"></div>
+  </div>`;
+}
+
+function addSession(session,index) {
+
+  const [accent,shadow] = colors[index % colors.length];
+
+  const section = document.createElement("section");
+
+  section.className = "lesson-session";
+  section.id = "session-" + (index + 1);
+
+  section.style.setProperty("--accent",accent);
+  section.style.setProperty("--shadow",shadow);
+
+  section.innerHTML = `
+    <div class="session">
+      <div class="session-head">
+
+        <div class="session-title">
+          <div class="session-kicker">
+            Section ${Math.floor(index/3)+1}, Unit ${index+1}
+          </div>
+
+          <div class="session-name">
+            ${session.title}
+          </div>
+        </div>
+
+        <div class="session-list">
+          ${listSvg}
+        </div>
+
+      </div>
+    </div>
+
+    <div class="path"></div>
+  `;
+
+  const pathEl = section.querySelector(".path");
+
+  for(let n=session.start; n<=session.end; n++) {
+
+    const local = n-session.start;
+
+    const stop = document.createElement("div");
+
+    stop.className = "stop " +
+      ["center","right","right","center","left",
+       "left","center","right","right","center"][local % 10];
+
+    /* All lessons in this section use the same colour */
+    const color = colors[index % colors.length];
+
+    stop.style.setProperty("--bubble",color[0]);
+    stop.style.setProperty("--bubble-shadow",color[1]);
+
+    if(local === 3 || local === 7) {
+
+      const art = document.createElement("div");
+
+      art.className = "side-art " +
+        (local === 3 ? "left-art" : "right-art");
+
+      art.innerHTML = mascot(index+local);
+
+      stop.appendChild(art);
+    }
+
+    const a = document.createElement("a");
+
+    a.className = "bubble";
+
+    /* Clicking lesson 1 opens lesson-1.html */
+    a.href = `lesson-${n}.html`;
+
+    a.setAttribute("aria-label",`Open lesson ${n}`);
+    a.title = `Lesson ${n}`;
+
+    a.innerHTML = `<span class="number">${n}</span>`;
+
+    stop.appendChild(a);
+
+    if(local === 4 || local === 9) {
+
+      const stars = document.createElement("div");
+
+      stars.className = "stars";
+      stars.innerHTML = starSvg + starSvg + starSvg;
+
+      a.appendChild(stars);
+    }
+
+    pathEl.appendChild(stop);
+
+    if(local === 5) {
+
+      const chestStop = document.createElement("div");
+
+      chestStop.className = "stop center";
+      chestStop.innerHTML = chestSvg;
+
+      pathEl.appendChild(chestStop);
+    }
+  }
+
+  const end = document.createElement("div");
+
+  end.className = "end-mark";
+  end.textContent = "• • •";
+
+  pathEl.appendChild(end);
+
+  path.appendChild(section);
+}
+
+sessions.forEach(addSession);
+
+
+/* Korean flag counter: 1, 2, 3, etc. */
+
+const counter = document.getElementById("sectionCounter");
+
+const sessionSections = [
+  ...document.querySelectorAll(".lesson-session")
+];
+
+if("IntersectionObserver" in window) {
+
+  const sessionObserver = new IntersectionObserver(entries => {
+
+    const visible = entries
+      .filter(entry => entry.isIntersecting)
+      .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+    if(visible) {
+
+      const currentIndex =
+        sessionSections.indexOf(visible.target);
+
+      if(currentIndex >= 0) {
+        counter.textContent = String(currentIndex + 1);
+      }
+    }
+
+  }, {
+    rootMargin:"-18% 0px -55% 0px",
+    threshold:[0,.1,.25,.5]
+  });
+
+  sessionSections.forEach(section =>
+    sessionObserver.observe(section)
+  );
+}
+
+
+/* Hamburger menu */
+
+const menuToggle = document.getElementById("menuToggle");
+const menuClose = document.getElementById("menuClose");
+const menuBackdrop = document.getElementById("menuBackdrop");
+const sideMenu = document.getElementById("sideMenu");
+
+function setMenuOpen(open) {
+
+  document.body.classList.toggle("menu-open",open);
+
+  menuToggle.setAttribute(
+    "aria-expanded",
+    String(open)
+  );
+
+  sideMenu.setAttribute(
+    "aria-hidden",
+    String(!open)
+  );
+}
+
+menuToggle.addEventListener("click",() =>
+  setMenuOpen(true)
+);
+
+menuClose.addEventListener("click",() =>
+  setMenuOpen(false)
+);
+
+menuBackdrop.addEventListener("click",() =>
+  setMenuOpen(false)
+);
+
+document.addEventListener("keydown",event => {
+
+  if(event.key === "Escape") {
+    setMenuOpen(false);
+  }
+
+});
+
 </script>
+
 </body>
 </html>
