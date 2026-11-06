@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>Fluenta — Leaderboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --bg:#101012;
+  --panel:#1b1b20;
+  --panel2:#24242b;
+  --pink:#ed4c8d;
+  --pink2:#d93678;
+  --white:#fff;
+  --muted:#aaaab5;
+  --gold:#f6c453;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--white);
+  font-family:Arial,sans-serif;
+  padding-bottom:90px;
+}
+header {
+  padding:22px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #292930;
+}
+.brand {
+  color:var(--pink);
+  font-size:22px;
+  font-weight:900;
+}
+.back {
+  color:white;
+  text-decoration:none;
+  background:var(--panel2);
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:13px;
+}
+main {
+  width:min(650px,92%);
+  margin:25px auto;
+}
+.heading {
+  text-align:center;
+  margin:25px 0;
+}
+.trophy {
+  width:65px;
+  height:65px;
+  margin:auto;
+  display:grid;
+  place-items:center;
+  background:#332916;
+  border:1px solid #6c5424;
+  border-radius:22px;
+}
+.trophy svg {width:38px;height:38px}
+h1 {
+  font-size:30px;
+  margin:15px 0 7px;
+}
+.subtitle {color:var(--muted);font-size:14px}
+.reward {
+  background:linear-gradient(135deg,#332819,#211d19);
+  border:1px solid #71562b;
+  border-radius:20px;
+  padding:18px;
+  margin:25px 0;
+}
+.reward-title {
+  color:var(--gold);
+  font-weight:800;
+  font-size:17px;
+}
+.reward p {
+  color:#e2d7c2;
+  font-size:13px;
+  line-height:1.6;
+}
+.prizes {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.prize {
+  background:#171512;
+  border:1px solid #5b4828;
+  border-radius:10px;
+  padding:8px 10px;
+  color:#f6d98f;
+  font-size:12px;
+  font-weight:bold;
+}
+.section-title {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:28px 2px 13px;
+}
+.section-title h2 {font-size:18px;margin:0}
+.section-title span {font-size:12px;color:var(--muted)}
+#leaderboard {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.player {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  background:var(--panel);
+  border:1px solid #2b2b32;
+  border-radius:17px;
+  min-width:0;
+}
+.player.first {
+  border-color:#a17b35;
+  background:linear-gradient(110deg,#302719,#1b1b20);
+}
+.rank {
+  width:27px;
+  flex-shrink:0;
+  text-align:center;
+  font-size:15px;
+  font-weight:900;
+  color:#c4c4ce;
+}
+.first .rank {color:var(--gold)}
+.avatar-wrap {
+  position:relative;
+  flex-shrink:0;
+}
+.avatar {
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#34343d;
+  border:2px solid #44444e;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+  color:white;
+}
+.status {
+  position:absolute;
+  width:12px;
+  height:12px;
+  right:0;
+  bottom:0;
+  border:2px solid var(--panel);
+  border-radius:50%;
+  background:#777;
+}
+.first .status {border-color:#302719}
+.status.online {background:#36d477}
+.player-info {
+  flex:1;
+  min-width:0;
+}
+.player-name {
+  font-size:14px;
+  font-weight:800;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.player-status {
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
+}
+.xp {
+  color:var(--pink);
+  font-weight:900;
+  font-size:14px;
+  white-space:nowrap;
+}
+.first .xp {color:var(--gold)}
+.message {
+  text-align:center;
+  padding:25px 15px;
+  background:var(--panel);
+  border-radius:15px;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:14px;
+}
+#refresh {
+  background:var(--pink2);
+  color:white;
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#17171b;
+  border-top:1px solid #303038;
+  display:flex;
+  justify-content:space-around;
+  padding:11px 5px calc(11px + env(safe-area-inset-bottom));
+  z-index:10;
+}
+.nav-item {
+  color:#9999a4;
+  text-decoration:none;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  font-size:10px;
+  min-width:55px;
+}
+.nav-item svg {width:22px;height:22px}
+.nav-item.active {color:var(--pink)}
+@media(max-width:380px) {
+  h1 {font-size:26px}
+  .player {gap:9px;padding:11px}
+  .avatar {width:41px;height:41px}
+  .xp {font-size:12px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">Fluenta</div>
+  <a class="back" href="index.html">Home</a>
+</header>
+
+<main>
+  <div class="heading">
+    <div class="trophy">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#f6c453"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/>
+        <path d="M7 6H4v2a4 4 0 0 0 4 4M17 6h3v2a4 4 0 0 1-4 4"/>
+      </svg>
+    </div>
+    <h1>Leaderboard</h1>
+    <div class="subtitle">Learn more. Earn more. Rise to the top.</div>
+  </div>
+
+  <section class="reward">
+    <div class="reward-title">Weekly Champion Reward</div>
+    <p>Stay at number 1 for seven consecutive days to qualify for the champion reward!</p>
+    <div class="prizes">
+      <div class="prize">+100 XP</div>
+      <div class="prize">+5 streak days</div>
+      <div class="prize">+200 gems</div>
+      <div class="prize">Battery ×25</div>
+    </div>
+  </section>
+
+  <div class="section-title">
+    <h2>All learners</h2>
+    <button id="refresh" onclick="loadLeaderboard()">Refresh</button>
+  </div>
+
+  <div id="leaderboard">
+    <div class="message">Loading Fluenta learners...</div>
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <a class="nav-item" href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1Z"/>
+    </svg>
+    Home
+  </a>
+  <a class="nav-item" href="lessons.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21Z"/>
+      <path d="M4 5.5v15M8 7h8"/>
+    </svg>
+    Lessons
+  </a>
+  <a class="nav-item active" href="leaderboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/>
+      <path d="M7 6H4v2a4 4 0 0 0 4 4M17 6h3v2a4 4 0 0 1-4 4"/>
+    </svg>
+    Rankings
+  </a>
+  <a class="nav-item" href="chat.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 11.5a8.5 8.5 0 0 1-9 8.5 9 9 0 0 1-4-.9L3 21l1.9-4.5A8 8 0 1 1 21 11.5Z"/>
+    </svg>
+    Chat
+  </a>
+</nav>
+
+<script>
+const SUPABASE_URL = "https://offvwlcozbmkznyxrvtz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VAd6QJyP3qyfXo0D1xbpMw_VgUDIUYP";
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
+
+async function startLeaderboard() {
+  const { data, error } = await db.auth.getSession();
+
+  if (error || !data.session) {
+    document.getElementById("leaderboard").innerHTML =
+      '<div class="message">Please sign in to your Fluenta account first.<br><br><a style="color:#ed4c8d" href="index.html">Go to Fluenta</a></div>';
+    return;
+  }
+
+  currentUser = data.session.user;
+
+  await updateMyOnlineStatus();
+  await loadLeaderboard();
+
+  // Refresh this user's online status while this page is open.
+  setInterval(updateMyOnlineStatus, 30000);
+
+  // Refresh the rankings every 30 seconds.
+  setInterval(loadLeaderboard, 30000);
+}
+
+async function updateMyOnlineStatus() {
+  if (!currentUser) return;
+
+  await db.from("profiles")
+    .update({ last_seen: new Date().toISOString() })
+    .eq("id", currentUser.id);
+}
+
+async function loadLeaderboard() {
+  const container = document.getElementById("leaderboard");
+  container.innerHTML = '<div class="message">Updating rankings...</div>';
+
+  const { data, error } = await db
+    .from("profiles")
+    .select("id, username, full_name, xp, avatar_url, last_seen");
+
+  if (error) {
+    container.innerHTML =
+      '<div class="message">Could not load the leaderboard.<br><br>' +
+      'Check that your profiles table allows signed-in users to read profiles, and that the new columns exist.<br><br>' +
+      '<small>' + escapeHTML(error.message) + '</small></div>';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    container.innerHTML = '<div class="message">No learners have registered yet.</div>';
+    return;
+  }
+
+  data.sort((a, b) => {
+    const xpA = Number(a.xp || 0);
+    const xpB = Number(b.xp || 0);
+
+    if (xpA !== xpB) return xpB - xpA;
+
+    const nameA = (a.full_name || a.username || "Learner").trim();
+    const nameB = (b.full_name || b.username || "Learner").trim();
+
+    return nameA.localeCompare(nameB, undefined, { sensitivity: "base" });
+  });
+
+  container.innerHTML = "";
+
+  data.forEach((person, index) => {
+    const name = person.full_name || person.username || "Learner";
+    const xp = Number(person.xp || 0);
+    const isOnline = person.last_seen &&
+      (Date.now() - new Date(person.last_seen).getTime()) < 120000;
+
+    const card = document.createElement("div");
+    card.className = "player" + (index === 0 ? " first" : "");
+
+    const avatar = person.avatar_url
+      ? '<img class="avatar" src="' + escapeHTML(person.avatar_url) +
+        '" alt="Profile picture">'
+      : '<div class="avatar">' + escapeHTML(name.charAt(0).toUpperCase()) + '</div>';
+
+    card.innerHTML =
+      '<div class="rank">' + (index + 1) + '</div>' +
+      '<div class="avatar-wrap">' + avatar +
+      '<span class="status ' + (isOnline ? "online" : "") + '"></span></div>' +
+      '<div class="player-info">' +
+      '<div class="player-name">' + escapeHTML(name) + '</div>' +
+      '<div class="player-status">' + (isOnline ? "Online" : "Offline") + '</div>' +
+      '</div>' +
+      '<div class="xp">' + xp.toLocaleString() + ' XP</div>';
+
+    container.appendChild(card);
+  });
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
+startLeaderboard();
+</script>
+
+</body>
+</html>
