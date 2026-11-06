@@ -1025,6 +1025,113 @@ html {
             rotate(calc(-1 * var(--angle)));
     }
 }
+
+
+/* =========================
+   FLUENTA APP BOTTOM NAVIGATION
+========================= */
+.fluenta-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #17171b;
+    border-top: 1px solid #303038;
+    padding: 5px 5px calc(5px + env(safe-area-inset-bottom));
+}
+
+.fluenta-bottom-nav a {
+    min-width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: #9999a4;
+    text-decoration: none;
+    font-size: 10px;
+    transition: color .2s ease;
+}
+
+.fluenta-bottom-nav a:hover,
+.fluenta-bottom-nav a.active {
+    color: #ed4c8d;
+}
+
+.fluenta-bottom-nav svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.fluenta-bottom-nav .ranking-link svg {
+    stroke: #f6c453;
+}
+
+#mainWebsite {
+    padding-bottom: 62px;
+}
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.create-profile-button {
+    width: auto;
+    min-height: 48px;
+    padding: 12px 19px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    border: 1px solid #ed4c8d;
+    border-radius: 14px;
+    background: #191216;
+    color: #ff8db8;
+    font-size: 15px;
+    font-weight: bold;
+    transition: .2s ease;
+}
+
+.create-profile-button:hover {
+    background: #2a1720;
+    transform: translateY(-2px);
+}
+
+.create-profile-button svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+@media (max-width: 500px) {
+    .hero-actions {
+        justify-content: center;
+    }
+
+    .hero-actions button {
+        flex: 1 1 145px;
+        padding-left: 12px;
+        padding-right: 12px;
+        font-size: 13px;
+    }
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1259,7 +1366,7 @@ document.addEventListener("DOMContentLoaded", function () {
             Video Lessons
         </button>
 
-        <button class="menu-item" onclick="showPage('profile')">
+        <button class="menu-item" onclick="openAuthScreen()">
             <span class="menu-icon">😁</span>
             Profile
         </button>
@@ -1289,11 +1396,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     listening and more — one step at a time.
                 </p>
 
-                <button
-                    class="pink-button hero-button"
-                    onclick="location.href='lessons.html'">
-                    START LEARNING
-                </button>
+                <div class="hero-actions">
+                    <button
+                        class="pink-button hero-button"
+                        onclick="location.href='lessons.html'">
+                        START LEARNING
+                    </button>
+
+                    <button
+                        class="create-profile-button"
+                        type="button"
+                        onclick="openAuthScreen()">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4 21a8 8 0 0 1 16 0"></path>
+                            <path d="M19 5v6M16 8h6"></path>
+                        </svg>
+                        CREATE PROFILE
+                    </button>
+                </div>
 
             </div>
 
@@ -1535,6 +1656,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     </main>
 
+    <!-- FLUENTA BOTTOM NAVIGATION -->
+    <nav class="fluenta-bottom-nav" aria-label="Main navigation">
+        <a href="#home" class="active" data-bottom-page="home"
+           onclick="showPage('home'); setBottomNavActive('home'); return false;">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"></path>
+            </svg>
+            Home
+        </a>
+
+        <a href="lessons.html" data-bottom-page="lessons">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"></path>
+                <path d="M4 5.5v15M8 7h8"></path>
+            </svg>
+            Lessons
+        </a>
+
+        <a href="leaderboard.html" class="ranking-link" data-bottom-page="rankings">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"></path>
+                <path d="M7 6H4v2a4 4 0 0 0 4 4M17 6h3v2a4 4 0 0 1-4 4"></path>
+            </svg>
+            Rankings
+        </a>
+
+        <a href="chat.html" data-bottom-page="chat">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 11.5a8.5 8.5 0 0 1-9 8.5 9 9 0 0 1-4-.9L3 21l1.9-4.5A8 8 0 1 1 21 11.5z"></path>
+            </svg>
+            Chat
+        </a>
+    </nav>
+
 </section>
 
 <!-- =====================================================
@@ -1544,6 +1699,17 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 
 let fluentaAuthMode = "signup";
+
+function openAuthScreen() {
+    // Always open the account screen in sign-up mode.
+    if (fluentaAuthMode === "login") {
+        toggleAuthMode();
+    }
+
+    document.getElementById("mainWebsite").style.display = "none";
+    document.getElementById("signupScreen").style.display = "flex";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 function toggleAuthMode() {
 
@@ -1818,6 +1984,16 @@ function closeMenu() {
    PAGE SWITCHING
 ========================= */
 
+
+function setBottomNavActive(pageName) {
+    document.querySelectorAll(".fluenta-bottom-nav a").forEach(function(link) {
+        link.classList.toggle(
+            "active",
+            link.getAttribute("data-bottom-page") === pageName
+        );
+    });
+}
+
 function showPage(pageID) {
 
     const pages = document.querySelectorAll(".page");
@@ -1833,6 +2009,8 @@ function showPage(pageID) {
     }
 
     closeMenu();
+
+    setBottomNavActive(pageID === "home" ? "home" : "");
 
     window.scrollTo({
         top: 0,
