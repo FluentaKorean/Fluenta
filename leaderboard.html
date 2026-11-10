@@ -4,245 +4,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#100e0a">
 <title>Fluenta — Leaderboard</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-:root {
-  --bg:#101012;
-  --panel:#1b1b20;
-  --panel2:#24242b;
+:root{
+  --bg:#100e0a;
+  --panel:#1d1a13;
+  --gold:#ffd45e;
+  --gold2:#f3a923;
   --pink:#ed4c8d;
-  --pink2:#d93678;
-  --white:#fff;
-  --muted:#aaaab5;
-  --gold:#f6c453;
+  --muted:#aaa49a;
 }
-* {box-sizing:border-box}
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--white);
-  font-family:Arial,sans-serif;
-  padding-bottom:90px;
+*{box-sizing:border-box}
+body{
+  margin:0;background:
+  radial-gradient(ellipse at 50% 0%,#493515 0%,#17130d 38%,#100e0a 75%);
+  color:white;font-family:Arial,sans-serif;
+  min-height:100vh;padding-bottom:90px;overflow-x:hidden;
 }
-header {
-  padding:22px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid #292930;
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+  radial-gradient(circle,#ffdf83 1px,transparent 2px),
+  radial-gradient(circle,#eeb746 1px,transparent 2px);
+  background-size:95px 95px,137px 137px;
+  background-position:0 0,45px 35px;
+  opacity:.18;animation:starDrift 18s linear infinite;
 }
-.brand {
-  color:var(--pink);
-  font-size:22px;
-  font-weight:900;
+@keyframes starDrift{
+  from{background-position:0 0,45px 35px}
+  to{background-position:95px 190px,182px 172px}
 }
-.back {
-  color:white;
-  text-decoration:none;
-  background:var(--panel2);
-  padding:10px 14px;
-  border-radius:12px;
+header{
+  position:relative;z-index:2;padding:20px 6%;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid #51401e;background:#15120dcc;
+  backdrop-filter:blur(12px);
+}
+.brand{font-size:24px;font-weight:900;color:#ff75a9}
+.back{
+  text-decoration:none;color:white;background:#29251c;
+  border:1px solid #66512a;padding:10px 15px;border-radius:12px;
   font-size:13px;
 }
-main {
-  width:min(650px,92%);
-  margin:25px auto;
+main{position:relative;z-index:1;width:min(720px,93%);margin:25px auto}
+.heading{text-align:center;margin:25px 0 28px}
+.crown{
+  font-size:46px;display:inline-block;
+  filter:drop-shadow(0 0 14px #ffc94d);
+  animation:crownFloat 2.5s ease-in-out infinite;
 }
-.heading {
-  text-align:center;
+@keyframes crownFloat{50%{transform:translateY(-8px) rotate(4deg)}}
+h1{
+  font-size:34px;margin:8px 0;
+  background:linear-gradient(90deg,#fff1a8,#ffc343,#fff1a8);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 25px #ffbd4240;
+}
+.subtitle{color:#c3b9a5;font-size:13px;line-height:1.6}
+.gold-line{
+  width:115px;height:3px;margin:15px auto;
+  background:linear-gradient(90deg,transparent,#ffd45e,transparent);
+  box-shadow:0 0 14px #ffd45e;
+}
+.champion{
+  position:relative;overflow:hidden;text-align:center;
+  border:1px solid #c89536;border-radius:25px;padding:25px 18px;
+  background:linear-gradient(145deg,#493718,#292014 52%,#17140f);
+  box-shadow:0 0 20px #e8a92d25,0 0 55px #d9951a16;
   margin:25px 0;
 }
-.trophy {
-  width:65px;
-  height:65px;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  background:#332916;
-  border:1px solid #6c5424;
-  border-radius:22px;
+.champion:before,.champion:after{
+  content:"";position:absolute;width:180px;height:180px;
+  border-radius:50%;filter:blur(50px);pointer-events:none;
+  background:#ffca52;opacity:.15;
+  animation:glowMove 5s ease-in-out infinite alternate;
 }
-.trophy svg {width:38px;height:38px}
-h1 {
-  font-size:30px;
-  margin:15px 0 7px;
+.champion:before{top:-100px;left:-60px}
+.champion:after{bottom:-120px;right:-60px;animation-delay:1s}
+@keyframes glowMove{to{transform:translate(55px,35px);opacity:.35}}
+.champion-content{position:relative;z-index:1}
+.champion-label{
+  color:#ffdc81;font-size:12px;font-weight:900;
+  letter-spacing:3px;
 }
-.subtitle {color:var(--muted);font-size:14px}
-.reward {
-  background:linear-gradient(135deg,#332819,#211d19);
-  border:1px solid #71562b;
-  border-radius:20px;
-  padding:18px;
-  margin:25px 0;
+.champion-crown{
+  font-size:48px;margin:10px 0;
+  filter:drop-shadow(0 0 15px #ffd45e);
 }
-.reward-title {
-  color:var(--gold);
-  font-weight:800;
-  font-size:17px;
+.champion-avatar{
+  width:85px;height:85px;border-radius:50%;object-fit:cover;
+  border:3px solid #ffda73;padding:3px;
+  background:#352819;box-shadow:0 0 22px #ffc84d80;
 }
-.reward p {
-  color:#e2d7c2;
-  font-size:13px;
-  line-height:1.6;
+.champion-name{
+  font-size:23px;font-weight:900;margin:12px 0 5px;
+  color:#fff0bd;
 }
-.prizes {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+.champion-xp{color:#ffdb79;font-size:15px;font-weight:900}
+.champion-message{color:#d6c6a5;font-size:12px;margin-top:12px}
+.reward{
+  position:relative;overflow:hidden;
+  background:linear-gradient(110deg,#332817,#201b13);
+  border:1px solid #80602b;border-radius:19px;
+  padding:19px;margin:22px 0;
 }
-.prize {
-  background:#171512;
-  border:1px solid #5b4828;
-  border-radius:10px;
-  padding:8px 10px;
-  color:#f6d98f;
-  font-size:12px;
-  font-weight:bold;
+.reward:after{
+  content:"";position:absolute;top:-80%;left:-40%;
+  width:35%;height:260%;
+  background:linear-gradient(90deg,transparent,#fff2b21c,transparent);
+  transform:rotate(25deg);animation:shine 5s linear infinite;
 }
-.section-title {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin:28px 2px 13px;
+@keyframes shine{
+  from{left:-50%}to{left:140%}
 }
-.section-title h2 {font-size:18px;margin:0}
-.section-title span {font-size:12px;color:var(--muted)}
-#leaderboard {
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+.reward-title{color:#ffdb77;font-size:17px;font-weight:900}
+.reward p{color:#d3c5aa;font-size:13px;line-height:1.6}
+.prizes{display:flex;flex-wrap:wrap;gap:8px}
+.prize{
+  padding:9px 11px;border-radius:10px;
+  background:#19150f;border:1px solid #72562a;
+  color:#ffe2a0;font-size:12px;font-weight:800;
 }
-.player {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:13px;
-  background:var(--panel);
-  border:1px solid #2b2b32;
-  border-radius:17px;
-  min-width:0;
+.reward-note{font-size:11px!important;color:#b5a78d!important}
+.gift-section{
+  display:flex;align-items:center;gap:17px;
+  padding:17px;border:1px solid #5b4827;border-radius:19px;
+  background:linear-gradient(110deg,#282014,#1b1812);
+  margin:22px 0;cursor:pointer;transition:.25s;
 }
-.player.first {
-  border-color:#a17b35;
-  background:linear-gradient(110deg,#302719,#1b1b20);
+.gift-section:hover{
+  transform:translateY(-3px);border-color:#ffd45e;
+  box-shadow:0 0 22px #ffc94d30;
 }
-.rank {
-  width:27px;
-  flex-shrink:0;
-  text-align:center;
-  font-size:15px;
-  font-weight:900;
-  color:#c4c4ce;
+.gift-image{
+  width:75px;height:75px;object-fit:contain;
+  filter:drop-shadow(0 0 12px #ffcc4d55);
+  animation:giftBounce 2.4s ease-in-out infinite;
 }
-.first .rank {color:var(--gold)}
-.avatar-wrap {
-  position:relative;
-  flex-shrink:0;
+@keyframes giftBounce{50%{transform:translateY(-6px) rotate(4deg)}}
+.gift-text{flex:1}
+.gift-text strong{color:#ffdc7b;font-size:16px}
+.gift-text p{font-size:12px;color:#bdb19a;line-height:1.5;margin:6px 0 0}
+.gift-arrow{font-size:23px;color:#ffd45e}
+.section-title{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:30px 2px 14px;
 }
-.avatar {
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#34343d;
-  border:2px solid #44444e;
-  display:grid;
-  place-items:center;
-  font-weight:bold;
-  color:white;
+.section-title h2{font-size:18px;margin:0;color:#fff0c7}
+#refresh{
+  border:1px solid #8b692d;background:#382b17;
+  color:#ffe09a;padding:10px 14px;border-radius:11px;
+  font-weight:bold;cursor:pointer;
 }
-.status {
-  position:absolute;
-  width:12px;
-  height:12px;
-  right:0;
-  bottom:0;
-  border:2px solid var(--panel);
-  border-radius:50%;
-  background:#777;
+#leaderboard{display:flex;flex-direction:column;gap:11px}
+.player{
+  position:relative;display:flex;align-items:center;gap:12px;
+  padding:14px;background:#1c1a15;
+  border:1px solid #383126;border-radius:17px;
+  min-width:0;overflow:hidden;transition:.25s;
 }
-.first .status {border-color:#302719}
-.status.online {background:#36d477}
-.player-info {
-  flex:1;
-  min-width:0;
+.player:hover{transform:translateY(-2px);border-color:#8b713d}
+.player.first{
+  border:1px solid #e6b947;
+  background:linear-gradient(110deg,#493819,#282014,#1d1a14);
+  box-shadow:0 0 19px #eebd4530;
+  animation:leaderGlow 3s ease-in-out infinite alternate;
 }
-.player-name {
-  font-size:14px;
-  font-weight:800;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+@keyframes leaderGlow{
+  to{box-shadow:0 0 27px #eebd4560,0 0 45px #eebd4515}
 }
-.player-status {
-  color:var(--muted);
-  font-size:11px;
-  margin-top:5px;
+.player.second{
+  border-color:#999da7;
+  background:linear-gradient(100deg,#302f32,#1c1a15);
 }
-.xp {
-  color:var(--pink);
-  font-weight:900;
-  font-size:14px;
-  white-space:nowrap;
+.player.third{
+  border-color:#aa7144;
+  background:linear-gradient(100deg,#382719,#1c1a15);
 }
-.first .xp {color:var(--gold)}
-.message {
-  text-align:center;
-  padding:25px 15px;
-  background:var(--panel);
-  border-radius:15px;
-  color:var(--muted);
-  line-height:1.6;
-  font-size:14px;
+.rank{
+  width:30px;flex-shrink:0;text-align:center;
+  font-weight:900;color:#bcb5a8;font-size:15px;
 }
-#refresh {
-  background:var(--pink2);
-  color:white;
-  border:0;
-  border-radius:12px;
-  padding:11px 15px;
-  font-weight:bold;
-  cursor:pointer;
+.first .rank{color:#ffdb68;font-size:19px}
+.second .rank{color:#d9dce5}
+.third .rank{color:#d99b67}
+.avatar-wrap{position:relative;flex-shrink:0}
+.avatar{
+  width:48px;height:48px;border-radius:50%;
+  object-fit:cover;background:#38332b;
+  border:2px solid #555044;
+  display:grid;place-items:center;font-weight:bold;color:white;
 }
-.bottom-nav {
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#17171b;
-  border-top:1px solid #303038;
-  display:flex;
-  justify-content:space-around;
+.first .avatar{border-color:#ffd45e;box-shadow:0 0 12px #ffd45e66}
+.second .avatar{border-color:#c6c8d0}
+.third .avatar{border-color:#c58a58}
+.status{
+  position:absolute;right:0;bottom:0;width:12px;height:12px;
+  border:2px solid #1d1a15;border-radius:50%;background:#777;
+}
+.status.online{background:#36d477}
+.player-info{flex:1;min-width:0}
+.player-name{
+  font-size:14px;font-weight:900;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.player-status{color:#aaa49a;font-size:11px;margin-top:5px}
+.xp{color:#ed7eaa;font-size:14px;font-weight:900;white-space:nowrap}
+.first .xp{color:#ffda73}
+.medal{font-size:19px;flex-shrink:0}
+.message{
+  text-align:center;padding:25px 15px;background:#1d1a15;
+  border:1px solid #3c3425;border-radius:15px;
+  color:#bdb5a5;line-height:1.6;font-size:14px;
+}
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#17150fee;border-top:1px solid #393020;
+  display:flex;justify-content:space-around;
   padding:11px 5px calc(11px + env(safe-area-inset-bottom));
-  z-index:10;
+  z-index:10;backdrop-filter:blur(12px);
 }
-.nav-item {
-  color:#9999a4;
-  text-decoration:none;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-  font-size:10px;
-  min-width:55px;
+.nav-item{
+  color:#99948a;text-decoration:none;display:flex;
+  flex-direction:column;align-items:center;gap:5px;
+  font-size:10px;min-width:55px;
 }
-.nav-item svg {width:22px;height:22px}
-.nav-item.active {color:var(--pink)}
-@media(max-width:380px) {
-  h1 {font-size:26px}
-  .player {gap:9px;padding:11px}
-  .avatar {width:41px;height:41px}
-  .xp {font-size:12px}
+.nav-item svg{width:22px;height:22px}
+.nav-item.active{color:#ffcf62}
+@media(max-width:420px){
+  h1{font-size:29px}
+  .player{gap:9px;padding:11px}
+  .avatar{width:42px;height:42px}
+  .xp{font-size:12px}
 }
 </style>
 </head>
 
 <body>
-
 <header>
   <div class="brand">Fluenta</div>
   <a class="back" href="index.html">Home</a>
@@ -250,31 +251,49 @@ h1 {
 
 <main>
   <div class="heading">
-    <div class="trophy">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#f6c453"
-        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/>
-        <path d="M7 6H4v2a4 4 0 0 0 4 4M17 6h3v2a4 4 0 0 1-4 4"/>
-      </svg>
-    </div>
-    <h1>Leaderboard</h1>
-    <div class="subtitle">Learn more. Earn more. Rise to the top.</div>
+    <div class="crown">👑</div>
+    <h1>THE LEADERBOARD</h1>
+    <div class="gold-line"></div>
+    <div class="subtitle">Rise above. Keep learning. Become a champion.</div>
   </div>
 
+  <section class="champion">
+    <div class="champion-content">
+      <div class="champion-label">★ FLUENTA'S TOP LEARNER ★</div>
+      <div class="champion-crown">👑</div>
+      <img id="championAvatar" class="champion-avatar"
+           src="" alt="Champion avatar" style="display:none">
+      <div class="champion-name" id="championName">Finding our champion...</div>
+      <div class="champion-xp" id="championXP">— XP</div>
+      <div class="champion-message">The number one spot belongs to a star!</div>
+    </div>
+  </section>
+
   <section class="reward">
-    <div class="reward-title">Weekly Champion Reward</div>
-    <p>Stay at number 1 for seven consecutive days to qualify for the champion reward!</p>
+    <div class="reward-title">🏆 WEEKLY CHAMPION REWARD</div>
+    <p>Stay at number 1 for seven consecutive days to qualify for these special rewards!</p>
     <div class="prizes">
       <div class="prize">+100 XP</div>
       <div class="prize">+5 streak days</div>
       <div class="prize">+200 gems</div>
       <div class="prize">Battery ×25</div>
     </div>
+    <p class="reward-note">Weekly reward tracking and automatic delivery will be activated after the Supabase setup.</p>
   </section>
+
+  <div class="gift-section" onclick="openGift()">
+    <img class="gift-image" src="gift.png" alt="Fluenta gift box"
+         onerror="this.style.opacity='.35';this.alt='Add gift.png to this folder'">
+    <div class="gift-text">
+      <strong>YOUR CHAMPION GIFT</strong>
+      <p>Open your special gift and see what's waiting for you!</p>
+    </div>
+    <div class="gift-arrow">›</div>
+  </div>
 
   <div class="section-title">
     <h2>All learners</h2>
-    <button id="refresh" onclick="loadLeaderboard()">Refresh</button>
+    <button id="refresh" onclick="loadLeaderboard()">↻ Refresh</button>
   </div>
 
   <div id="leaderboard">
@@ -286,28 +305,24 @@ h1 {
   <a class="nav-item" href="index.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1Z"/>
-    </svg>
-    Home
+    </svg>Home
   </a>
   <a class="nav-item" href="lessons.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21Z"/>
       <path d="M4 5.5v15M8 7h8"/>
-    </svg>
-    Lessons
+    </svg>Lessons
   </a>
   <a class="nav-item active" href="leaderboard.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/>
       <path d="M7 6H4v2a4 4 0 0 0 4 4M17 6h3v2a4 4 0 0 1-4 4"/>
-    </svg>
-    Rankings
+    </svg>Rankings
   </a>
   <a class="nav-item" href="chat.html">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M21 11.5a8.5 8.5 0 0 1-9 8.5 9 9 0 0 1-4-.9L3 21l1.9-4.5A8 8 0 1 1 21 11.5Z"/>
-    </svg>
-    Chat
+    </svg>Chat
   </a>
 </nav>
 
@@ -319,100 +334,130 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUser = null;
 
-async function startLeaderboard() {
-  const { data, error } = await db.auth.getSession();
+// PASTE YOUR GIFT LINK BETWEEN THE QUOTES BELOW.
+const GIFT_LINK = "TYPE YOUR GIFT";
 
-  if (error || !data.session) {
+function openGift(){
+  if(GIFT_LINK === "TYPE YOUR GIFT" || !GIFT_LINK.trim()){
+    alert("Add your gift link where it says TYPE YOUR GIFT in the code first!");
+    return;
+  }
+  window.open(GIFT_LINK,"_blank","noopener,noreferrer");
+}
+
+async function startLeaderboard(){
+  const {data,error} = await db.auth.getSession();
+
+  if(error || !data.session){
     document.getElementById("leaderboard").innerHTML =
-      '<div class="message">Please sign in to your Fluenta account first.<br><br><a style="color:#ed4c8d" href="index.html">Go to Fluenta</a></div>';
+      '<div class="message">Please sign in to your Fluenta account first.<br><br><a style="color:#ffcf62" href="index.html">Go to Fluenta</a></div>';
+    document.getElementById("championName").textContent="Sign in to see the champion";
     return;
   }
 
   currentUser = data.session.user;
-
   await updateMyOnlineStatus();
   await loadLeaderboard();
 
-  // Refresh this user's online status while this page is open.
-  setInterval(updateMyOnlineStatus, 30000);
-
-  // Refresh the rankings every 30 seconds.
-  setInterval(loadLeaderboard, 30000);
+  setInterval(updateMyOnlineStatus,30000);
+  setInterval(loadLeaderboard,30000);
 }
 
-async function updateMyOnlineStatus() {
-  if (!currentUser) return;
+async function updateMyOnlineStatus(){
+  if(!currentUser)return;
 
   await db.from("profiles")
-    .update({ last_seen: new Date().toISOString() })
-    .eq("id", currentUser.id);
+    .update({last_seen:new Date().toISOString()})
+    .eq("id",currentUser.id);
 }
 
-async function loadLeaderboard() {
+async function loadLeaderboard(){
   const container = document.getElementById("leaderboard");
-  container.innerHTML = '<div class="message">Updating rankings...</div>';
+  container.innerHTML = '<div class="message">Updating the rankings...</div>';
 
-  const { data, error } = await db
-    .from("profiles")
+  const {data,error} = await db.from("profiles")
     .select("id, username, full_name, xp, avatar_url, last_seen");
 
-  if (error) {
+  if(error){
     container.innerHTML =
       '<div class="message">Could not load the leaderboard.<br><br>' +
-      'Check that your profiles table allows signed-in users to read profiles, and that the new columns exist.<br><br>' +
-      '<small>' + escapeHTML(error.message) + '</small></div>';
+      escapeHTML(error.message) + '</div>';
     return;
   }
 
-  if (!data || data.length === 0) {
-    container.innerHTML = '<div class="message">No learners have registered yet.</div>';
+  if(!data || data.length===0){
+    container.innerHTML='<div class="message">No learners have registered yet.</div>';
+    document.getElementById("championName").textContent="Waiting for our first champion";
+    document.getElementById("championXP").textContent="0 XP";
     return;
   }
 
-  data.sort((a, b) => {
-    const xpA = Number(a.xp || 0);
-    const xpB = Number(b.xp || 0);
+  data.sort((a,b)=>{
+    const xpA=Number(a.xp||0);
+    const xpB=Number(b.xp||0);
+    if(xpA!==xpB)return xpB-xpA;
 
-    if (xpA !== xpB) return xpB - xpA;
-
-    const nameA = (a.full_name || a.username || "Learner").trim();
-    const nameB = (b.full_name || b.username || "Learner").trim();
-
-    return nameA.localeCompare(nameB, undefined, { sensitivity: "base" });
+    const nameA=(a.full_name||a.username||"Learner").trim();
+    const nameB=(b.full_name||b.username||"Learner").trim();
+    return nameA.localeCompare(nameB,undefined,{sensitivity:"base"});
   });
 
-  container.innerHTML = "";
+  // Update the large champion display.
+  const champion=data[0];
+  const championName=champion.full_name||champion.username||"Learner";
+  const championAvatar=document.getElementById("championAvatar");
 
-  data.forEach((person, index) => {
-    const name = person.full_name || person.username || "Learner";
-    const xp = Number(person.xp || 0);
-    const isOnline = person.last_seen &&
-      (Date.now() - new Date(person.last_seen).getTime()) < 120000;
+  document.getElementById("championName").textContent=championName;
+  document.getElementById("championXP").textContent=
+    Number(champion.xp||0).toLocaleString()+" XP";
 
-    const card = document.createElement("div");
-    card.className = "player" + (index === 0 ? " first" : "");
+  if(champion.avatar_url){
+    championAvatar.src=champion.avatar_url;
+    championAvatar.style.display="inline-block";
+  }else{
+    championAvatar.style.display="none";
+  }
 
-    const avatar = person.avatar_url
-      ? '<img class="avatar" src="' + escapeHTML(person.avatar_url) +
-        '" alt="Profile picture">'
-      : '<div class="avatar">' + escapeHTML(name.charAt(0).toUpperCase()) + '</div>';
+  container.innerHTML="";
 
-    card.innerHTML =
-      '<div class="rank">' + (index + 1) + '</div>' +
-      '<div class="avatar-wrap">' + avatar +
-      '<span class="status ' + (isOnline ? "online" : "") + '"></span></div>' +
-      '<div class="player-info">' +
-      '<div class="player-name">' + escapeHTML(name) + '</div>' +
-      '<div class="player-status">' + (isOnline ? "Online" : "Offline") + '</div>' +
-      '</div>' +
-      '<div class="xp">' + xp.toLocaleString() + ' XP</div>';
+  data.forEach((person,index)=>{
+    const name=person.full_name||person.username||"Learner";
+    const xp=Number(person.xp||0);
+    const isOnline=person.last_seen &&
+      (Date.now()-new Date(person.last_seen).getTime())<120000;
+
+    const card=document.createElement("div");
+    let rankClass="";
+    if(index===0)rankClass=" first";
+    else if(index===1)rankClass=" second";
+    else if(index===2)rankClass=" third";
+
+    card.className="player"+rankClass;
+
+    const avatar=person.avatar_url
+      ? '<img class="avatar" src="'+escapeHTML(person.avatar_url)+'" alt="Profile picture">'
+      : '<div class="avatar">'+escapeHTML(name.charAt(0).toUpperCase())+'</div>';
+
+    const medals=["👑","🥈","🥉"];
+    const medal=index<3?medals[index]:"";
+
+    card.innerHTML=
+      '<div class="rank">'+(index+1)+'</div>'+
+      '<div class="avatar-wrap">'+avatar+
+      '<span class="status '+(isOnline?"online":"")+'"></span></div>'+
+      '<div class="player-info">'+
+      '<div class="player-name">'+escapeHTML(name)+'</div>'+
+      '<div class="player-status">'+(isOnline?"Online":"Offline")+'</div>'+
+      '</div>'+
+      '<div class="xp">'+xp.toLocaleString()+' XP</div>'+
+      '<div class="medal">'+medal+'</div>';
 
     container.appendChild(card);
   });
 }
 
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,char=>({
     "&":"&amp;",
     "<":"&lt;",
     ">":"&gt;",
@@ -423,6 +468,5 @@ function escapeHTML(value) {
 
 startLeaderboard();
 </script>
-
 </body>
 </html>
